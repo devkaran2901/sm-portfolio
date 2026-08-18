@@ -4,8 +4,13 @@
 
 @layer base {
   :root {
-    --font-display: 'Fraunces Fallback', Georgia, serif;
-    --font-sans: 'Inter Fallback', system-ui, sans-serif;
+    /*
+     * --font-display and --font-sans are set by next/font on <html>. They are
+     * deliberately NOT redeclared here: a `:root` rule has the same specificity
+     * as next/font's generated class, so declaring them again wins on source
+     * order and pins the site to the metric fallback, never loading the real
+     * face. The fallback stacks live in tailwind.config.ts instead.
+     */
     --shell-gutter: clamp(1.25rem, 5vw, 4rem);
   }
 

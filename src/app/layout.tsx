@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Fraunces, Inter } from 'next/font/google';
+import { Anton, Inter } from 'next/font/google';
 
 import { SITE } from '@/content/defaults';
 import { siteUrl } from '@/lib/env';
@@ -9,10 +9,11 @@ import './globals.css';
  * Fonts are self-hosted by next/font at build time: no runtime request to a
  * third party, no layout shift from a late swap, and no cookie set by a font CDN.
  */
-// Variable font: the full weight range ships in one file, so no `weight` list.
-const display = Fraunces({
+// Anton ships a single heavy weight by design, so `font-semibold` and friends
+// are no-ops on display text - the face is already the poster weight.
+const display = Anton({
   subsets: ['latin'],
-  style: ['normal', 'italic'],
+  weight: '400',
   variable: '--font-display',
   display: 'swap',
 });
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#08090A',
+  themeColor: '#C8CED6',
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',

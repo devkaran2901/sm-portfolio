@@ -177,8 +177,8 @@ export function MediaPlaceholder({
         className={cn(
           'absolute inset-0 opacity-[0.18]',
           tone === 'dark'
-            ? 'bg-[linear-gradient(135deg,transparent_46%,rgba(255,255,255,0.5)_50%,transparent_54%)]'
-            : 'bg-[linear-gradient(135deg,transparent_46%,rgba(0,0,0,0.35)_50%,transparent_54%)]',
+            ? 'bg-[linear-gradient(135deg,transparent_46%,rgba(12,14,16,0.32)_50%,transparent_54%)]'
+            : 'bg-[linear-gradient(135deg,transparent_46%,rgba(246,247,249,0.45)_50%,transparent_54%)]',
         )}
       />
       <p

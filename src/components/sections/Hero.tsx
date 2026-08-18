@@ -23,7 +23,7 @@ export function Hero({ profile, stats }: { profile: ProfileView; stats: StatView
       {/* Turf-toned wash and a faint pitch line: atmosphere without a stock photo. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_75%_-10%,rgba(35,127,82,0.22),transparent_58%),radial-gradient(90%_60%_at_10%_110%,rgba(168,130,31,0.14),transparent_60%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_75%_-10%,rgba(35,127,82,0.14),transparent_58%),radial-gradient(90%_60%_at_10%_110%,rgba(168,130,31,0.12),transparent_60%)]"
       />
       <div
         aria-hidden="true"
