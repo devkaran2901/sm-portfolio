@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Sonu Malik">
+  <rect width="64" height="64" rx="14" fill="#0E1011"/>
+  <circle cx="32" cy="32" r="17" fill="none" stroke="#237F52" stroke-width="2.5"/>
+  <path d="M32 15c5.2 5.2 5.2 28.6 0 34M32 15c-5.2 5.2-5.2 28.6 0 34" fill="none" stroke="#C29B31" stroke-width="1.6" stroke-linecap="round"/>
+  <circle cx="32" cy="32" r="3.4" fill="#F6F2EA"/>
+</svg>

@@ -1,0 +1,135 @@
+import Link from 'next/link';
+import { ArrowUpRight } from 'lucide-react';
+
+import { NAV_LINKS, SITE } from '@/content/defaults';
+import type { BusinessView, ProfileView } from '@/lib/content';
+import { ExternalTrackedLink } from './ExternalTrackedLink';
+
+const LEGAL_LINKS = [
+  { href: '/privacy', label: 'Privacy Policy' },
+  { href: '/terms', label: 'Terms & Conditions' },
+  { href: '/cookies', label: 'Cookie & Analytics Policy' },
+];
+
+export function SiteFooter({
+  profile,
+  businesses,
+}: {
+  profile: ProfileView;
+  businesses: BusinessView[];
+}) {
+  const year = new Date().getFullYear();
+
+  return (
+    <footer className="border-t border-ink-800 bg-ink-950">
+      <div className="shell grid gap-12 py-16 lg:grid-cols-12 lg:gap-8">
+        <div className="lg:col-span-5">
+          <p className="font-display text-2xl font-semibold text-bone-50">{profile.fullName}</p>
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-bone-400">{profile.shortBio}</p>
+
+          {profile.currentCity ? (
+            <p className="mt-6 text-xs uppercase tracking-[0.16em] text-bone-500">
+              {[profile.currentCity, profile.region, profile.country].filter(Boolean).join(', ')}
+            </p>
+          ) : null}
+
+          {profile.socialLinks.length > 0 ? (
+            <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
+              {profile.socialLinks.map((link) => (
+                <li key={link.url}>
+                  <ExternalTrackedLink
+                    href={link.url}
+                    event="external_link_click"
+                    className="link-underline text-sm"
+                  >
+                    {link.label}
+                  </ExternalTrackedLink>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+
+        <nav aria-label="Footer" className="lg:col-span-3">
+          <h2 className="eyebrow">Navigate</h2>
+          <ul className="mt-5 space-y-2.5">
+            {NAV_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="text-sm text-bone-300 transition-colors hover:text-brass-200">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="lg:col-span-4">
+          <h2 className="eyebrow">Ventures</h2>
+          <ul className="mt-5 space-y-2.5">
+            <li>
+              <ExternalTrackedLink
+                href={SITE.redBallUrl}
+                event="red_ball_link_click"
+                className="group inline-flex items-center gap-1.5 text-sm text-bone-300 transition-colors hover:text-brass-200"
+              >
+                Red Ball Sports Arena
+                <ArrowUpRight
+                  size={14}
+                  aria-hidden="true"
+                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
+              </ExternalTrackedLink>
+            </li>
+            {businesses.map((business) =>
+              business.websiteUrl ? (
+                <li key={business.slug}>
+                  <ExternalTrackedLink
+                    href={business.websiteUrl}
+                    event="business_link_click"
+                    metadata={{ business: business.slug }}
+                    className="group inline-flex items-center gap-1.5 text-sm text-bone-300 transition-colors hover:text-brass-200"
+                  >
+                    {business.name}
+                    <ArrowUpRight size={14} aria-hidden="true" />
+                  </ExternalTrackedLink>
+                </li>
+              ) : (
+                <li key={business.slug}>
+                  <Link
+                    href={`/ventures#${business.slug}`}
+                    className="text-sm text-bone-300 transition-colors hover:text-brass-200"
+                  >
+                    {business.name}
+                  </Link>
+                </li>
+              ),
+            )}
+          </ul>
+
+          <h2 className="eyebrow mt-8">Legal</h2>
+          <ul className="mt-5 space-y-2.5">
+            {LEGAL_LINKS.map((link) => (
+              <li key={link.href}>
+                <Link href={link.href} className="text-sm text-bone-300 transition-colors hover:text-brass-200">
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div className="border-t border-ink-800/80">
+        <div className="shell flex flex-col gap-3 py-6 text-xs text-bone-500 sm:flex-row sm:items-center sm:justify-between">
+          <p>
+            &copy; {year} {profile.fullName}. All rights reserved.
+          </p>
+          <p>
+            Details marked &ldquo;verification required&rdquo; are published only once a source is
+            attached.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+}

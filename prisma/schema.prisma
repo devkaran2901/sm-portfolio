@@ -1,0 +1,695 @@
+// Sonu Malik - portfolio, CMS, inquiry and analytics platform.
+// PostgreSQL + Prisma. Every public claim can carry verification metadata;
+// nothing in this schema stores or implies fabricated evidence.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Access control
+// ---------------------------------------------------------------------------
+
+enum RoleName {
+  SUPER_ADMIN
+  CONTENT_ADMIN
+  INQUIRY_MANAGER
+  ANALYTICS_VIEWER
+}
+
+model Role {
+  id          String       @id @default(cuid())
+  name        RoleName     @unique
+  label       String
+  description String
+  permissions Permission[]
+  users       AdminUser[]
+  createdAt   DateTime     @default(now())
+}
+
+model Permission {
+  id    String @id @default(cuid())
+  key   String @unique // e.g. "inquiry:write"
+  label String
+  group String
+  roles Role[]
+}
+
+model AdminUser {
+  id                 String    @id @default(cuid())
+  email              String    @unique
+  name               String
+  passwordHash       String
+  roleId             String
+  role               Role      @relation(fields: [roleId], references: [id], onDelete: Restrict)
+  isActive           Boolean   @default(true)
+  twoFactorEnabled   Boolean   @default(false)
+  twoFactorSecret    String?
+  lastLoginAt        DateTime?
+  failedAttempts     Int       @default(0)
+  lockedUntil        DateTime?
+  mustChangePassword Boolean   @default(false)
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  sessions          AdminSession[]
+  resetTokens       PasswordResetToken[]
+  auditLogs         AuditLog[]
+  assignedInquiries ContactInquiry[]     @relation("InquiryAssignee")
+  inquiryNotes      InquiryNote[]
+  verifications     VerificationRecord[] @relation("VerificationReviewer")
+
+  @@index([roleId])
+  @@index([isActive])
+}
+
+model AdminSession {
+  id         String    @id @default(cuid())
+  userId     String
+  user       AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // SHA-256 of the session token. The raw token only ever lives in the cookie.
+  tokenHash  String    @unique
+  userAgent  String?
+  ipHash     String?
+  createdAt  DateTime  @default(now())
+  lastSeenAt DateTime  @default(now())
+  expiresAt  DateTime
+  revokedAt  DateTime?
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(cuid())
+  userId    String
+  user      AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+// ---------------------------------------------------------------------------
+// Portfolio content
+// ---------------------------------------------------------------------------
+
+model Profile {
+  id            String    @id @default("primary")
+  fullName      String
+  headline      String
+  positioning   String
+  shortBio      String    @db.Text
+  longBio       String    @db.Text
+  birthDate     DateTime?
+  birthPlace    String?
+  currentCity   String?
+  region        String?
+  country       String?
+  education     String?
+  educationBody String?
+  portraitUrl   String?
+  portraitAlt   String?
+  email         String?
+  phone         String?
+  socialLinks   Json      @default("[]")
+  updatedAt     DateTime  @updatedAt
+}
+
+enum TimelineCategory {
+  ORIGIN
+  CRICKET
+  INTERNATIONAL
+  INFRASTRUCTURE
+  BUSINESS
+  EDUCATION
+}
+
+model TimelineEvent {
+  id          String           @id @default(cuid())
+  slug        String           @unique
+  // Free text on purpose: "1988", "Early years". Exact years are never invented.
+  yearLabel   String
+  sortOrder   Int              @default(0)
+  title       String
+  summary     String           @db.Text
+  category    TimelineCategory @default(CRICKET)
+  location    String?
+  country     String?
+  isVerified  Boolean          @default(false)
+  needsSource Boolean          @default(true)
+  isPublished Boolean          @default(true)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  verifications VerificationRecord[]
+
+  @@index([sortOrder])
+  @@index([category, isPublished])
+}
+
+enum FacilityGroup {
+  CRICKET
+  RACQUET
+  FITNESS
+  HOSPITALITY
+}
+
+model Facility {
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  name        String
+  group       FacilityGroup
+  quantity    Int?
+  unitLabel   String?
+  description String        @db.Text
+  iconKey     String        @default("dot")
+  sortOrder   Int           @default(0)
+  isPublished Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  images FacilityImage[]
+
+  @@index([group, sortOrder])
+}
+
+model FacilityImage {
+  id         String   @id @default(cuid())
+  facilityId String
+  facility   Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  url        String
+  alt        String
+  caption    String?
+  sortOrder  Int      @default(0)
+  // Placeholder rows render as clearly labelled empty frames until real media exists.
+  isPlaceholder Boolean @default(true)
+  createdAt     DateTime @default(now())
+
+  @@index([facilityId, sortOrder])
+}
+
+enum EventCategory {
+  CORPORATE_LEAGUE
+  OPEN_TOURNAMENT
+  BCCI_U14
+  BCCI_U16
+  BCCI_U19
+  OTHER
+}
+
+model SportsEvent {
+  id          String        @id @default(cuid())
+  slug        String        @unique
+  name        String
+  category    EventCategory
+  yearLabel   String?
+  organizer   String?
+  summary     String        @db.Text
+  venue       String?
+  isPublished Boolean       @default(true)
+  sortOrder   Int           @default(0)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  verifications VerificationRecord[]
+
+  @@index([category, isPublished])
+  @@index([sortOrder])
+}
+
+enum AssociationType {
+  PLAYED_AT_FACILITY
+  TRAINED_AT_ACADEMY
+  GUEST_APPEARANCE
+  TOURNAMENT_PARTICIPANT
+  UNSPECIFIED
+}
+
+model Player {
+  id              String          @id @default(cuid())
+  slug            String          @unique
+  name            String
+  // Team context exactly as supplied. Never inferred, never expanded.
+  teamContext     String?
+  level           String?
+  associationType AssociationType @default(UNSPECIFIED)
+  associationNote String          @default("Player associated with the facility.")
+  photoUrl        String?
+  photoAlt        String?
+  isPublished     Boolean         @default(true)
+  sortOrder       Int             @default(0)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  verifications VerificationRecord[]
+
+  @@index([isPublished, sortOrder])
+}
+
+model Business {
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  name         String
+  role         String   @default("Founder & Owner")
+  category     String?
+  description  String   @db.Text
+  logoUrl      String?
+  websiteUrl   String?
+  bookingUrl   String?
+  location     String?
+  contactEmail String?
+  contactPhone String?
+  socialLinks  Json     @default("[]")
+  isPublished  Boolean  @default(true)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  images BusinessImage[]
+
+  @@index([isPublished, sortOrder])
+}
+
+model BusinessImage {
+  id            String   @id @default(cuid())
+  businessId    String
+  business      Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  url           String
+  alt           String
+  sortOrder     Int      @default(0)
+  isPlaceholder Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  @@index([businessId, sortOrder])
+}
+
+model SiteStat {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  // Text, not a number: "50+" and "6+" are the honest values here.
+  value       String
+  label       String
+  description String?
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  updatedAt   DateTime @updatedAt
+
+  @@index([sortOrder])
+}
+
+model FaqItem {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  question    String
+  answer      String   @db.Text
+  sortOrder   Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([sortOrder])
+}
+
+// ---------------------------------------------------------------------------
+// Media, press and verification
+// ---------------------------------------------------------------------------
+
+enum MediaCategory {
+  NORWAY_CRICKET
+  INTERNATIONAL_CLUB_CRICKET
+  RED_BALL_GROUND
+  SPORTS_INFRASTRUCTURE
+  BUSINESS
+  PLAYER_ASSOCIATIONS
+  EVENTS
+  OTHER
+}
+
+enum MediaType {
+  NEWSPAPER_ARTICLE
+  NEWSPAPER_CLIPPING
+  ONLINE_ARTICLE
+  INTERVIEW
+  VIDEO
+  PHOTO
+  PDF
+  EXTERNAL_REFERENCE
+}
+
+enum VerificationStatus {
+  UNVERIFIED
+  UNDER_REVIEW
+  VERIFIED
+  REJECTED
+}
+
+model MediaArticle {
+  id           String             @id @default(cuid())
+  slug         String             @unique
+  title        String
+  publication  String?
+  publishedOn  DateTime?
+  category     MediaCategory      @default(OTHER)
+  mediaType    MediaType          @default(EXTERNAL_REFERENCE)
+  description  String?            @db.Text
+  thumbnailUrl String?
+  thumbnailAlt String?
+  externalUrl  String?
+  sourceNote   String?
+  status       VerificationStatus @default(UNVERIFIED)
+  // Unpublished by default: press items go live only after a deliberate review.
+  isPublished  Boolean            @default(false)
+  sortOrder    Int                @default(0)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  evidence      MediaEvidence[]
+  verifications VerificationRecord[]
+
+  @@index([category, isPublished])
+  @@index([status])
+  @@index([publishedOn])
+}
+
+model MediaEvidence {
+  id             String       @id @default(cuid())
+  mediaArticleId String
+  mediaArticle   MediaArticle @relation(fields: [mediaArticleId], references: [id], onDelete: Cascade)
+  fileUrl        String
+  fileName       String
+  mimeType       String
+  sizeBytes      Int
+  checksum       String?
+  uploadedById   String?
+  createdAt      DateTime     @default(now())
+
+  @@index([mediaArticleId])
+}
+
+enum SourceType {
+  NEWSPAPER
+  MAGAZINE
+  ONLINE_PUBLICATION
+  BROADCAST
+  OFFICIAL_RECORD
+  CLUB_WEBSITE
+  INSTITUTIONAL_WEBSITE
+  TOURNAMENT_RECORD
+  OTHER
+}
+
+enum VerificationSubject {
+  TIMELINE_EVENT
+  SPORTS_EVENT
+  PLAYER
+  MEDIA_ARTICLE
+  STANDALONE_CLAIM
+}
+
+/// One row = one public claim plus the evidence that backs it.
+/// A claim without a VERIFIED record renders with a "Verification required" marker.
+model VerificationRecord {
+  id           String              @id @default(cuid())
+  claim        String              @db.Text
+  subjectType  VerificationSubject @default(STANDALONE_CLAIM)
+  sourceType   SourceType          @default(OTHER)
+  publication  String?
+  publishedOn  DateTime?
+  sourceUrl    String?
+  evidenceUrl  String?
+  evidenceName String?
+  status       VerificationStatus  @default(UNVERIFIED)
+  adminNotes   String?             @db.Text
+  reviewedById String?
+  reviewedBy   AdminUser?          @relation("VerificationReviewer", fields: [reviewedById], references: [id], onDelete: SetNull)
+  reviewedAt   DateTime?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  timelineEventId String?
+  timelineEvent   TimelineEvent? @relation(fields: [timelineEventId], references: [id], onDelete: Cascade)
+  sportsEventId   String?
+  sportsEvent     SportsEvent?   @relation(fields: [sportsEventId], references: [id], onDelete: Cascade)
+  playerId        String?
+  player          Player?        @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  mediaArticleId  String?
+  mediaArticle    MediaArticle?  @relation(fields: [mediaArticleId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([subjectType])
+  @@index([timelineEventId])
+  @@index([sportsEventId])
+  @@index([playerId])
+  @@index([mediaArticleId])
+}
+
+// ---------------------------------------------------------------------------
+// Inquiries
+// ---------------------------------------------------------------------------
+
+enum InquiryType {
+  SPORTS_FACILITY
+  CRICKET
+  BUSINESS
+  PARTNERSHIP
+  MEDIA
+  EVENT
+  GENERAL
+}
+
+enum InquiryStatus {
+  NEW
+  CONTACTED
+  IN_PROGRESS
+  RESOLVED
+  SPAM
+  ARCHIVED
+}
+
+model ContactInquiry {
+  id           String        @id @default(cuid())
+  reference    String        @unique
+  name         String
+  email        String
+  phone        String?
+  organization String?
+  subject      String
+  message      String        @db.Text
+  inquiryType  InquiryType   @default(GENERAL)
+  status       InquiryStatus @default(NEW)
+  consentGiven Boolean       @default(false)
+
+  sourcePage  String?
+  referrer    String?
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmTerm     String?
+  utmContent  String?
+
+  // Privacy-safe: a salted hash only, never a raw IP address.
+  visitorHash String?
+  countryCode String?
+  spamScore   Int     @default(0)
+
+  assignedToId String?
+  assignedTo   AdminUser? @relation("InquiryAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  respondedAt DateTime?
+
+  notes InquiryNote[]
+
+  @@index([status, createdAt])
+  @@index([inquiryType])
+  @@index([createdAt])
+  @@index([assignedToId])
+  @@index([email])
+}
+
+model InquiryNote {
+  id        String         @id @default(cuid())
+  inquiryId String
+  inquiry   ContactInquiry @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  authorId  String?
+  author    AdminUser?     @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  body      String         @db.Text
+  createdAt DateTime       @default(now())
+
+  @@index([inquiryId, createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// First-party analytics. No third-party trackers, no raw IP addresses.
+// ---------------------------------------------------------------------------
+
+enum DeviceType {
+  DESKTOP
+  MOBILE
+  TABLET
+  UNKNOWN
+}
+
+enum TrafficChannel {
+  DIRECT
+  ORGANIC_SEARCH
+  SOCIAL
+  REFERRAL
+  CAMPAIGN
+  INTERNAL
+}
+
+model AnalyticsSession {
+  id         String    @id @default(cuid())
+  sessionKey String    @unique
+  // Daily-rotating salted hash. Not reversible to an IP address.
+  visitorHash String
+  startedAt   DateTime  @default(now())
+  lastSeenAt  DateTime  @default(now())
+  endedAt     DateTime?
+  durationSec Int       @default(0)
+  pageViews   Int       @default(0)
+  isBounce    Boolean   @default(true)
+  entryPath   String?
+  exitPath    String?
+
+  device       DeviceType     @default(UNKNOWN)
+  browser      String?
+  os           String?
+  channel      TrafficChannel @default(DIRECT)
+  referrerHost String?
+  countryCode  String?
+  region       String?
+  city         String?
+
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmTerm     String?
+  utmContent  String?
+  converted   Boolean @default(false)
+
+  events AnalyticsEvent[]
+
+  @@index([startedAt])
+  @@index([visitorHash, startedAt])
+  @@index([channel, startedAt])
+  @@index([device, startedAt])
+  @@index([countryCode, startedAt])
+}
+
+enum AnalyticsEventName {
+  page_view
+  session_start
+  contact_form_view
+  contact_form_start
+  contact_form_submit
+  external_link_click
+  media_open
+  red_ball_link_click
+  business_link_click
+}
+
+model AnalyticsEvent {
+  id         String             @id @default(cuid())
+  sessionId  String
+  session    AnalyticsSession   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  name       AnalyticsEventName
+  path       String
+  referrer   String?
+  metadata   Json?
+  occurredAt DateTime           @default(now())
+
+  @@index([name, occurredAt])
+  @@index([path, occurredAt])
+  @@index([sessionId])
+  @@index([occurredAt])
+}
+
+// ---------------------------------------------------------------------------
+// Operations
+// ---------------------------------------------------------------------------
+
+enum AuditAction {
+  ADMIN_LOGIN
+  ADMIN_LOGIN_FAILED
+  ADMIN_LOGOUT
+  PASSWORD_RESET_REQUESTED
+  PASSWORD_CHANGED
+  CONTENT_CREATED
+  CONTENT_UPDATED
+  CONTENT_DELETED
+  INQUIRY_STATUS_CHANGED
+  INQUIRY_ASSIGNED
+  INQUIRY_NOTE_ADDED
+  MEDIA_UPLOADED
+  MEDIA_VERIFIED
+  MEDIA_REJECTED
+  SETTINGS_UPDATED
+  USER_CREATED
+  USER_UPDATED
+  USER_DEACTIVATED
+}
+
+model AuditLog {
+  id            String      @id @default(cuid())
+  actorId       String?
+  actor         AdminUser?  @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  actorEmail    String?
+  action        AuditAction
+  resourceType  String
+  resourceId    String?
+  summary       String
+  previousValue Json?
+  newValue      Json?
+  ipHash        String?
+  userAgent     String?
+  createdAt     DateTime    @default(now())
+
+  @@index([createdAt])
+  @@index([action, createdAt])
+  @@index([actorId])
+  @@index([resourceType, resourceId])
+}
+
+model SiteSetting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     Json
+  group     String   @default("general")
+  updatedAt DateTime @updatedAt
+}
+
+model SeoSetting {
+  id            String   @id @default(cuid())
+  path          String   @unique
+  title         String
+  description   String   @db.Text
+  keywords      String?
+  ogImageUrl    String?
+  canonicalPath String?
+  noindex       Boolean  @default(false)
+  updatedAt     DateTime @updatedAt
+
+  @@index([noindex])
+}
+
+model RateLimitHit {
+  id        String   @id @default(cuid())
+  bucket    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([bucket, expiresAt])
+  @@index([expiresAt])
+}
