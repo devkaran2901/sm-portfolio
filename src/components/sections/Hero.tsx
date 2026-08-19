@@ -13,7 +13,20 @@ import { cn } from '@/lib/utils';
  * Renders server-side with no entry animation on the headline: this is the LCP
  * element, so it paints immediately rather than fading in.
  */
-export function Hero({ profile, stats }: { profile: ProfileView; stats: StatView[] }) {
+export function Hero({
+  profile,
+  stats,
+  showHeadline = true,
+}: {
+  profile: ProfileView;
+  stats: StatView[];
+  /**
+   * Off when the scroll sequence above already carries the name as the page
+   * h1 - two giant identical headings would be a duplicate h1 and read as a
+   * mistake.
+   */
+  showHeadline?: boolean;
+}) {
   const location = [profile.currentCity, profile.region].filter(Boolean).join(', ');
   const positioning = profile.positioning.split('·').map((part) => part.trim()).filter(Boolean);
   const heroStats = stats.slice(0, 3);
@@ -37,9 +50,11 @@ export function Hero({ profile, stats }: { profile: ProfileView; stats: StatView
             {location || 'Rohtak, Haryana'}, India
           </p>
 
-          <h1 className="mt-6 text-display-xl text-bone-50">{profile.headline}</h1>
+          {showHeadline ? (
+            <h1 className="mt-6 text-display-xl text-bone-50">{profile.headline}</h1>
+          ) : null}
 
-          <ul className="mt-7 flex flex-wrap items-center gap-x-3 gap-y-2">
+          <ul className={cn('flex flex-wrap items-center gap-x-3 gap-y-2', showHeadline ? 'mt-7' : 'mt-6')}>
             {positioning.map((item, index) => (
               <li key={item} className="flex items-center gap-3">
                 {index > 0 ? (

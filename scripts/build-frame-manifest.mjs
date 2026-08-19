@@ -1,0 +1,153 @@
+/**
+ * Scans public/frames and writes src/content/frame-manifest.json.
+ *
+ * The hero sequence needs to know how many frames exist, how they are named and
+ * what they measure, before it can request any of them. Reading the directory at
+ * build time keeps that in one generated file instead of a hand-maintained
+ * constant that drifts the moment a frame is added or removed.
+ *
+ * Run: npm run frames
+ */
+import { readdir, writeFile, readFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
+
+const FRAMES_DIR = path.join(process.cwd(), 'public', 'frames');
+const OUTPUT = path.join(process.cwd(), 'src', 'content', 'frame-manifest.json');
+const EXTENSIONS = new Set(['.webp', '.avif', '.jpg', '.jpeg', '.png']);
+
+/** Reads intrinsic dimensions without pulling in an image library. */
+async function readDimensions(file) {
+  const buffer = await readFile(file);
+
+  // PNG: IHDR is always the first chunk.
+  if (buffer.length > 24 && buffer.readUInt32BE(0) === 0x89504e47) {
+    return { width: buffer.readUInt32BE(16), height: buffer.readUInt32BE(20) };
+  }
+
+  // JPEG: walk the segment markers to the first SOF frame header.
+  if (buffer.length > 4 && buffer[0] === 0xff && buffer[1] === 0xd8) {
+    let offset = 2;
+    while (offset < buffer.length - 9) {
+      if (buffer[offset] !== 0xff) {
+        offset += 1;
+        continue;
+      }
+      const marker = buffer[offset + 1];
+      const length = buffer.readUInt16BE(offset + 2);
+      // SOF0-SOF15, excluding the non-frame markers DHT/JPG/DAC.
+      if (marker >= 0xc0 && marker <= 0xcf && ![0xc4, 0xc8, 0xcc].includes(marker)) {
+        return { height: buffer.readUInt16BE(offset + 5), width: buffer.readUInt16BE(offset + 7) };
+      }
+      offset += 2 + length;
+    }
+  }
+
+  // WebP: VP8X carries the canvas size, VP8 and VP8L encode it inline.
+  if (buffer.length > 30 && buffer.toString('ascii', 0, 4) === 'RIFF') {
+    const format = buffer.toString('ascii', 12, 16);
+    if (format === 'VP8X') {
+      return {
+        width: 1 + buffer.readUIntLE(24, 3),
+        height: 1 + buffer.readUIntLE(27, 3),
+      };
+    }
+    if (format === 'VP8 ') {
+      return {
+        width: buffer.readUInt16LE(26) & 0x3fff,
+        height: buffer.readUInt16LE(28) & 0x3fff,
+      };
+    }
+    if (format === 'VP8L') {
+      const bits = buffer.readUInt32LE(21);
+      return { width: (bits & 0x3fff) + 1, height: ((bits >> 14) & 0x3fff) + 1 };
+    }
+  }
+
+  return null;
+}
+
+async function main() {
+  if (!existsSync(FRAMES_DIR)) {
+    await writeManifest({ frameCount: 0, reason: 'public/frames does not exist yet' });
+    console.log('No public/frames directory. Wrote an empty manifest.');
+    console.log('Create it and drop your frames in, then re-run: npm run frames');
+    return;
+  }
+
+  const entries = await readdir(FRAMES_DIR, { withFileTypes: true });
+  const files = entries
+    .filter((entry) => entry.isFile() && EXTENSIONS.has(path.extname(entry.name).toLowerCase()))
+    // Natural sort, so frame_2 precedes frame_10.
+    .map((entry) => entry.name)
+    .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+
+  if (files.length === 0) {
+    await writeManifest({ frameCount: 0, reason: 'public/frames is empty' });
+    console.log('public/frames is empty. Wrote an empty manifest.');
+    return;
+  }
+
+  // Derive the pattern from the first file: prefix, zero padding, extension.
+  const first = files[0];
+  const extension = path.extname(first);
+  const stem = path.basename(first, extension);
+  const digits = stem.match(/(\d+)$/);
+
+  if (!digits) {
+    console.error(`Cannot read a frame number from "${first}".`);
+    console.error('Frames must end in digits, e.g. frame-0001.webp or 001.jpg');
+    process.exitCode = 1;
+    return;
+  }
+
+  const pad = digits[1].length;
+  const prefix = stem.slice(0, stem.length - pad);
+  const start = Number.parseInt(digits[1], 10);
+  const dimensions = (await readDimensions(path.join(FRAMES_DIR, first))) ?? { width: 0, height: 0 };
+
+  // Confirm the run is unbroken; a gap would freeze the sequence mid-scroll.
+  const missing = [];
+  for (let index = 0; index < files.length; index += 1) {
+    const expected = `${prefix}${String(start + index).padStart(pad, '0')}${extension}`;
+    if (!files.includes(expected)) missing.push(expected);
+  }
+
+  await writeManifest({
+    frameCount: files.length,
+    prefix,
+    pad,
+    extension,
+    start,
+    width: dimensions.width,
+    height: dimensions.height,
+  });
+
+  console.log(`Frames found: ${files.length}`);
+  console.log(`  pattern   : ${prefix}${'0'.repeat(pad)}${extension}  (starts at ${start})`);
+  console.log(`  dimensions: ${dimensions.width}x${dimensions.height}`);
+  if (missing.length > 0) {
+    console.warn(`  WARNING: ${missing.length} gap(s) in the numbering, first: ${missing[0]}`);
+  }
+  console.log('Wrote src/content/frame-manifest.json');
+}
+
+async function writeManifest(data) {
+  const payload = {
+    $comment: 'Generated by npm run frames. Do not edit by hand.',
+    frameCount: 0,
+    prefix: 'frame-',
+    pad: 4,
+    extension: '.webp',
+    start: 1,
+    width: 0,
+    height: 0,
+    ...data,
+  };
+  await writeFile(OUTPUT, `${JSON.stringify(payload, null, 2)}\n`, 'utf8');
+}
+
+main().catch((error) => {
+  console.error('Failed to build the frame manifest:', error);
+  process.exitCode = 1;
+});

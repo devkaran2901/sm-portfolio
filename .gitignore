@@ -11,3 +11,11 @@ next-env.d.ts
 !/public/uploads/.gitkeep
 .tsbuildinfo
 *.tsbuildinfo
+
+# Hero frames are committed: the whole sequence is ~1 MB, and keeping it in the
+# repo means a fresh clone or deploy renders the animation with no extra step.
+# If a future export is much heavier, ignore /public/frames/* again and serve it
+# from object storage via NEXT_PUBLIC_FRAMES_BASE_URL.
+
+# Animated source for the frame sequence: superseded by the extracted frames.
+/output.webp

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 import { Hero } from '@/components/sections/Hero';
+import { HeroSequence } from '@/components/sections/HeroSequence';
 import { Timeline } from '@/components/sections/Timeline';
 import { Ecosystem } from '@/components/sections/Ecosystem';
 import { PlayerImpact } from '@/components/sections/PlayerImpact';
@@ -61,7 +62,13 @@ export default async function HomePage() {
 
   return (
     <>
-      <Hero profile={profile} stats={stats} />
+      <HeroSequence
+        name={profile.fullName}
+        fallbackImageUrl={profile.portraitUrl}
+        fallbackAlt={profile.portraitAlt}
+      />
+
+      <Hero profile={profile} stats={stats} showHeadline={false} />
 
       {/* Who, in one screen. The 10-second answer the brief asks for. */}
       <Section id="overview" tone="raised">
