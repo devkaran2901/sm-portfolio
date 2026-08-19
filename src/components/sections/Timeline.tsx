@@ -40,7 +40,7 @@ export function Timeline({ events }: { events: TimelineView[] }) {
         <Reveal as="li" key={event.id} delay={Math.min(index * 55, 300)} className="relative block">
           <div className="flex flex-col gap-x-8 gap-y-3 pb-12 sm:flex-row">
             <div className="order-2 shrink-0 sm:order-1 sm:w-36 sm:pt-0.5 sm:text-right">
-              <span className="text-xs font-semibold uppercase tracking-[0.14em] text-brass-300">
+              <span className="text-sm font-semibold uppercase tracking-[0.14em] text-brass-300">
                 {event.yearLabel}
               </span>
             </div>
@@ -57,19 +57,19 @@ export function Timeline({ events }: { events: TimelineView[] }) {
 
             <div className="order-3 min-w-0 flex-1 sm:pl-1">
               <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                <h3 className="text-xl font-semibold text-bone-50">{event.title}</h3>
+                <h3 className="text-2xl font-semibold text-bone-50">{event.title}</h3>
                 <span className="text-[0.6875rem] uppercase tracking-[0.12em] text-bone-500">
                   {CATEGORY_LABELS[event.category] ?? event.category}
                 </span>
               </div>
 
-              <p className="mt-2.5 max-w-2xl text-[0.9375rem] leading-relaxed text-bone-300">
+              <p className="mt-2.5 max-w-2xl text-[1.0625rem] leading-relaxed text-bone-300">
                 {event.summary}
               </p>
 
               <div className="mt-4 flex flex-wrap items-center gap-3">
                 {event.location ? (
-                  <span className="text-xs text-bone-500">{event.location}</span>
+                  <span className="text-sm text-bone-500">{event.location}</span>
                 ) : null}
                 {event.needsSource && !event.isVerified ? (
                   <VerificationBadge status="pending" />

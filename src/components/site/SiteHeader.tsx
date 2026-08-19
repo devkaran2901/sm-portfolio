@@ -107,7 +107,7 @@ export function SiteHeader() {
               href={link.href}
               aria-current={isActive(link.href) ? 'page' : undefined}
               className={cn(
-                'relative rounded-full px-3.5 py-2 text-[0.8125rem] font-medium transition-colors duration-200',
+                'relative rounded-full px-4 py-2 text-[0.9375rem] font-medium transition-colors duration-200',
                 isActive(link.href)
                   ? 'text-bone-50'
                   : 'text-bone-400 hover:text-bone-100',

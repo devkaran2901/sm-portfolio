@@ -23,7 +23,7 @@ export function InternationalMap() {
               className="absolute inset-0 opacity-70"
               style={{
                 backgroundImage:
-                  'linear-gradient(to right, rgba(60,68,76,0.18) 1px, transparent 1px), linear-gradient(to bottom, rgba(60,68,76,0.18) 1px, transparent 1px)',
+                  'linear-gradient(to right, rgba(58,60,63,0.18) 1px, transparent 1px), linear-gradient(to bottom, rgba(58,60,63,0.18) 1px, transparent 1px)',
                 backgroundSize: '8.333% 12.5%',
               }}
             />

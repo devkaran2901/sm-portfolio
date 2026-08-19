@@ -1,12 +1,21 @@
 import { FACILITY_GROUP_LABELS } from '@/content/defaults';
 import type { FacilityView } from '@/lib/content';
 
-const GROUP_ORDER: Array<FacilityView['group']> = ['CRICKET', 'RACQUET', 'FITNESS', 'HOSPITALITY'];
+const GROUP_ORDER: Array<FacilityView['group']> = [
+  'CRICKET',
+  'RACQUET',
+  'FIELD',
+  'FITNESS',
+  'PRECISION',
+  'HOSPITALITY',
+];
 
 const GROUP_COLORS: Record<FacilityView['group'], { ring: string; text: string }> = {
   CRICKET: { ring: 'stroke-turf-400', text: 'fill-turf-200' },
   RACQUET: { ring: 'stroke-brass-300', text: 'fill-brass-200' },
+  FIELD: { ring: 'stroke-turf-500', text: 'fill-turf-300' },
   FITNESS: { ring: 'stroke-info-400', text: 'fill-info-400' },
+  PRECISION: { ring: 'stroke-bone-500', text: 'fill-bone-400' },
   HOSPITALITY: { ring: 'stroke-bone-400', text: 'fill-bone-300' },
 };
 

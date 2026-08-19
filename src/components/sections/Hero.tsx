@@ -20,10 +20,10 @@ export function Hero({ profile, stats }: { profile: ProfileView; stats: StatView
 
   return (
     <section className="grain relative overflow-hidden border-b border-ink-800">
-      {/* Turf-toned wash and a faint pitch line: atmosphere without a stock photo. */}
+      {/* Neutral light wash and a faint vertical rule: depth without colour. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_75%_-10%,rgba(35,127,82,0.14),transparent_58%),radial-gradient(90%_60%_at_10%_110%,rgba(168,130,31,0.12),transparent_60%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_75%_-10%,rgba(255,255,255,0.55),transparent_58%),radial-gradient(90%_60%_at_10%_110%,rgba(10,10,11,0.06),transparent_60%)]"
       />
       <div
         aria-hidden="true"
@@ -45,14 +45,14 @@ export function Hero({ profile, stats }: { profile: ProfileView; stats: StatView
                 {index > 0 ? (
                   <span aria-hidden="true" className="h-1 w-1 rounded-full bg-brass-400" />
                 ) : null}
-                <span className="text-sm font-medium uppercase tracking-[0.14em] text-bone-300">
+                <span className="text-base font-medium uppercase tracking-[0.14em] text-bone-300">
                   {item}
                 </span>
               </li>
             ))}
           </ul>
 
-          <p className="mt-8 max-w-xl text-lg leading-relaxed text-bone-300">{profile.shortBio}</p>
+          <p className="mt-8 max-w-xl text-xl leading-relaxed text-bone-300">{profile.shortBio}</p>
 
           <div className="mt-10 flex flex-wrap items-center gap-3">
             <Link href="/cricket" className={buttonClass('primary', 'lg')}>
@@ -67,8 +67,8 @@ export function Hero({ profile, stats }: { profile: ProfileView; stats: StatView
             <dl className="mt-14 grid max-w-lg grid-cols-3 gap-6 border-t border-ink-800 pt-8">
               {heroStats.map((stat) => (
                 <div key={stat.key}>
-                  <dt className="text-xs uppercase tracking-[0.12em] text-bone-500">{stat.label}</dt>
-                  <dd className="mt-2 font-display text-3xl text-brass-200 tabular-nums">
+                  <dt className="text-sm uppercase tracking-[0.12em] text-bone-500">{stat.label}</dt>
+                  <dd className="mt-2 font-display text-4xl text-brass-200 tabular-nums">
                     {stat.value}
                   </dd>
                 </div>
@@ -100,8 +100,15 @@ export function Hero({ profile, stats }: { profile: ProfileView; stats: StatView
                 className={cn('relative w-full')}
               />
             )}
-            <figcaption className="mt-4 text-xs uppercase tracking-[0.14em] text-bone-500">
-              {profile.fullName} &mdash; {profile.birthPlace ?? 'Rohtak, Haryana'}
+            {/*
+              With a real photograph in place the caption carries the name only.
+              Pairing a portrait with a birthplace would read as a location
+              caption for the image, which is a claim the photo does not make.
+            */}
+            <figcaption className="mt-4 text-sm uppercase tracking-[0.14em] text-bone-500">
+              {profile.portraitUrl
+                ? profile.fullName
+                : `${profile.fullName} — ${profile.birthPlace ?? 'Rohtak, Haryana'}`}
             </figcaption>
           </figure>
         </div>

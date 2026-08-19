@@ -27,7 +27,7 @@ export function PlayerImpact({
           <p className="mt-4 text-lg font-semibold text-bone-50">
             {playersStat?.label ?? 'Players Progressed to Higher Levels'}
           </p>
-          <p className="mt-3 text-sm leading-relaxed text-bone-400">
+          <p className="mt-3 text-[0.9375rem] leading-relaxed text-bone-400">
             {playersStat?.description ??
               'Players who trained or played at the facility and went on to higher levels of competitive cricket.'}
           </p>
@@ -57,13 +57,13 @@ export function PlayerImpact({
                   className="rounded-none border-0 border-b border-dashed border-ink-700"
                 />
                 <div className="flex flex-1 flex-col p-5">
-                  <h4 className="font-display text-lg text-bone-50">{player.name}</h4>
+                  <h4 className="font-display text-xl text-bone-50">{player.name}</h4>
                   {player.teamContext ? (
                     <p className="mt-1 text-xs uppercase tracking-[0.12em] text-brass-300">
                       {player.teamContext}
                     </p>
                   ) : null}
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-bone-400">
+                  <p className="mt-3 flex-1 text-[0.9375rem] leading-relaxed text-bone-400">
                     {player.associationNote}
                   </p>
                   <div className="mt-4">
@@ -79,7 +79,7 @@ export function PlayerImpact({
 
         <div className="mt-8 rounded-xl2 border border-dashed border-ink-600 bg-ink-900/40 p-6">
           <h4 className="text-sm font-semibold text-bone-100">Testimonials and references</h4>
-          <p className="mt-2 text-sm leading-relaxed text-bone-400">
+          <p className="mt-2 text-[0.9375rem] leading-relaxed text-bone-400">
             Player testimonials, photographs and official references are added from the admin portal
             once they have been supplied and verified. Nothing is published here on the strength of
             an assumption.

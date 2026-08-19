@@ -29,7 +29,7 @@ export function Faq({ faqs }: { faqs: FaqView[] }) {
               <span className="absolute h-px w-3 bg-current" />
             </span>
           </summary>
-          <p className="mt-3 max-w-3xl pr-12 text-[0.9375rem] leading-relaxed text-bone-300">
+          <p className="mt-3 max-w-3xl pr-12 text-[1.0625rem] leading-relaxed text-bone-300">
             {faq.answer}
           </p>
         </details>

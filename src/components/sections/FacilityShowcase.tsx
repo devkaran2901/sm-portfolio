@@ -69,7 +69,7 @@ export function FacilityShowcase({ facilities }: { facilities: FacilityView[] })
                     <div className="p-6">
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <h4 className="font-display text-lg text-bone-50">{facility.name}</h4>
+                          <h4 className="font-display text-xl text-bone-50">{facility.name}</h4>
                           {facility.quantity ? (
                             <p className="mt-1 text-xs uppercase tracking-[0.12em] text-brass-300">
                               {facility.quantity} {facility.unitLabel ?? ''}
@@ -84,7 +84,7 @@ export function FacilityShowcase({ facilities }: { facilities: FacilityView[] })
                         </span>
                       </div>
 
-                      <p className="mt-4 text-sm leading-relaxed text-bone-400">
+                      <p className="mt-4 text-[0.9375rem] leading-relaxed text-bone-400">
                         {facility.description}
                       </p>
                     </div>

@@ -26,21 +26,21 @@ import { formatNumber, formatPercent } from '@/lib/utils';
  * elsewhere on the page, because a canvas alone is not accessible.
  */
 
-const SERIES = ['#2C8C5E', '#A8821F', '#3B7CB8', '#7E8792', '#63BE92', '#D4B65A'];
+const SERIES = ['#202124', '#4E5053', '#7A7C7F', '#9EA0A3', '#B4B6B9', '#C9CBCD'];
 
-const AXIS = { stroke: '#7E8792', fontSize: 11 };
-const GRID = '#BFC6CF';
+const AXIS = { stroke: '#7A7C7F', fontSize: 12 };
+const GRID = '#C9CBCD';
 
 const tooltipStyle = {
   contentStyle: {
-    background: '#F6F7F9',
-    border: '1px solid #BFC6CF',
+    background: '#FFFFFF',
+    border: '1px solid #C9CBCD',
     borderRadius: 10,
     fontSize: 12,
-    color: '#0C0E10',
+    color: '#0A0A0B',
   },
-  labelStyle: { color: '#586069', marginBottom: 4 },
-  itemStyle: { color: '#22262B' },
+  labelStyle: { color: '#4E5053', marginBottom: 4 },
+  itemStyle: { color: '#202124' },
 };
 
 function shortDate(value: string) {
@@ -151,7 +151,7 @@ export function HorizontalBars({ data }: { data: BreakdownDatum[] }) {
             axisLine={false}
             {...AXIS}
           />
-          <Tooltip {...tooltipStyle} cursor={{ fill: '#DCE1E7' }} />
+          <Tooltip {...tooltipStyle} cursor={{ fill: '#E8E9EA' }} />
           <Bar dataKey="value" name="Sessions" radius={[0, 5, 5, 0]}>
             {data.map((entry, index) => (
               <Cell key={entry.key} fill={SERIES[index % SERIES.length]} />
@@ -220,7 +220,7 @@ export function InquiryTrendChart({ data }: { data: Array<{ date: string; total:
           <YAxis allowDecimals={false} tickLine={false} axisLine={false} width={40} {...AXIS} />
           <Tooltip
             {...tooltipStyle}
-            cursor={{ fill: '#DCE1E7' }}
+            cursor={{ fill: '#E8E9EA' }}
             labelFormatter={(label) => shortDate(String(label))}
           />
           <Bar dataKey="total" name="Inquiries" fill={SERIES[1]} radius={[5, 5, 0, 0]} />

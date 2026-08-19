@@ -22,16 +22,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Surfaces: cool light grey ground with near-white cards.
+        // Surfaces: neutral grey ground, white cards. No blue cast.
         ink: {
-          950: '#C8CED6', // page background
-          900: '#F6F7F9', // cards, panels, admin sidebar
-          800: '#DCE1E7', // dividers and hover fills
-          700: '#BFC6CF', // default borders
-          600: '#ADB6C1', // stronger borders
-          500: '#7E8792', // icons and faint marks
-          400: '#5C646E',
-          tint: '#BDC5CE',
+          950: '#D9DADC', // page background
+          900: '#FFFFFF', // cards, panels, admin sidebar
+          800: '#E8E9EA', // dividers and hover fills
+          700: '#C9CBCD', // default borders
+          600: '#B4B6B9', // stronger borders
+          500: '#7A7C7F', // icons and faint marks
+          400: '#5A5C5F',
+          tint: '#CFD0D2',
         },
         /*
          * Content: near-black through to muted grey.
@@ -42,54 +42,63 @@ const config: Config = {
          * hierarchy is carried by the remaining separation.
          */
         bone: {
-          50: '#0C0E10', // headings          13.1:1
-          100: '#15181B', // 12.0:1
-          200: '#22262B', // body copy        10.5:1
-          300: '#2F363C', // secondary copy    8.3:1
-          400: '#3E454C', // muted copy        6.1:1
-          500: '#464D54', // captions          5.4:1
-          600: '#4F575F', // faintest labels   4.6:1
+          50: '#0A0A0B', // headings
+          100: '#141516',
+          200: '#202124', // body copy
+          300: '#2C2E31', // secondary copy
+          400: '#3A3C3F', // muted copy
+          500: '#45474A', // captions
+          600: '#4E5053', // faintest labels
         },
+        /*
+         * Accents are neutral greys, not colours. The palette is deliberately
+         * black / grey / white, so what used to be turf green and brass gold now
+         * read as tone alone - the same scale positions, none of the hue.
+         */
         turf: {
-          50: '#0A291B',
-          100: '#0E3B27',
-          200: '#175239', // accent text
-          300: '#1E6A47',
-          400: '#2C8C5E', // dots and markers
-          500: '#3BA372', // fills
-          600: '#63BE92',
-          700: '#93D6B2',
-          800: '#BEE7D1',
-          900: '#DCF1E6', // faint tints
+          50: '#0A0A0B',
+          100: '#141516',
+          200: '#1A1B1D', // accent text
+          300: '#26282B',
+          400: '#33363A', // dots and markers
+          500: '#3A3D41', // fills (carries a white checkmark)
+          600: '#8E9195', // avatar fill under near-black text
+          700: '#B4B6B9',
+          800: '#D2D4D6',
+          900: '#E8E9EA', // faint tints
         },
-        // Gold has to run dark to stay legible on a light ground: the text
-        // shades (100-300) all clear AA, while 400+ are borders and fills only.
         brass: {
-          50: '#2E2405',
-          100: '#3D2F08', // link hover        8.4:1
-          200: '#4E3C0B', // accent text       6.6:1
-          300: '#5E4910', // eyebrows          5.4:1
-          400: '#A8821F', // borders
-          500: '#C29B31',
-          600: '#D4B65A',
-          700: '#E7D394', // tinted fills
+          50: '#0A0A0B',
+          100: '#141516', // link hover
+          200: '#1F2124', // accent text and links
+          300: '#3A3C3F', // eyebrows
+          400: '#B4B6B9', // borders
+          500: '#C9CBCD',
+          600: '#DCDDDF',
+          700: '#EDEEEF', // tinted fills
         },
+        // Error state keeps its hue: red carries meaning that grey cannot.
         danger: { 400: '#93291D', 500: '#C0392B', 600: '#B32D1C' },
-        info: { 400: '#245078', 500: '#3B7CB8' },
+        info: { 400: '#3A3C3F', 500: '#7A7C7F' },
       },
       fontFamily: {
         display: ['var(--font-display)', 'Haettenschweiler', 'Impact', 'sans-serif'],
         sans: ['var(--font-sans)', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif'],
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
+      /*
+       * Anton is condensed, so the large sizes previously carried heavy negative
+       * tracking and closed up. display-sm reads best, and the larger steps are
+       * now tuned to sit near it optically rather than tightening as they grow.
+       */
       fontSize: {
-        'display-xl': ['clamp(3.25rem, 10vw, 8.5rem)', { lineHeight: '0.92', letterSpacing: '-0.03em' }],
-        'display-lg': ['clamp(2.5rem, 6.4vw, 5rem)', { lineHeight: '0.98', letterSpacing: '-0.025em' }],
-        'display-md': ['clamp(2rem, 4.4vw, 3.25rem)', { lineHeight: '1.04', letterSpacing: '-0.02em' }],
-        'display-sm': ['clamp(1.5rem, 3vw, 2.125rem)', { lineHeight: '1.12', letterSpacing: '-0.015em' }],
-        eyebrow: ['0.75rem', { lineHeight: '1', letterSpacing: '0.22em' }],
+        'display-xl': ['clamp(3.5rem, 10.5vw, 9rem)', { lineHeight: '0.95', letterSpacing: '0.005em' }],
+        'display-lg': ['clamp(2.75rem, 6.8vw, 5.5rem)', { lineHeight: '1.0', letterSpacing: '0em' }],
+        'display-md': ['clamp(2.125rem, 4.6vw, 3.5rem)', { lineHeight: '1.06', letterSpacing: '-0.008em' }],
+        'display-sm': ['clamp(1.625rem, 3.1vw, 2.25rem)', { lineHeight: '1.14', letterSpacing: '-0.015em' }],
+        eyebrow: ['0.8125rem', { lineHeight: '1', letterSpacing: '0.2em' }],
       },
-      maxWidth: { shell: '82rem', prose: '68ch' },
+      maxWidth: { shell: '100rem', prose: '72ch' },
       spacing: { section: 'clamp(4rem, 9vw, 8.5rem)' },
       borderRadius: { xl2: '1.25rem' },
       boxShadow: {

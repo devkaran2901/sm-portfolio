@@ -25,10 +25,10 @@ export function SiteFooter({
       <div className="shell grid gap-12 py-16 lg:grid-cols-12 lg:gap-8">
         <div className="lg:col-span-5">
           <p className="font-display text-2xl font-semibold text-bone-50">{profile.fullName}</p>
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-bone-400">{profile.shortBio}</p>
+          <p className="mt-4 max-w-sm text-[0.9375rem] leading-relaxed text-bone-400">{profile.shortBio}</p>
 
           {profile.currentCity ? (
-            <p className="mt-6 text-xs uppercase tracking-[0.16em] text-bone-500">
+            <p className="mt-6 text-sm uppercase tracking-[0.16em] text-bone-500">
               {[profile.currentCity, profile.region, profile.country].filter(Boolean).join(', ')}
             </p>
           ) : null}
@@ -55,7 +55,7 @@ export function SiteFooter({
           <ul className="mt-5 space-y-2.5">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="text-sm text-bone-300 transition-colors hover:text-brass-200">
+                <Link href={link.href} className="text-[0.9375rem] text-bone-300 transition-colors hover:text-brass-200">
                   {link.label}
                 </Link>
               </li>
@@ -70,7 +70,7 @@ export function SiteFooter({
               <ExternalTrackedLink
                 href={SITE.redBallUrl}
                 event="red_ball_link_click"
-                className="group inline-flex items-center gap-1.5 text-sm text-bone-300 transition-colors hover:text-brass-200"
+                className="group inline-flex items-center gap-1.5 text-[0.9375rem] text-bone-300 transition-colors hover:text-brass-200"
               >
                 Red Ball Sports Arena
                 <ArrowUpRight
@@ -87,7 +87,7 @@ export function SiteFooter({
                     href={business.websiteUrl}
                     event="business_link_click"
                     metadata={{ business: business.slug }}
-                    className="group inline-flex items-center gap-1.5 text-sm text-bone-300 transition-colors hover:text-brass-200"
+                    className="group inline-flex items-center gap-1.5 text-[0.9375rem] text-bone-300 transition-colors hover:text-brass-200"
                   >
                     {business.name}
                     <ArrowUpRight size={14} aria-hidden="true" />
@@ -97,7 +97,7 @@ export function SiteFooter({
                 <li key={business.slug}>
                   <Link
                     href={`/ventures#${business.slug}`}
-                    className="text-sm text-bone-300 transition-colors hover:text-brass-200"
+                    className="text-[0.9375rem] text-bone-300 transition-colors hover:text-brass-200"
                   >
                     {business.name}
                   </Link>
@@ -110,7 +110,7 @@ export function SiteFooter({
           <ul className="mt-5 space-y-2.5">
             {LEGAL_LINKS.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="text-sm text-bone-300 transition-colors hover:text-brass-200">
+                <Link href={link.href} className="text-[0.9375rem] text-bone-300 transition-colors hover:text-brass-200">
                   {link.label}
                 </Link>
               </li>

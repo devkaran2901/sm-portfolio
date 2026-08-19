@@ -19,7 +19,7 @@ export function RedBallCta({ className }: { className?: string }) {
         <h2 className="mt-4 text-display-sm text-bone-50">
           A multi-sports ecosystem built in Rohtak
         </h2>
-        <p className="mt-4 text-[0.9375rem] leading-relaxed text-bone-300">
+        <p className="mt-4 text-[1.0625rem] leading-relaxed text-bone-300">
           Cricket grounds and academies, box cricket, racquet sports, fitness and hospitality on one
           site. Visit the arena website for facility details and bookings.
         </p>
@@ -48,7 +48,7 @@ export function ContactCta() {
       <div className="flex flex-col items-start justify-between gap-8 rounded-xl2 border border-ink-700/70 bg-ink-900/50 p-8 sm:p-12 lg:flex-row lg:items-center">
         <div className="max-w-xl">
           <h2 className="text-display-sm text-bone-50">Start a conversation</h2>
-          <p className="mt-3 text-[0.9375rem] leading-relaxed text-bone-300">
+          <p className="mt-3 text-[1.0625rem] leading-relaxed text-bone-300">
             Facility bookings, cricket, business, partnerships, media or events &mdash; send a
             message and it goes straight to the inbox that is actually monitored.
           </p>

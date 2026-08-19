@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { PageHeader } from '@/components/site/PageHeader';
 import { Ecosystem } from '@/components/sections/Ecosystem';
-import { FacilityShowcase } from '@/components/sections/FacilityShowcase';
+import { ArenaFacilities } from '@/components/sections/ArenaFacilities';
 import { EventsList } from '@/components/sections/EventsList';
 import { ContactCta, RedBallCta } from '@/components/sections/CallToAction';
 import { Counter } from '@/components/ui/Counter';
@@ -18,7 +18,7 @@ import { breadcrumbsFor, buildMetadata } from '@/lib/seo';
 export const metadata: Metadata = buildMetadata({
   title: 'Red Ball Cricket Ground, Rohtak | Multi-Sports Complex',
   description:
-    'Red Ball Cricket Ground in Rohtak, Haryana: two cricket grounds, two cricket academies, box cricket, badminton and pickleball courts, gym, swimming pool and restaurant.',
+    'Red Ball Sports Arena in Rohtak, Haryana: cricket grounds and academy, box cricket, badminton, pickleball, tennis, table tennis, football, volleyball, swimming pool, gym, archery and shooting.',
   path: '/red-ball',
   keywords: [
     'Red Ball Cricket Ground',
@@ -27,6 +27,8 @@ export const metadata: Metadata = buildMetadata({
     'sports complex Rohtak',
     'box cricket Rohtak',
     'pickleball Rohtak',
+    'football ground Rohtak',
+    'swimming pool Rohtak',
   ],
 });
 
@@ -52,7 +54,7 @@ export default async function RedBallPage() {
       <PageHeader
         eyebrow="Red Ball Cricket Ground"
         title="A cricket ground that grew into a sports ecosystem."
-        lead="Founded and operated by Sonu Malik in Rohtak, Haryana, for approximately six years. Cricket remains the core; racquet sports, fitness and hospitality have been built around it."
+        lead="Founded and operated by Sonu Malik in Rohtak, Haryana, for approximately six years. Cricket remains the core; racquet sports, outdoor games, precision sports and fitness have been built around it."
         breadcrumbs={breadcrumbs}
       />
 
@@ -75,7 +77,7 @@ export default async function RedBallPage() {
           <SectionHeading
             eyebrow="Sports Ecosystem"
             title="How the facilities connect"
-            lead="One site, four connected areas. Players train, compete, recover and eat without leaving the complex."
+            lead="One site, connected areas. Players train, compete, recover and eat without leaving the complex."
           />
           <div className="mt-14">
             <Ecosystem facilities={facilities} />
@@ -83,18 +85,9 @@ export default async function RedBallPage() {
         </div>
       </Section>
 
-      <Section id="facilities">
-        <div className="shell">
-          <SectionHeading
-            eyebrow="Facility Showcase"
-            title="What is on site"
-            lead="Photography is added from the admin portal as it becomes available. Until then each card shows a labelled placeholder rather than a stand-in image."
-          />
-          <div className="mt-14">
-            <FacilityShowcase facilities={facilities} />
-          </div>
-        </div>
-      </Section>
+      <div id="facilities">
+        <ArenaFacilities facilities={facilities} />
+      </div>
 
       <Section id="events" tone="raised">
         <div className="shell">

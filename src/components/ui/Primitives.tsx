@@ -63,7 +63,7 @@ export function SectionHeading({
       {lead ? (
         <p
           className={cn(
-            'mt-5 text-[1.0625rem] leading-relaxed text-bone-300',
+            'mt-5 text-[1.1875rem] leading-relaxed text-bone-300',
             tone === 'light' && 'text-ink-600',
             align === 'center' && 'mx-auto',
           )}
@@ -177,13 +177,13 @@ export function MediaPlaceholder({
         className={cn(
           'absolute inset-0 opacity-[0.18]',
           tone === 'dark'
-            ? 'bg-[linear-gradient(135deg,transparent_46%,rgba(12,14,16,0.32)_50%,transparent_54%)]'
-            : 'bg-[linear-gradient(135deg,transparent_46%,rgba(246,247,249,0.45)_50%,transparent_54%)]',
+            ? 'bg-[linear-gradient(135deg,transparent_46%,rgba(10,10,11,0.30)_50%,transparent_54%)]'
+            : 'bg-[linear-gradient(135deg,transparent_46%,rgba(255,255,255,0.5)_50%,transparent_54%)]',
         )}
       />
       <p
         className={cn(
-          'relative max-w-[16rem] px-6 text-center text-xs font-medium uppercase tracking-[0.16em]',
+          'relative max-w-[16rem] px-6 text-center text-[0.8125rem] font-medium uppercase tracking-[0.16em]',
           tone === 'dark' ? 'text-bone-500' : 'text-ink-500',
         )}
       >
@@ -221,7 +221,7 @@ export function EmptyState({
       <h3 className={cn('text-display-sm', tone === 'light' && 'text-ink-900')}>{title}</h3>
       <p
         className={cn(
-          'mx-auto mt-3 max-w-md text-sm leading-relaxed',
+          'mx-auto mt-3 max-w-md text-[0.9375rem] leading-relaxed',
           tone === 'dark' ? 'text-bone-400' : 'text-ink-600',
         )}
       >
@@ -283,14 +283,14 @@ export function StatBlock({
       </div>
       <div
         className={cn(
-          'text-sm font-semibold',
+          'text-base font-semibold',
           tone === 'dark' ? 'text-bone-100' : 'text-ink-900',
         )}
       >
         {label}
       </div>
       {description ? (
-        <p className={cn('text-sm leading-relaxed', tone === 'dark' ? 'text-bone-400' : 'text-ink-600')}>
+        <p className={cn('text-[0.9375rem] leading-relaxed', tone === 'dark' ? 'text-bone-400' : 'text-ink-600')}>
           {description}
         </p>
       ) : null}

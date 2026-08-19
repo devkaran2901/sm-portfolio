@@ -22,9 +22,9 @@ export function EventsList({ events }: { events: EventView[] }) {
                 event.category}
             </p>
 
-            <h3 className="mt-3.5 font-display text-lg text-bone-50">{event.name}</h3>
+            <h3 className="mt-3.5 font-display text-xl text-bone-50">{event.name}</h3>
 
-            <p className="mt-3 flex-1 text-sm leading-relaxed text-bone-400">{event.summary}</p>
+            <p className="mt-3 flex-1 text-[0.9375rem] leading-relaxed text-bone-400">{event.summary}</p>
 
             <dl className="mt-5 space-y-1.5 border-t border-ink-800 pt-4 text-xs">
               <div className="flex justify-between gap-3">

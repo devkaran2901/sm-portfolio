@@ -58,11 +58,15 @@ export type FacilityView = {
   id: string;
   slug: string;
   name: string;
-  group: 'CRICKET' | 'RACQUET' | 'FITNESS' | 'HOSPITALITY';
+  group: 'CRICKET' | 'RACQUET' | 'FIELD' | 'FITNESS' | 'PRECISION' | 'HOSPITALITY';
   quantity: number | null;
   unitLabel: string | null;
   description: string;
   iconKey: string;
+  isFeatured: boolean;
+  /** First genuine photograph, or null while the facility awaits one. */
+  imageUrl: string | null;
+  imageAlt: string | null;
   imageCount: number;
 };
 
@@ -224,6 +228,9 @@ export async function getFacilities(): Promise<FacilityView[]> {
     unitLabel: item.unitLabel,
     description: item.description,
     iconKey: item.iconKey,
+    isFeatured: item.isFeatured,
+    imageUrl: null,
+    imageAlt: null,
     imageCount: 0,
   }));
 
@@ -231,7 +238,15 @@ export async function getFacilities(): Promise<FacilityView[]> {
     const rows = await prisma.facility.findMany({
       where: { isPublished: true },
       orderBy: { sortOrder: 'asc' },
-      include: { _count: { select: { images: true } } },
+      include: {
+        // Placeholder rows are excluded: only a genuine upload counts as an image.
+        images: {
+          where: { isPlaceholder: false },
+          orderBy: { sortOrder: 'asc' },
+          take: 1,
+        },
+        _count: { select: { images: true } },
+      },
     });
     if (rows.length === 0) return fallback;
     return rows.map((row) => ({
@@ -243,6 +258,9 @@ export async function getFacilities(): Promise<FacilityView[]> {
       unitLabel: row.unitLabel,
       description: row.description,
       iconKey: row.iconKey,
+      isFeatured: row.isFeatured,
+      imageUrl: row.images[0]?.url ?? null,
+      imageAlt: row.images[0]?.alt ?? null,
       imageCount: row._count.images,
     }));
   }, fallback);

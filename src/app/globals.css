@@ -11,7 +11,7 @@
      * order and pins the site to the metric fallback, never loading the real
      * face. The fallback stacks live in tailwind.config.ts instead.
      */
-    --shell-gutter: clamp(1.25rem, 5vw, 4rem);
+    --shell-gutter: clamp(1.25rem, 3.5vw, 3rem);
   }
 
   * {
@@ -37,8 +37,8 @@
   p { text-wrap: pretty; }
 
   ::selection {
-    background-color: theme('colors.turf.500');
-    color: theme('colors.bone.50');
+    background-color: theme('colors.bone.50');
+    color: theme('colors.ink.900');
   }
 
   /* Visible, high-contrast focus for keyboard users only. */
@@ -73,7 +73,7 @@
   }
 
   .prose-editorial {
-    @apply max-w-prose text-[1.0625rem] leading-[1.75] text-bone-300;
+    @apply max-w-prose text-[1.125rem] leading-[1.72] text-bone-300;
   }
   .prose-editorial p + p { @apply mt-5; }
   .prose-editorial strong { @apply font-semibold text-bone-100; }

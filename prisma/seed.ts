@@ -147,6 +147,7 @@ async function seedContent() {
       unitLabel: item.unitLabel,
       description: item.description,
       iconKey: item.iconKey,
+      isFeatured: item.isFeatured,
       sortOrder: item.sortOrder,
       isPublished: true,
     };

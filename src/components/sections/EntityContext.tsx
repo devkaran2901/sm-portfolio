@@ -27,7 +27,7 @@ export function AnswerBlocks({ faqs, limit = 5 }: { faqs: FaqView[]; limit?: num
       {items.map((faq) => (
         <div key={faq.slug} className="border-l-2 border-turf-700/60 pl-5">
           <dt className="font-display text-lg text-bone-50">{faq.question}</dt>
-          <dd className="mt-2 text-[0.9375rem] leading-relaxed text-bone-300">{faq.answer}</dd>
+          <dd className="mt-2 text-[1.0625rem] leading-relaxed text-bone-300">{faq.answer}</dd>
         </div>
       ))}
     </dl>
@@ -85,9 +85,9 @@ export function EntityWeb({ profile }: { profile: ProfileView }) {
           <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass-300">
             {group.heading}
           </h3>
-          <ul className="mt-4 space-y-2.5">
+          <ul className="mt-4 space-y-3">
             {group.items.map((item) => (
-              <li key={item.label} className="text-sm leading-snug">
+              <li key={item.label} className="text-[0.9375rem] leading-snug">
                 {item.href ? (
                   <Link href={item.href} className="text-bone-200 transition-colors hover:text-brass-200">
                     {item.label}

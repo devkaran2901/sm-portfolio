@@ -42,7 +42,7 @@ export const PROFILE = {
   longBio: [
     'Sonu Malik was born on 23 March 1988 in Mokhra village, Rohtak district, Haryana, and lives in Rohtak today. Cricket started where most Haryana careers start: on village ground with the local Mokhra team, then at the collegiate level for Vaish College.',
     'He did not take the professional BCCI route as a player. Instead his cricket took him abroad, into international club cricket - turning out with Dolphin Club in South Africa, playing club cricket in Nepal, and taking part in the Norwegian Cup in Norway.',
-    'That travelling grounding shaped what came next. For roughly six years he has founded and run Red Ball Cricket Ground in Rohtak, growing it from a cricket ground into a multi-sports complex with two cricket grounds, two cricket academies, box cricket, badminton and pickleball courts, a gym, a swimming pool and a restaurant.',
+    'That travelling grounding shaped what came next. For roughly six years he has founded and run Red Ball Cricket Ground in Rohtak, growing it from a cricket ground into a multi-sport arena spanning cricket, racquet sports, outdoor games, precision sports, fitness and aquatics, alongside an on-site restaurant.',
     'Alongside the sports infrastructure he holds an LLM from Kalinga University and runs two businesses as founder and owner: The Page and Hotel The Prada.',
   ].join('\n\n'),
   birthDate: '1988-03-23',
@@ -52,8 +52,9 @@ export const PROFILE = {
   country: 'India',
   education: 'LLM',
   educationBody: 'Kalinga University',
-  portraitUrl: null,
-  portraitAlt: 'Portrait of Sonu Malik',
+  portraitUrl: '/images/sonu-malik-portrait.jpg',
+  // Describes only what the photograph actually shows.
+  portraitAlt: 'Sonu Malik at the podium of the Norwegian Embassy in New Delhi',
   email: null,
   phone: null,
   socialLinks: [] as Array<{ label: string; url: string }>,
@@ -169,7 +170,7 @@ export const TIMELINE: TimelineSeed[] = [
     sortOrder: 90,
     title: 'A multi-sports ecosystem',
     summary:
-      'Red Ball has grown into a multi-sports complex spanning cricket, racquet sports, fitness and hospitality, alongside continued business activity.',
+      'Red Ball has grown into a multi-sport arena spanning cricket, racquet sports, outdoor games, precision sports, fitness and aquatics, alongside continued business activity.',
     category: 'INFRASTRUCTURE',
     location: 'Rohtak',
     country: 'India',
@@ -180,14 +181,23 @@ export const TIMELINE: TimelineSeed[] = [
 export type FacilitySeed = {
   slug: string;
   name: string;
-  group: 'CRICKET' | 'RACQUET' | 'FITNESS' | 'HOSPITALITY';
+  group: 'CRICKET' | 'RACQUET' | 'FIELD' | 'FITNESS' | 'PRECISION' | 'HOSPITALITY';
   quantity: number | null;
   unitLabel: string | null;
   description: string;
   iconKey: string;
+  /** Featured facilities take the large cards that anchor the arena grid. */
+  isFeatured: boolean;
   sortOrder: number;
 };
 
+/**
+ * Sports facilities at Red Ball Sports Arena, exactly as supplied.
+ *
+ * Descriptions state what each facility is for and nothing more - no capacities,
+ * dimensions, surfaces, opening hours, pricing or coaching claims have been
+ * invented to fill the cards out.
+ */
 export const FACILITIES: FacilitySeed[] = [
   {
     slug: 'cricket-grounds',
@@ -196,19 +206,21 @@ export const FACILITIES: FacilitySeed[] = [
     quantity: 2,
     unitLabel: 'Grounds',
     description:
-      'Two full cricket grounds form the core of the complex and host league, tournament and age-group fixtures.',
+      'Dedicated cricket grounds designed for competitive matches, training sessions and cricket events.',
     iconKey: 'target',
+    isFeatured: true,
     sortOrder: 10,
   },
   {
-    slug: 'cricket-academies',
-    name: 'Cricket Academies',
+    slug: 'cricket-academy',
+    name: 'Cricket Academy',
     group: 'CRICKET',
     quantity: 2,
     unitLabel: 'Academies',
     description:
-      'Two cricket academies operate on site, providing structured practice for players working toward higher levels of the game.',
+      'A dedicated environment for cricket training, skill development and structured practice.',
     iconKey: 'graduation',
+    isFeatured: false,
     sortOrder: 20,
   },
   {
@@ -217,41 +229,78 @@ export const FACILITIES: FacilitySeed[] = [
     group: 'CRICKET',
     quantity: null,
     unitLabel: null,
-    description:
-      'An enclosed box cricket arena for short-format and corporate play, usable through the evening.',
+    description: 'A dedicated space for fast-paced recreational and competitive box cricket.',
     iconKey: 'box',
+    isFeatured: false,
     sortOrder: 30,
   },
   {
-    slug: 'badminton-courts',
-    name: 'Badminton Courts',
+    slug: 'badminton',
+    name: 'Badminton',
     group: 'RACQUET',
     quantity: null,
-    unitLabel: 'Courts',
-    description: 'Badminton courts for casual, coached and competitive play.',
+    unitLabel: null,
+    description: 'Dedicated badminton facilities for training, practice and recreational play.',
     iconKey: 'racquet',
+    isFeatured: false,
     sortOrder: 40,
   },
   {
-    slug: 'pickleball-courts',
-    name: 'Pickleball Courts',
+    slug: 'pickleball',
+    name: 'Pickleball',
     group: 'RACQUET',
     quantity: null,
-    unitLabel: 'Courts',
-    description:
-      'Dedicated pickleball courts, one of the fastest-growing racquet sports in the region.',
+    unitLabel: null,
+    description: 'Dedicated pickleball courts for recreational and competitive play.',
     iconKey: 'racquet',
+    isFeatured: false,
     sortOrder: 50,
   },
   {
-    slug: 'gym',
-    name: 'Gym',
-    group: 'FITNESS',
+    slug: 'tennis',
+    name: 'Tennis',
+    group: 'RACQUET',
     quantity: null,
     unitLabel: null,
-    description: 'An on-site gym supporting general fitness and athlete conditioning.',
-    iconKey: 'dumbbell',
+    description: 'Tennis facilities designed for practice, training and recreational matches.',
+    iconKey: 'racquet',
+    isFeatured: false,
     sortOrder: 60,
+  },
+  {
+    slug: 'football-ground',
+    name: 'Football Ground',
+    group: 'FIELD',
+    quantity: null,
+    unitLabel: null,
+    description:
+      'An outdoor football facility suitable for training, games and recreational activities.',
+    iconKey: 'football',
+    isFeatured: true,
+    sortOrder: 70,
+  },
+  {
+    slug: 'volleyball',
+    name: 'Volleyball',
+    group: 'FIELD',
+    quantity: null,
+    unitLabel: null,
+    description: 'A dedicated volleyball facility for practice, games and recreational play.',
+    iconKey: 'volleyball',
+    isFeatured: false,
+    sortOrder: 80,
+  },
+  {
+    slug: 'table-tennis',
+    name: 'Table Tennis',
+    group: 'RACQUET',
+    quantity: null,
+    unitLabel: null,
+    description:
+      'Indoor table tennis facilities for practice, training and recreational games.',
+    iconKey: 'racquet',
+    isFeatured: false,
+    sortOrder: 90,
   },
   {
     slug: 'swimming-pool',
@@ -259,11 +308,50 @@ export const FACILITIES: FacilitySeed[] = [
     group: 'FITNESS',
     quantity: null,
     unitLabel: null,
-    description: 'A swimming pool for training, recovery and recreational use.',
+    description:
+      'A dedicated swimming facility for fitness, recreation and swimming activities.',
     iconKey: 'waves',
-    sortOrder: 70,
+    isFeatured: false,
+    sortOrder: 100,
   },
   {
+    slug: 'gym',
+    name: 'Gym & Fitness',
+    group: 'FITNESS',
+    quantity: null,
+    unitLabel: null,
+    description:
+      'A dedicated fitness facility supporting strength, conditioning and general physical fitness.',
+    iconKey: 'dumbbell',
+    isFeatured: false,
+    sortOrder: 110,
+  },
+  {
+    slug: 'archery',
+    name: 'Archery',
+    group: 'PRECISION',
+    quantity: null,
+    unitLabel: null,
+    description: 'A dedicated space for archery practice and recreational activities.',
+    iconKey: 'target',
+    isFeatured: false,
+    sortOrder: 120,
+  },
+  {
+    slug: 'shooting',
+    name: 'Shooting',
+    group: 'PRECISION',
+    quantity: null,
+    unitLabel: null,
+    description:
+      'A dedicated shooting facility for supervised sporting and recreational activities.',
+    iconKey: 'crosshair',
+    isFeatured: false,
+    sortOrder: 130,
+  },
+  {
+    // Kept in the data but excluded from the sports section, which covers
+    // sport only. Removing it would contradict the bio and the FAQ.
     slug: 'restaurant',
     name: 'Restaurant',
     group: 'HOSPITALITY',
@@ -272,14 +360,17 @@ export const FACILITIES: FacilitySeed[] = [
     description:
       'An on-site restaurant serving players, families and spectators through the day.',
     iconKey: 'utensils',
-    sortOrder: 80,
+    isFeatured: false,
+    sortOrder: 200,
   },
 ];
 
 export const FACILITY_GROUP_LABELS: Record<FacilitySeed['group'], string> = {
   CRICKET: 'Cricket',
   RACQUET: 'Racquet Sports',
-  FITNESS: 'Fitness & Recreation',
+  FIELD: 'Outdoor Games',
+  FITNESS: 'Fitness & Aquatics',
+  PRECISION: 'Precision Sports',
   HOSPITALITY: 'Hospitality',
 };
 
@@ -441,10 +532,10 @@ export const STATS: StatSeed[] = [
   },
   {
     key: 'sports-disciplines',
-    value: '7',
-    label: 'Sports & Facility Types',
+    value: '13',
+    label: 'Sports Facilities',
     description:
-      'Cricket, box cricket, badminton, pickleball, gym, swimming and on-site dining.',
+      'Cricket, box cricket, badminton, pickleball, tennis, table tennis, football, volleyball, swimming, gym, archery and shooting.',
     sortOrder: 50,
   },
 ];
@@ -535,7 +626,7 @@ export const FAQS: FaqSeed[] = [
     slug: 'red-ball-facilities',
     question: 'What facilities are available at Red Ball Sports Arena?',
     answer:
-      'Two cricket grounds, two cricket academies, box cricket, badminton courts, pickleball courts, a gym, a swimming pool and a restaurant.',
+      'Cricket grounds and a cricket academy, box cricket, badminton, pickleball, tennis, table tennis, a football ground, volleyball, a swimming pool, a gym, archery and shooting, alongside an on-site restaurant.',
     sortOrder: 70,
   },
   {

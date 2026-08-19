@@ -215,11 +215,12 @@ export const timelineSchema = z.object({
 export const facilitySchema = z.object({
   slug: text(2, 90),
   name: text(2, 120),
-  group: z.enum(['CRICKET', 'RACQUET', 'FITNESS', 'HOSPITALITY']),
+  group: z.enum(['CRICKET', 'RACQUET', 'FIELD', 'FITNESS', 'PRECISION', 'HOSPITALITY']),
   quantity: z.coerce.number().int().min(0).max(999).optional().nullable(),
   unitLabel: optionalText(60),
   description: text(10, 2000),
   iconKey: optionalText(40),
+  isFeatured: z.coerce.boolean().default(false),
   sortOrder: z.coerce.number().int().min(0).max(9999).default(0),
   isPublished: z.coerce.boolean().default(true),
 });
