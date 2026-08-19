@@ -23,12 +23,59 @@ export function SiteHeader() {
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
 
+  /*
+   * The home page opens with a full-viewport scroll sequence, and the nav would
+   * sit on top of it. It is held back until the sequence has run.
+   *
+   * The initial value comes from the pathname rather than an effect: the server
+   * knows the path too, so both renders agree and the nav never flashes on
+   * before hiding itself.
+   */
+  const [heroHidden, setHeroHidden] = useState(pathname === '/');
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    const sentinel = document.querySelector('[data-hero-sequence-end]');
+
+    // Every other page has no sequence, so the nav behaves normally. The reset
+    // is deferred a frame rather than set inline: the header survives
+    // client-side navigation, so this runs when leaving the home page mid-
+    // sequence, and setting state synchronously here would cascade a render.
+    if (!sentinel) {
+      const frame = requestAnimationFrame(() => setHeroHidden(false));
+      return () => cancelAnimationFrame(frame);
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry) return;
+        // Revealed once the end marker has passed above the viewport, which is
+        // the moment the last frame has been scrubbed.
+        setHeroHidden(entry.isIntersecting || entry.boundingClientRect.top > 0);
+      },
+      { threshold: 0 },
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [pathname]);
+
+  // A keyboard user at the top of the page would otherwise have no way to reach
+  // the nav, so the first Tab press brings it back regardless of scroll.
+  useEffect(() => {
+    if (!heroHidden) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Tab') setHeroHidden(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [heroHidden]);
 
   // Nav links close the panel themselves on click. This covers the other way a
   // route can change while it is open: the browser back and forward buttons.
@@ -82,10 +129,16 @@ export function SiteHeader() {
   return (
     <header
       className={cn(
-        'fixed inset-x-0 top-0 z-50 transition-all duration-300 ease-editorial',
+        'fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-editorial',
         scrolled || open
           ? 'border-b border-ink-700/70 bg-ink-950/88 backdrop-blur-lg'
           : 'border-b border-transparent bg-transparent',
+        // `invisible` matters as much as the opacity: it takes the links out of
+        // the tab order while the nav is off screen, so focus cannot land on
+        // something the reader cannot see.
+        heroHidden
+          ? 'invisible -translate-y-full opacity-0'
+          : 'visible translate-y-0 opacity-100',
       )}
     >
       <div className="shell flex h-[4.5rem] items-center justify-between gap-6">

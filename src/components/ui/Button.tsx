@@ -5,23 +5,45 @@ import { cn } from '@/lib/utils';
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
 type Size = 'sm' | 'md' | 'lg';
 
+/*
+ * Hover language, shared by every variant: a half-step lift, a deepening
+ * shadow, and a colour move. The press state drops back to zero on a short
+ * duration so a click feels physical rather than mushy.
+ *
+ * `secondary` inverts on hover - outline to solid - which reads as deliberate
+ * on a monochrome palette where a colour shift has nowhere to go.
+ *
+ * Motion is safe to declare unconditionally: globals.css collapses every
+ * transition to ~0ms under prefers-reduced-motion, so the colour change still
+ * lands and the movement does not.
+ */
 const VARIANTS: Record<Variant, string> = {
   primary:
-    'bg-bone-50 text-ink-950 hover:bg-white shadow-card hover:shadow-lift border border-transparent',
+    'border border-transparent bg-bone-50 text-ink-900 shadow-card hover:bg-bone-200 hover:shadow-lift',
   secondary:
-    'bg-transparent text-bone-100 border border-ink-600 hover:border-brass-400/70 hover:text-brass-100',
-  ghost: 'bg-transparent text-bone-300 hover:text-bone-50 border border-transparent',
-  danger: 'bg-danger-600 text-white hover:bg-danger-500 border border-transparent',
+    'border border-ink-600 bg-transparent text-bone-100 hover:border-bone-50 hover:bg-bone-50 hover:text-ink-900 hover:shadow-card',
+  ghost:
+    'border border-transparent bg-transparent text-bone-300 hover:bg-ink-800 hover:text-bone-50',
+  danger:
+    'border border-transparent bg-danger-600 text-white shadow-card hover:bg-danger-500 hover:shadow-lift',
 };
 
+// Heights use real scale steps. `h-13` was silently dropped by Tailwind, which
+// left large buttons with no height at all beyond their padding.
 const SIZES: Record<Size, string> = {
-  sm: 'h-9 px-3.5 text-[0.8125rem]',
-  md: 'h-11 px-5 text-sm',
-  lg: 'h-13 px-7 text-[0.9375rem]',
+  sm: 'h-10 gap-2 px-5 text-sm',
+  md: 'h-12 gap-2.5 px-7 text-[0.9375rem]',
+  lg: 'h-14 gap-3 px-9 text-base',
 };
 
-const BASE =
-  'inline-flex items-center justify-center gap-2 rounded-full font-semibold tracking-tight transition-all duration-200 ease-editorial disabled:cursor-not-allowed disabled:opacity-55';
+const BASE = [
+  'group/btn inline-flex items-center justify-center rounded-full font-semibold tracking-tight',
+  'transition-[transform,box-shadow,background-color,border-color,color] duration-300 ease-editorial',
+  'hover:-translate-y-0.5 active:translate-y-0 active:duration-75',
+  // Any icon inside nudges along with the lift.
+  '[&_svg]:transition-transform [&_svg]:duration-300 [&_svg]:ease-editorial hover:[&_svg]:translate-x-0.5',
+  'disabled:cursor-not-allowed disabled:opacity-55 disabled:hover:translate-y-0 disabled:hover:shadow-card',
+].join(' ');
 
 export function buttonClass(variant: Variant = 'primary', size: Size = 'md', className?: string) {
   return cn(BASE, VARIANTS[variant], SIZES[size], className);

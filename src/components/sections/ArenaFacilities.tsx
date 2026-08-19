@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, X } from 'lucide-react';
 
+import { buttonClass } from '@/components/ui/Button';
 import { Reveal } from '@/components/ui/Reveal';
 import { FACILITY_GROUP_LABELS } from '@/content/defaults';
 import type { FacilityView } from '@/lib/content';
@@ -171,18 +172,10 @@ function FacilityCard({
         <button
           type="button"
           onClick={() => onOpen(facility)}
-          className={cn(
-            'mt-6 inline-flex w-fit items-center gap-1.5 rounded-full border border-ink-600 px-4 py-2',
-            'text-sm font-semibold text-bone-100 transition-colors duration-300',
-            'hover:border-bone-50 hover:bg-bone-50 hover:text-ink-900',
-          )}
+          className={buttonClass('secondary', size === 'hero' ? 'md' : 'sm', 'mt-7 w-fit')}
         >
           View facility
-          <ArrowUpRight
-            size={15}
-            aria-hidden="true"
-            className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-          />
+          <ArrowUpRight size={16} aria-hidden="true" />
           <span className="sr-only">: {facility.name}</span>
         </button>
       </div>
