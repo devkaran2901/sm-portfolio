@@ -66,7 +66,7 @@ export default async function PlayersPage() {
             lead="Every figure and association on this page is tracked in the verification archive. Until a source is attached, it carries a visible marker."
           />
 
-          <ul className="mt-10 grid gap-4 sm:grid-cols-2">
+          <ul className="mt-10 grid grid-cols-2 gap-3 sm:gap-4">
             {[
               'More than 50 players progressed to higher levels',
               'The ground hosts domestic, Ranji and IPL-level players',

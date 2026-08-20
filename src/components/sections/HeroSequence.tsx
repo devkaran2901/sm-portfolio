@@ -41,10 +41,16 @@ const FRAME_COUNT = manifest.frameCount;
 const BASE_URL = (process.env.NEXT_PUBLIC_FRAMES_BASE_URL ?? '/frames').replace(/\/+$/, '');
 
 /** Longer sequences earn a longer runway, within sane bounds. */
-const RUNWAY_VH = Math.min(500, Math.max(220, FRAME_COUNT * 2.4));
+const RUNWAY_VH = Math.min(320, Math.max(180, FRAME_COUNT * 1.8));
 
 /** Simultaneous image requests. Enough to saturate, few enough to stay polite. */
 const CONCURRENCY = 6;
+
+/**
+ * Fraction of the frame height kept in view. The subject occupies ~5%-95% of
+ * this footage, so 0.75 shows head through mid-shin.
+ */
+const SUBJECT_FRACTION = 0.75;
 
 function frameUrl(index: number): string {
   const number = String(manifest.start + index).padStart(manifest.pad, '0');
@@ -61,7 +67,7 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
 
   const [started, setStarted] = useState(false);
   const [ready, setReady] = useState(false);
-  const [loadedCount, setLoadedCount] = useState(0);
+  const [loadState, setLoadState] = useState({ loaded: 0, planned: FRAME_COUNT });
 
   const hasFrames = FRAME_COUNT > 0;
 
@@ -73,7 +79,7 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
     let cancelled = false;
     let loaded = 0;
 
-    const load = (index: number) =>
+    const load = (index: number, planned: number) =>
       new Promise<void>((resolve) => {
         const image = new window.Image();
         image.decoding = 'async';
@@ -81,7 +87,7 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
         const done = () => {
           if (cancelled) return resolve();
           loaded += 1;
-          setLoadedCount(loaded);
+          setLoadState({ loaded, planned });
           resolve();
         };
         image.onload = () => {
@@ -93,18 +99,30 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
         image.onerror = done;
       });
 
+    /*
+     * On a narrow screen every second frame is skipped. The whole sequence is
+     * downloaded before it can be scrubbed, so on mobile data that halves the
+     * cost; the scrub stays smooth because `nearestLoaded` snaps to the
+     * neighbouring frame, and at 24fps the difference between adjacent frames
+     * is imperceptible while scrolling.
+     */
+    const stride = window.matchMedia('(max-width: 767px)').matches ? 2 : 1;
+    const plan: number[] = [];
+    for (let index = 0; index < FRAME_COUNT; index += stride) plan.push(index);
+    // Always include the final frame, so the sequence ends where the clip does.
+    if (plan[plan.length - 1] !== FRAME_COUNT - 1) plan.push(FRAME_COUNT - 1);
+
     (async () => {
-      await load(0);
+      await load(plan[0]!, plan.length);
       if (cancelled) return;
 
-      // Simple worker pool over the remaining indices.
-      let next = 1;
+      let cursor = 1;
       const workers = Array.from({ length: CONCURRENCY }, async () => {
         while (!cancelled) {
-          const index = next;
-          next += 1;
-          if (index >= FRAME_COUNT) break;
-          await load(index);
+          const position = cursor;
+          cursor += 1;
+          if (position >= plan.length) break;
+          await load(plan[position]!, plan.length);
         }
       });
       await Promise.all(workers);
@@ -127,13 +145,44 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    /** Draws `image` to cover the canvas, centred, preserving aspect ratio. */
+    /**
+     * Draws a frame so the subject is framed head-down, not cropped to a strip.
+     *
+     * A plain cover fit fails badly here: the footage is 720x1280 portrait, so
+     * on a wide stage the width drives the scale, the frame is blown up ~2.6x,
+     * and the visible slice is a band across the middle - torso only, no face.
+     *
+     * Instead the scale is capped so the top SUBJECT_FRACTION of the frame
+     * always fits the stage height, and the frame is anchored to the top. In
+     * this footage the subject runs from ~5% to ~95% of frame height, so 0.75
+     * lands on head-through-mid-shin: three quarters of the body, legs cropped.
+     *
+     * When that leaves the frame narrower than the stage, the margins are
+     * filled with a zoomed, knocked-back copy of the same frame rather than an
+     * invented colour, so the edges always belong to the footage.
+     */
     const paint = (image: HTMLImageElement) => {
       const { width: cw, height: ch } = canvas;
-      const scale = Math.max(cw / image.naturalWidth, ch / image.naturalHeight);
-      const dw = image.naturalWidth * scale;
-      const dh = image.naturalHeight * scale;
-      context.drawImage(image, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+      const iw = image.naturalWidth;
+      const ih = image.naturalHeight;
+
+      const coverScale = Math.max(cw / iw, ch / ih);
+      const subjectScale = ch / (SUBJECT_FRACTION * ih);
+      const scale = Math.min(coverScale, subjectScale);
+
+      const dw = iw * scale;
+      const dh = ih * scale;
+
+      if (dw < cw - 1) {
+        const bw = iw * coverScale;
+        const bh = ih * coverScale;
+        context.drawImage(image, (cw - bw) / 2, (ch - bh) / 2, bw, bh);
+        context.fillStyle = 'rgba(10,10,11,0.62)';
+        context.fillRect(0, 0, cw, ch);
+      }
+
+      // Top-anchored: overflow is taken off the bottom, never off the head.
+      context.drawImage(image, (cw - dw) / 2, 0, dw, dh);
     };
 
     /** Falls back outward to the closest frame that has actually arrived. */
@@ -186,7 +235,7 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener('resize', resize);
     };
-  }, [hasFrames, loadedCount]);
+  }, [hasFrames, loadState.loaded]);
 
   return (
     <section
@@ -262,12 +311,12 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
         {/* Scroll cue and loading readout sit above; sentinel is below. */}
 
         {/* Loading readout: only while a meaningful share is still outstanding. */}
-        {hasFrames && loadedCount < FRAME_COUNT && loadedCount > 0 ? (
+        {hasFrames && loadState.loaded < loadState.planned && loadState.loaded > 0 ? (
           <div
             aria-hidden="true"
             className="absolute bottom-10 right-[var(--shell-gutter)] text-xs uppercase tracking-[0.16em] text-ink-900/45"
           >
-            {Math.round((loadedCount / FRAME_COUNT) * 100)}%
+            {Math.round((loadState.loaded / loadState.planned) * 100)}%
           </div>
         ) : null}
       </div>

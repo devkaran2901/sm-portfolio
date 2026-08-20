@@ -61,7 +61,7 @@ export default async function RedBallPage() {
       <Section className="py-14">
         <div className="shell">
           <Reveal>
-            <dl className="grid gap-8 border-y border-ink-800 py-10 sm:grid-cols-2 lg:grid-cols-5">
+            <dl className="grid grid-cols-3 gap-4 border-y border-ink-800 py-10 sm:gap-8 lg:grid-cols-5">
               {stats.map((stat) => (
                 <StatBlock key={stat.key} label={stat.label} description={stat.description}>
                   <Counter value={stat.value} />

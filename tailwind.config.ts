@@ -92,14 +92,14 @@ const config: Config = {
        * now tuned to sit near it optically rather than tightening as they grow.
        */
       fontSize: {
-        'display-xl': ['clamp(3.5rem, 10.5vw, 9rem)', { lineHeight: '0.95', letterSpacing: '0.005em' }],
-        'display-lg': ['clamp(2.75rem, 6.8vw, 5.5rem)', { lineHeight: '1.0', letterSpacing: '0em' }],
-        'display-md': ['clamp(2.125rem, 4.6vw, 3.5rem)', { lineHeight: '1.06', letterSpacing: '-0.008em' }],
-        'display-sm': ['clamp(1.625rem, 3.1vw, 2.25rem)', { lineHeight: '1.14', letterSpacing: '-0.015em' }],
+        'display-xl': ['clamp(2.75rem, 10.5vw, 9rem)', { lineHeight: '0.95', letterSpacing: '0.005em' }],
+        'display-lg': ['clamp(2.25rem, 6.8vw, 5.5rem)', { lineHeight: '1.0', letterSpacing: '0em' }],
+        'display-md': ['clamp(1.75rem, 4.6vw, 3.5rem)', { lineHeight: '1.06', letterSpacing: '-0.008em' }],
+        'display-sm': ['clamp(1.4375rem, 3.1vw, 2.25rem)', { lineHeight: '1.14', letterSpacing: '-0.015em' }],
         eyebrow: ['0.8125rem', { lineHeight: '1', letterSpacing: '0.2em' }],
       },
       maxWidth: { shell: '100rem', prose: '72ch' },
-      spacing: { section: 'clamp(4rem, 9vw, 8.5rem)' },
+      spacing: { section: 'clamp(3.25rem, 9vw, 8.5rem)' },
       borderRadius: { xl2: '1.25rem' },
       boxShadow: {
         card: '0 1px 2px rgba(12,14,16,0.05), 0 12px 32px -18px rgba(12,14,16,0.22)',

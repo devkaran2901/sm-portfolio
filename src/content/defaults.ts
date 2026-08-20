@@ -24,7 +24,6 @@ export const SITE = {
 export const NAV_LINKS = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
-  { href: '/cricket', label: 'Cricket Journey' },
   { href: '/red-ball', label: 'Red Ball' },
   { href: '/players', label: 'Players & Impact' },
   { href: '/ventures', label: 'Ventures' },

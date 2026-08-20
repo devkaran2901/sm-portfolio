@@ -195,7 +195,7 @@ export function ContactForm() {
         </div>
       ) : null}
 
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div className="grid grid-cols-2 gap-4 sm:gap-6">
         <Field id="contact-name" label="Full Name" required error={errors.name}>
           <TextInput
             id="contact-name"

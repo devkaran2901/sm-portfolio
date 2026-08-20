@@ -31,9 +31,9 @@ const VARIANTS: Record<Variant, string> = {
 // Heights use real scale steps. `h-13` was silently dropped by Tailwind, which
 // left large buttons with no height at all beyond their padding.
 const SIZES: Record<Size, string> = {
-  sm: 'h-10 gap-2 px-5 text-sm',
-  md: 'h-12 gap-2.5 px-7 text-[0.9375rem]',
-  lg: 'h-14 gap-3 px-9 text-base',
+  sm: 'h-10 min-h-[40px] gap-2 px-5 text-sm',
+  md: 'h-12 min-h-[44px] gap-2.5 px-7 text-[0.9375rem]',
+  lg: 'h-14 min-h-[48px] gap-3 px-9 text-base',
 };
 
 const BASE = [

@@ -18,6 +18,18 @@
     border-color: theme('colors.ink.700 / 60%');
   }
 
+  /*
+   * Phones render the same layout as the desktop, just smaller. The root size
+   * is interpolated with the viewport so a 375px screen gets ~12.7px and a
+   * 430px screen ~14.6px, reaching the full 16px by the tablet breakpoint.
+   * The floor keeps body copy legible; below it, layout would win over reading.
+   */
+  @media (max-width: 767px) {
+    html {
+      font-size: clamp(12.5px, 3.4vw, 16px);
+    }
+  }
+
   html {
     -webkit-text-size-adjust: 100%;
     scroll-behavior: smooth;

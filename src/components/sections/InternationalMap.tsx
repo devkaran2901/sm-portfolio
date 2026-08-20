@@ -14,8 +14,8 @@ import { Reveal } from '@/components/ui/Reveal';
  */
 export function InternationalMap() {
   return (
-    <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
-      <div className="lg:col-span-7">
+    <div className="grid grid-cols-12 gap-6 lg:gap-10">
+      <div className="col-span-12 sm:col-span-7">
         <div className="relative overflow-hidden rounded-xl2 border border-ink-700/70 bg-ink-900/50 p-4">
           <div className="relative aspect-[2/1] w-full">
             <div
@@ -62,7 +62,7 @@ export function InternationalMap() {
         </p>
       </div>
 
-      <ul className="lg:col-span-5">
+      <ul className="col-span-12 sm:col-span-5">
         {INTERNATIONAL.map((place, index) => (
           <Reveal
             as="li"
