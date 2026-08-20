@@ -24,6 +24,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/cookies', priority: 0.2, changeFrequency: 'yearly' },
   ];
 
+  // One entry per venture, so each detail page is discoverable.
+  const venturePaths = await safeQuery(
+    async () => {
+      const rows = await prisma.business.findMany({
+        where: { isPublished: true },
+        select: { slug: true },
+        orderBy: { sortOrder: 'asc' },
+      });
+      return rows.map((row) => `/ventures/${row.slug}`);
+    },
+    [] as string[],
+  );
+
+  for (const path of venturePaths) {
+    routes.push({ path, priority: 0.6, changeFrequency: 'monthly' });
+  }
+
   const noindexPaths = await safeQuery(
     async () => {
       const rows = await prisma.seoSetting.findMany({

@@ -141,12 +141,12 @@ function FacilityCard({
         )}
       </div>
 
-      <div className={cn('flex flex-1 flex-col', size === 'hero' ? 'p-8 sm:p-10' : 'p-6')}>
+      <div className={cn('flex min-w-0 flex-1 flex-col', size === 'hero' ? 'p-6 sm:p-10' : 'p-4 sm:p-6')}>
         <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
           <h3
             className={cn(
-              'font-display text-bone-50',
-              size === 'hero' ? 'text-display-sm' : 'text-2xl',
+              'break-words font-display text-bone-50',
+              size === 'hero' ? 'text-display-sm' : 'text-lg sm:text-2xl',
             )}
           >
             {facility.name}
@@ -162,8 +162,10 @@ function FacilityCard({
 
         <p
           className={cn(
-            'mt-4 flex-1 leading-relaxed text-bone-400',
-            size === 'hero' ? 'max-w-2xl text-[1.0625rem]' : 'text-[0.9375rem]',
+            'mt-3 flex-1 leading-relaxed text-bone-400 sm:mt-4',
+            size === 'hero'
+              ? 'max-w-2xl text-[1rem] sm:text-[1.0625rem]'
+              : 'line-clamp-3 text-[0.875rem] sm:line-clamp-none sm:text-[0.9375rem]',
           )}
         >
           {facility.description}
@@ -172,7 +174,7 @@ function FacilityCard({
         <button
           type="button"
           onClick={() => onOpen(facility)}
-          className={buttonClass('secondary', size === 'hero' ? 'md' : 'sm', 'mt-7 w-fit')}
+          className={buttonClass('secondary', size === 'hero' ? 'md' : 'sm', 'mt-5 w-fit sm:mt-6')}
         >
           View facility
           <ArrowUpRight size={16} aria-hidden="true" />
