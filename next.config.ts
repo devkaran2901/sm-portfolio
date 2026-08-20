@@ -20,6 +20,15 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'redballsportsarena.in' },
     ],
   },
+  async redirects() {
+    return [
+      // /cricket merged into /about: both pages were biography, and splitting
+      // them made a reader visit two URLs for one story. Permanent so search
+      // moves its ranking across rather than treating /about as a new page.
+      { source: '/cricket', destination: '/about', permanent: true },
+    ];
+  },
+
   async headers() {
     return [
       { source: '/:path*', headers: securityHeaders },

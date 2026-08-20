@@ -56,7 +56,7 @@ export default async function MediaPage({
       {/* The honest state of the archive, up front. */}
       <Section className="py-12">
         <div className="shell">
-          <div className="grid gap-6 rounded-xl2 border border-ink-700/70 bg-ink-900/50 p-6 sm:grid-cols-3 sm:p-8">
+          <div className="grid grid-cols-3 gap-4 rounded-xl2 border border-ink-700/70 bg-ink-900/50 p-6 sm:gap-6 sm:p-8">
             {[
               { label: 'Verified references', value: summary.verified },
               { label: 'Under review', value: summary.underReview },
@@ -114,7 +114,7 @@ export default async function MediaPage({
                 description="Genuine articles, clippings, interviews and videos appear here once they have been uploaded and reviewed in the admin portal. This space is deliberately left empty rather than filled with placeholder coverage."
               />
             ) : (
-              <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <ul className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
                 {items.map((item, index) => (
                   <Reveal as="li" key={item.id} delay={Math.min(index * 55, 260)}>
                     <article className="flex h-full flex-col overflow-hidden rounded-xl2 border border-ink-700/70 bg-ink-900/60 transition-colors hover:border-brass-500/40">

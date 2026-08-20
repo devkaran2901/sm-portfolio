@@ -144,7 +144,7 @@ export function SiteHeader() {
       <div className="shell flex h-[4.5rem] items-center justify-between gap-6">
         <Link
           href="/"
-          className="group flex items-baseline gap-2.5 font-display text-lg font-semibold tracking-tight text-bone-50"
+          className="group flex min-h-[44px] items-center gap-2.5 font-display text-lg font-semibold tracking-tight text-bone-50"
         >
           Sonu Malik
           <span
@@ -189,7 +189,7 @@ export function SiteHeader() {
             aria-expanded={open}
             aria-controls="mobile-navigation"
             aria-label={open ? 'Close menu' : 'Open menu'}
-            className="grid h-10 w-10 place-items-center rounded-full border border-ink-600 text-bone-100 transition-colors hover:border-brass-400/60 lg:hidden"
+            className="grid h-10 w-10 min-h-[44px] min-w-[44px] place-items-center rounded-full border border-ink-600 text-bone-100 transition-colors hover:border-brass-400/60 lg:hidden"
           >
             {open ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
           </button>

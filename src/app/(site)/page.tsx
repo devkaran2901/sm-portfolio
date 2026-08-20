@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 import { Hero } from '@/components/sections/Hero';
+import { WorkSummary } from '@/components/sections/WorkSummary';
 import { HeroSequence } from '@/components/sections/HeroSequence';
 import { Timeline } from '@/components/sections/Timeline';
 import { Ecosystem } from '@/components/sections/Ecosystem';
@@ -70,6 +71,19 @@ export default async function HomePage() {
 
       <Hero profile={profile} stats={stats} showHeadline={false} />
 
+      <Section id="what-he-runs" tone="raised" className="py-16">
+        <div className="shell">
+          <SectionHeading
+            eyebrow="At a Glance"
+            title="The arena and the ventures"
+            lead="Two places to go next, depending on what brought you here."
+          />
+          <div className="mt-12">
+            <WorkSummary facilities={facilities} businesses={businesses} />
+          </div>
+        </div>
+      </Section>
+
       {/* Who, in one screen. The 10-second answer the brief asks for. */}
       <Section id="overview" tone="raised">
         <div className="shell grid gap-12 lg:grid-cols-12">
@@ -100,7 +114,7 @@ export default async function HomePage() {
           <div className="mt-14">
             <Timeline events={journeyPreview} />
           </div>
-          <Link href="/cricket" className={buttonClass('secondary', 'md')}>
+          <Link href="/about#journey" className={buttonClass('secondary', 'md')}>
             See the full timeline
           </Link>
         </div>
@@ -115,7 +129,7 @@ export default async function HomePage() {
           />
 
           <Reveal className="mt-14">
-            <dl className="grid gap-8 border-y border-ink-800 py-10 sm:grid-cols-2 lg:grid-cols-5">
+            <dl className="grid grid-cols-3 gap-4 border-y border-ink-800 py-10 sm:gap-8 lg:grid-cols-5">
               {stats.map((stat) => (
                 <StatBlock key={stat.key} label={stat.label} description={stat.description}>
                   <Counter value={stat.value} />

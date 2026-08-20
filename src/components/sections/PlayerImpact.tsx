@@ -47,7 +47,7 @@ export function PlayerImpact({
           Players associated with the facility
         </h3>
 
-        <ul className="mt-6 grid gap-5 sm:grid-cols-2">
+        <ul className="mt-6 grid grid-cols-2 gap-3 sm:gap-5">
           {players.map((player, index) => (
             <Reveal as="li" key={player.id} delay={index * 70}>
               <article className="flex h-full flex-col overflow-hidden rounded-xl2 border border-ink-700/70 bg-ink-900/60">

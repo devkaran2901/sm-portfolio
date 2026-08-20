@@ -273,16 +273,11 @@ async function seedSeo() {
     },
     {
       path: '/about',
-      title: 'About Sonu Malik | Rohtak, Haryana',
+      title: 'About Sonu Malik | Cricket Journey, Rohtak, Haryana',
       description:
-        'Born in Mokhra village, Rohtak, in 1988. LLM from Kalinga University. Founder of Red Ball Cricket Ground and owner of The Page and Hotel The Prada.',
+        'Born in Mokhra village, Rohtak, in 1988. Village and collegiate cricket, then international club cricket in South Africa, Nepal and Norway. LLM from Kalinga University, founder of Red Ball Sports Arena.',
     },
-    {
-      path: '/cricket',
-      title: 'Cricket Journey | Sonu Malik',
-      description:
-        'From village cricket in Mokhra and collegiate cricket at Vaish College to international club cricket in South Africa, Nepal and Norway.',
-    },
+
     {
       path: '/red-ball',
       title: 'Red Ball Cricket Ground, Rohtak | Multi-Sports Complex',

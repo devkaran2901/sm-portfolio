@@ -54,7 +54,7 @@ export function FacilityShowcase({ facilities }: { facilities: FacilityView[] })
             </span>
           </div>
 
-          <ul className="mt-7 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-7 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-3">
             {section.items.map((facility, index) => {
               const Icon = ICONS[facility.iconKey] ?? Circle;
               return (

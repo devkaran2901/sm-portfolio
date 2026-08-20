@@ -23,7 +23,7 @@ export function AnswerBlocks({ faqs, limit = 5 }: { faqs: FaqView[]; limit?: num
   const items = faqs.slice(0, limit);
 
   return (
-    <dl className="grid gap-x-10 gap-y-8 sm:grid-cols-2">
+    <dl className="grid grid-cols-2 gap-x-5 gap-y-6 sm:gap-x-10 sm:gap-y-8">
       {items.map((faq) => (
         <div key={faq.slug} className="border-l-2 border-turf-700/60 pl-5">
           <dt className="font-display text-lg text-bone-50">{faq.question}</dt>
@@ -50,15 +50,15 @@ export function EntityWeb({ profile }: { profile: ProfileView }) {
       heading: 'Education',
       items: [
         { label: profile.educationBody ?? 'Kalinga University', note: profile.education ?? 'LLM' },
-        { label: 'Vaish College', note: 'Collegiate cricket', href: '/cricket' },
+        { label: 'Vaish College', note: 'Collegiate cricket', href: '/about#journey' },
       ],
     },
     {
       heading: 'Cricket',
       items: [
-        { label: 'South Africa — Dolphin Club', href: '/cricket#country-za' },
-        { label: 'Nepal — club cricket', href: '/cricket#country-np' },
-        { label: 'Norway — Norwegian Cup', href: '/cricket#country-no' },
+        { label: 'South Africa — Dolphin Club', href: '/about#country-za' },
+        { label: 'Nepal — club cricket', href: '/about#country-np' },
+        { label: 'Norway — Norwegian Cup', href: '/about#country-no' },
       ],
     },
     {
@@ -79,7 +79,7 @@ export function EntityWeb({ profile }: { profile: ProfileView }) {
   ];
 
   return (
-    <nav aria-label="Related topics" className="grid gap-8 sm:grid-cols-2 lg:grid-cols-5">
+    <nav aria-label="Related topics" className="grid grid-cols-2 gap-5 sm:gap-8 lg:grid-cols-5">
       {groups.map((group) => (
         <div key={group.heading}>
           <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass-300">

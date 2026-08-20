@@ -16,7 +16,7 @@ import { safeExternalUrl } from '@/lib/utils';
  */
 export function VentureCards({ businesses }: { businesses: BusinessView[] }) {
   return (
-    <ul className="grid gap-8 lg:grid-cols-2">
+    <ul className="grid grid-cols-2 gap-4 sm:gap-8">
       {businesses.map((business, index) => {
         const website = safeExternalUrl(business.websiteUrl);
         const booking = safeExternalUrl(business.bookingUrl);

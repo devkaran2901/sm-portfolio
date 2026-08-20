@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
  */
 
 const CONTROL =
-  'w-full rounded-lg border bg-ink-900/70 px-3.5 py-2.5 text-[0.9375rem] text-bone-100 placeholder:text-bone-500 transition-colors duration-200 focus:border-brass-400/70 focus:outline-none focus-visible:outline-none disabled:opacity-60';
+  'w-full min-h-[44px] rounded-lg border bg-ink-900/70 px-3.5 py-2.5 text-[0.9375rem] text-bone-100 placeholder:text-bone-500 transition-colors duration-200 focus:border-brass-400/70 focus:outline-none focus-visible:outline-none disabled:opacity-60';
 
 export function Field({
   id,

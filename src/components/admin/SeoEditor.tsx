@@ -25,7 +25,7 @@ const FIELDS: FieldDef[] = [
     label: 'Path',
     type: 'text',
     required: true,
-    placeholder: '/cricket',
+    placeholder: '/about',
     hint: 'Clean path with a leading slash. Use / for the home page.',
   },
   {

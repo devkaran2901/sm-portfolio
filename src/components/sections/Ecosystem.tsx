@@ -50,12 +50,12 @@ export function Ecosystem({ facilities }: { facilities: FacilityView[] }) {
 
   return (
     <div>
-      <div className="overflow-x-auto">
+      <div>
         <svg
           viewBox={`0 0 ${width} ${height}`}
           role="presentation"
           aria-hidden="true"
-          className="mx-auto h-auto w-full min-w-[600px] max-w-3xl"
+          className="mx-auto h-auto w-full max-w-3xl"
         >
           {nodes.map((node) => (
             <line
@@ -116,7 +116,7 @@ export function Ecosystem({ facilities }: { facilities: FacilityView[] }) {
         </svg>
       </div>
 
-      <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
         {groups.map((entry) => (
           <div key={entry.group} className="border-t border-ink-700 pt-4">
             <h3 className="text-sm font-semibold uppercase tracking-[0.12em] text-bone-100">

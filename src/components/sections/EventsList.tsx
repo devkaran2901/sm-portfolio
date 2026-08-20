@@ -13,7 +13,7 @@ import type { EventView } from '@/lib/content';
  */
 export function EventsList({ events }: { events: EventView[] }) {
   return (
-    <ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
       {events.map((event, index) => (
         <Reveal as="li" key={event.id} delay={Math.min(index * 60, 260)}>
           <article className="flex h-full flex-col rounded-xl2 border border-ink-700/70 bg-ink-900/60 p-6 transition-colors duration-300 hover:border-turf-500/40">

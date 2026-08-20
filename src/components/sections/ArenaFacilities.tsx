@@ -58,7 +58,7 @@ export function ArenaFacilities({ facilities }: Props) {
           <FacilityCard facility={featured} size="hero" onOpen={setActive} />
         </Reveal>
 
-        <ul className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-6">
+        <ul className="mt-6 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-6">
           {rest.map((facility, index) => (
             <Reveal
               as="li"
@@ -67,7 +67,7 @@ export function ArenaFacilities({ facilities }: Props) {
               className={cn(
                 'block',
                 // Featured items take a double-width cell on large screens.
-                facility.isFeatured ? 'lg:col-span-4' : 'lg:col-span-2',
+                facility.isFeatured ? 'col-span-2 lg:col-span-4' : 'col-span-1 lg:col-span-2',
               )}
             >
               <FacilityCard
