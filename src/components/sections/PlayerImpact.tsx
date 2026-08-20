@@ -56,14 +56,14 @@ export function PlayerImpact({
                   aspect="aspect-[3/2]"
                   className="rounded-none border-0 border-b border-dashed border-ink-700"
                 />
-                <div className="flex flex-1 flex-col p-5">
-                  <h4 className="font-display text-xl text-bone-50">{player.name}</h4>
+                <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
+                  <h4 className="break-words font-display text-lg text-bone-50 sm:text-xl">{player.name}</h4>
                   {player.teamContext ? (
                     <p className="mt-1 text-xs uppercase tracking-[0.12em] text-brass-300">
                       {player.teamContext}
                     </p>
                   ) : null}
-                  <p className="mt-3 flex-1 text-[0.9375rem] leading-relaxed text-bone-400">
+                  <p className="mt-2.5 line-clamp-3 flex-1 text-[0.875rem] leading-relaxed text-bone-400 sm:line-clamp-none sm:text-[0.9375rem]">
                     {player.associationNote}
                   </p>
                   <div className="mt-4">

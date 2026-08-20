@@ -108,6 +108,7 @@ export type BusinessView = {
   contactEmail: string | null;
   contactPhone: string | null;
   socialLinks: SocialLink[];
+  images: Array<{ url: string; alt: string }>;
 };
 
 export type StatView = { key: string; value: string; label: string; description: string | null };
@@ -349,12 +350,17 @@ export async function getBusinesses(): Promise<BusinessView[]> {
     contactEmail: null,
     contactPhone: null,
     socialLinks: [],
+    images: [],
   }));
 
   return safeQuery(async () => {
     const rows = await prisma.business.findMany({
       where: { isPublished: true },
       orderBy: { sortOrder: 'asc' },
+      // Placeholder rows are excluded: only a genuine upload counts as an image.
+      include: {
+        images: { where: { isPlaceholder: false }, orderBy: { sortOrder: 'asc' } },
+      },
     });
     if (rows.length === 0) return fallback;
     return rows.map((row) => ({
@@ -371,8 +377,15 @@ export async function getBusinesses(): Promise<BusinessView[]> {
       contactEmail: row.contactEmail,
       contactPhone: row.contactPhone,
       socialLinks: parseLinks(row.socialLinks),
+      images: row.images.map((image) => ({ url: image.url, alt: image.alt })),
     }));
   }, fallback);
+}
+
+/** A single venture by slug, for its own page. Null when it does not exist. */
+export async function getBusiness(slug: string): Promise<BusinessView | null> {
+  const all = await getBusinesses();
+  return all.find((business) => business.slug === slug) ?? null;
 }
 
 export async function getStats(): Promise<StatView[]> {

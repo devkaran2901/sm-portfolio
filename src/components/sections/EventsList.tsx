@@ -16,15 +16,15 @@ export function EventsList({ events }: { events: EventView[] }) {
     <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
       {events.map((event, index) => (
         <Reveal as="li" key={event.id} delay={Math.min(index * 60, 260)}>
-          <article className="flex h-full flex-col rounded-xl2 border border-ink-700/70 bg-ink-900/60 p-6 transition-colors duration-300 hover:border-turf-500/40">
+          <article className="flex h-full min-w-0 flex-col rounded-xl2 border border-ink-700/70 bg-ink-900/60 p-4 transition-colors duration-300 hover:border-turf-500/40 sm:p-6">
             <p className="eyebrow">
               {EVENT_CATEGORY_LABELS[event.category as keyof typeof EVENT_CATEGORY_LABELS] ??
                 event.category}
             </p>
 
-            <h3 className="mt-3.5 font-display text-xl text-bone-50">{event.name}</h3>
+            <h3 className="mt-3 break-words font-display text-lg text-bone-50 sm:text-xl">{event.name}</h3>
 
-            <p className="mt-3 flex-1 text-[0.9375rem] leading-relaxed text-bone-400">{event.summary}</p>
+            <p className="mt-2.5 line-clamp-3 flex-1 text-[0.875rem] leading-relaxed text-bone-400 sm:line-clamp-none sm:text-[0.9375rem]">{event.summary}</p>
 
             <dl className="mt-5 space-y-1.5 border-t border-ink-800 pt-4 text-xs">
               <div className="flex justify-between gap-3">
