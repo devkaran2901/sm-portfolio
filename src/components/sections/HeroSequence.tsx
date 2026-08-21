@@ -52,6 +52,22 @@ const CONCURRENCY = 6;
  */
 const SUBJECT_FRACTION = 0.75;
 
+/**
+ * Fraction of the frame height discarded before anything is drawn.
+ *
+ * The source clip carries a generative-AI watermark near the bottom right -
+ * measured at x 576-623, y 1136-1183 of the 720x1280 frame, in the same place
+ * on all 120 frames, so its top edge sits at 88.75% of frame height. On a wide
+ * stage the subject cap hid it, but on a phone the cover fit is height-driven
+ * and the whole frame height is on screen, so the mark was visible.
+ *
+ * Trimming 16% clears it by ~60px and puts the cut on the shin rather than the
+ * ankle. Keep this below 1 - SUBJECT_FRACTION: that inequality is what
+ * guarantees the drawn height always covers the stage, so the trim can never
+ * leave an unpainted strip along the bottom.
+ */
+const FRAME_BOTTOM_TRIM = 0.16;
+
 function frameUrl(index: number): string {
   const number = String(manifest.start + index).padStart(manifest.pad, '0');
   return `${BASE_URL}/${manifest.prefix}${number}${manifest.extension}`;
@@ -160,29 +176,36 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
      * When that leaves the frame narrower than the stage, the margins are
      * filled with a zoomed, knocked-back copy of the same frame rather than an
      * invented colour, so the edges always belong to the footage.
+     *
+     * Both draws sample a source rectangle that stops short of the bottom of
+     * the frame, so the watermarked strip is never read - not for the subject
+     * and not for the knocked-back margins either.
      */
     const paint = (image: HTMLImageElement) => {
       const { width: cw, height: ch } = canvas;
       const iw = image.naturalWidth;
       const ih = image.naturalHeight;
 
-      const coverScale = Math.max(cw / iw, ch / ih);
+      // The usable source: everything above the trim line.
+      const sh = ih * (1 - FRAME_BOTTOM_TRIM);
+
+      const coverScale = Math.max(cw / iw, ch / sh);
       const subjectScale = ch / (SUBJECT_FRACTION * ih);
       const scale = Math.min(coverScale, subjectScale);
 
       const dw = iw * scale;
-      const dh = ih * scale;
+      const dh = sh * scale;
 
       if (dw < cw - 1) {
         const bw = iw * coverScale;
-        const bh = ih * coverScale;
-        context.drawImage(image, (cw - bw) / 2, (ch - bh) / 2, bw, bh);
+        const bh = sh * coverScale;
+        context.drawImage(image, 0, 0, iw, sh, (cw - bw) / 2, (ch - bh) / 2, bw, bh);
         context.fillStyle = 'rgba(10,10,11,0.62)';
         context.fillRect(0, 0, cw, ch);
       }
 
       // Top-anchored: overflow is taken off the bottom, never off the head.
-      context.drawImage(image, (cw - dw) / 2, 0, dw, dh);
+      context.drawImage(image, 0, 0, iw, sh, (cw - dw) / 2, 0, dw, dh);
     };
 
     /** Falls back outward to the closest frame that has actually arrived. */

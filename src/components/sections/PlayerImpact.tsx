@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 import { Counter } from '@/components/ui/Counter';
 import { MediaPlaceholder, VerificationBadge } from '@/components/ui/Primitives';
 import { Reveal } from '@/components/ui/Reveal';
@@ -51,11 +53,29 @@ export function PlayerImpact({
           {players.map((player, index) => (
             <Reveal as="li" key={player.id} delay={index * 70}>
               <article className="flex h-full flex-col overflow-hidden rounded-xl2 border border-ink-700/70 bg-ink-900/60">
-                <MediaPlaceholder
-                  label={`${player.name} photograph`}
-                  aspect="aspect-[3/2]"
-                  className="rounded-none border-0 border-b border-dashed border-ink-700"
-                />
+                {/*
+                  Supplied photographs vary in shape - a squared-off cutout on
+                  a transparent ground, a wide broadcast still - so the frame
+                  is fixed and the image covers it, anchored to the top so a
+                  head is never the part that gets cropped.
+                */}
+                {player.photoUrl ? (
+                  <div className="relative aspect-[3/2] w-full border-b border-ink-700 bg-ink-950">
+                    <Image
+                      src={player.photoUrl}
+                      alt={player.photoAlt ?? player.name}
+                      fill
+                      sizes="(min-width: 1024px) 20rem, 45vw"
+                      className="object-cover object-top"
+                    />
+                  </div>
+                ) : (
+                  <MediaPlaceholder
+                    label={`${player.name} photograph`}
+                    aspect="aspect-[3/2]"
+                    className="rounded-none border-0 border-b border-dashed border-ink-700"
+                  />
+                )}
                 <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
                   <h4 className="break-words font-display text-lg text-bone-50 sm:text-xl">{player.name}</h4>
                   {player.teamContext ? (
