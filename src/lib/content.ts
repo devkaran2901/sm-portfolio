@@ -309,8 +309,8 @@ export async function getPlayers(): Promise<PlayerView[]> {
     teamContext: item.teamContext,
     level: null,
     associationNote: item.associationNote,
-    photoUrl: null,
-    photoAlt: null,
+    photoUrl: item.photoUrl,
+    photoAlt: item.photoAlt,
     verifiedCount: 0,
   }));
 
@@ -350,7 +350,9 @@ export async function getBusinesses(): Promise<BusinessView[]> {
     contactEmail: null,
     contactPhone: null,
     socialLinks: [],
-    images: [],
+    // The seeded premises photograph ships with the build, so it is still there
+    // when the database is not.
+    images: item.imageUrl ? [{ url: item.imageUrl, alt: item.imageAlt ?? item.name }] : [],
   }));
 
   return safeQuery(async () => {

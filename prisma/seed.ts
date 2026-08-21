@@ -182,6 +182,8 @@ async function seedContent() {
       teamContext: item.teamContext,
       associationNote: item.associationNote,
       associationType: 'UNSPECIFIED' as const,
+      photoUrl: item.photoUrl,
+      photoAlt: item.photoAlt,
       sortOrder: item.sortOrder,
       isPublished: true,
     };
@@ -202,11 +204,37 @@ async function seedContent() {
       sortOrder: item.sortOrder,
       isPublished: true,
     };
-    await prisma.business.upsert({
+    const business = await prisma.business.upsert({
       where: { slug: item.slug },
       update: data,
       create: { slug: item.slug, ...data },
     });
+
+    /*
+     * BusinessImage has no unique key to upsert against, so the row is matched
+     * on its URL and then updated or created. Re-running the seed therefore
+     * refreshes the alt text rather than stacking duplicate images, and an
+     * image an admin added through the portal is left alone.
+     */
+    if (item.imageUrl) {
+      const existing = await prisma.businessImage.findFirst({
+        where: { businessId: business.id, url: item.imageUrl },
+        select: { id: true },
+      });
+      const image = {
+        url: item.imageUrl,
+        alt: item.imageAlt ?? item.name,
+        sortOrder: 0,
+        // A real photograph, so it passes the isPlaceholder filter the public
+        // queries apply.
+        isPlaceholder: false,
+      };
+      if (existing) {
+        await prisma.businessImage.update({ where: { id: existing.id }, data: image });
+      } else {
+        await prisma.businessImage.create({ data: { businessId: business.id, ...image } });
+      }
+    }
   }
   console.log(`  businesses: ${BUSINESSES.length}`);
 

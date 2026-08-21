@@ -437,6 +437,13 @@ export type PlayerSeed = {
   name: string;
   teamContext: string | null;
   associationNote: string;
+  /**
+   * Supplied photograph. The alt text describes only what is visible in the
+   * frame - it never restates the association, because the photograph is not
+   * evidence of one.
+   */
+  photoUrl: string | null;
+  photoAlt: string | null;
   sortOrder: number;
 };
 
@@ -450,6 +457,8 @@ export const PLAYERS: PlayerSeed[] = [
     name: 'Mohit Rathee',
     teamContext: 'Punjab Kings',
     associationNote: 'Player associated with the facility.',
+    photoUrl: '/images/players/mohit-rathee.webp',
+    photoAlt: 'Mohit Rathee, arms folded, in Punjab Kings kit.',
     sortOrder: 10,
   },
   {
@@ -457,6 +466,8 @@ export const PLAYERS: PlayerSeed[] = [
     name: 'Nishant Sindhu',
     teamContext: 'Gujarat Titans',
     associationNote: 'Player associated with the facility.',
+    photoUrl: '/images/players/nishant-sindhu.webp',
+    photoAlt: 'Nishant Sindhu on the field in India kit at the Emerging Teams Asia Cup.',
     sortOrder: 20,
   },
 ];
@@ -467,6 +478,13 @@ export type BusinessSeed = {
   role: string;
   category: string | null;
   description: string;
+  /**
+   * Premises photograph. Seeded as a BusinessImage with isPlaceholder false,
+   * which is the flag the public queries filter on - a placeholder row is a
+   * reserved slot, not a picture.
+   */
+  imageUrl: string | null;
+  imageAlt: string | null;
   sortOrder: number;
 };
 
@@ -478,6 +496,8 @@ export const BUSINESSES: BusinessSeed[] = [
     category: null,
     description:
       'A business founded and owned by Sonu Malik. Full details, imagery and links are managed from the admin portal and published once confirmed.',
+    imageUrl: '/images/ventures/the-page.jpg',
+    imageAlt: 'The Page at night: a lit glass frontage under a patterned canopy, with its sign above the entrance.',
     sortOrder: 10,
   },
   {
@@ -487,6 +507,9 @@ export const BUSINESSES: BusinessSeed[] = [
     category: 'Hospitality',
     description:
       'A hotel founded and owned by Sonu Malik. Location, photography, booking and contact details are managed from the admin portal and published once confirmed.',
+    imageUrl: '/images/ventures/hotel-the-prada.webp',
+    imageAlt:
+      'The entrance to Hotel The Prada, its name on the canopy below a row of international flags.',
     sortOrder: 20,
   },
 ];

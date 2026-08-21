@@ -34,11 +34,25 @@ export function VentureCards({ businesses }: { businesses: BusinessView[] }) {
               id={business.slug}
               className="flex h-full scroll-mt-28 flex-col overflow-hidden rounded-xl2 border border-ink-700/70 bg-ink-900/60 transition-all duration-300 ease-editorial hover:border-brass-500/40 hover:shadow-lift"
             >
-              <MediaPlaceholder
-                label={`${business.name} photography`}
-                aspect="aspect-[16/9]"
-                className="rounded-none border-0 border-b border-dashed border-ink-700"
-              />
+              {/* The premises shot when one has been supplied, the reserved
+                  slot when it has not. */}
+              {business.images.length > 0 ? (
+                <div className="relative aspect-[16/9] w-full border-b border-ink-700 bg-ink-950">
+                  <Image
+                    src={business.images[0]!.url}
+                    alt={business.images[0]!.alt}
+                    fill
+                    sizes="(min-width: 1024px) 32rem, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+              ) : (
+                <MediaPlaceholder
+                  label={`${business.name} photography`}
+                  aspect="aspect-[16/9]"
+                  className="rounded-none border-0 border-b border-dashed border-ink-700"
+                />
+              )}
 
               <div className="flex min-w-0 flex-1 flex-col p-5 sm:p-7">
                 <div className="flex items-start justify-between gap-4">
