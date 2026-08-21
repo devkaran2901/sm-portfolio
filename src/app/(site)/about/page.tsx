@@ -113,7 +113,7 @@ export default async function AboutPage() {
       <Section className="py-12">
         <div className="shell">
           <div className="rounded-xl2 border border-brass-500/30 bg-brass-700/10 p-6 sm:p-8">
-            <h2 className="text-sm font-semibold uppercase tracking-[0.14em] text-brass-200">
+            <h2 className="text-sm font-sans font-semibold uppercase tracking-[0.14em] text-brass-200">
               How this page describes his cricket
             </h2>
             <p className="mt-3 max-w-3xl text-[0.9375rem] leading-relaxed text-bone-300">

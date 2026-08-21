@@ -87,15 +87,17 @@ const config: Config = {
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
       /*
-       * Anton is condensed, so the large sizes previously carried heavy negative
-       * tracking and closed up. display-sm reads best, and the larger steps are
-       * now tuned to sit near it optically rather than tightening as they grow.
+       * Anton is condensed, so tracking runs the opposite way to a normal-width
+       * face: it needs air as it gets smaller, not as it gets bigger. The small
+       * steps used to carry negative tracking, which closed them up at exactly
+       * the sizes that could least afford it. Tracking now opens as the size
+       * drops, and only the poster sizes sit near zero.
        */
       fontSize: {
         'display-xl': ['clamp(2.75rem, 10.5vw, 9rem)', { lineHeight: '0.95', letterSpacing: '0.005em' }],
-        'display-lg': ['clamp(2.25rem, 6.8vw, 5.5rem)', { lineHeight: '1.0', letterSpacing: '0em' }],
-        'display-md': ['clamp(1.75rem, 4.6vw, 3.5rem)', { lineHeight: '1.06', letterSpacing: '-0.008em' }],
-        'display-sm': ['clamp(1.4375rem, 3.1vw, 2.25rem)', { lineHeight: '1.14', letterSpacing: '-0.015em' }],
+        'display-lg': ['clamp(2.25rem, 6.8vw, 5.5rem)', { lineHeight: '1.0', letterSpacing: '0.008em' }],
+        'display-md': ['clamp(1.75rem, 4.6vw, 3.5rem)', { lineHeight: '1.06', letterSpacing: '0.012em' }],
+        'display-sm': ['clamp(1.4375rem, 3.1vw, 2.25rem)', { lineHeight: '1.18', letterSpacing: '0.016em' }],
         eyebrow: ['0.8125rem', { lineHeight: '1', letterSpacing: '0.2em' }],
       },
       maxWidth: { shell: '100rem', prose: '72ch' },

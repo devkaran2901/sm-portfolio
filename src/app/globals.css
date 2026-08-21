@@ -41,10 +41,37 @@
     text-rendering: optimizeLegibility;
   }
 
+  /*
+   * Every heading is Anton, which is condensed and ships a single 400 weight.
+   * Two consequences worth stating, because both have bitten:
+   *
+   * 1. A `font-semibold`/`font-bold` utility here has no 600 to resolve to, so
+   *    the browser synthesises one by widening the strokes. On a condensed face
+   *    that eats the counters and the word gaps and the text closes up. Display
+   *    headings carry no weight utility; anything that needs a real weight
+   *    wants `font-sans`, where the weights actually exist.
+   * 2. At text-base through text-2xl the face needs air that it does not need
+   *    at poster sizes. The default tracking and word spacing below supply it.
+   *    The text-display-* steps set their own letter-spacing and override this,
+   *    which is intended - they are tuned per size.
+   */
   h1, h2, h3, h4 {
     @apply font-display text-bone-50;
+    letter-spacing: 0.012em;
+    word-spacing: 0.1em;
     text-wrap: balance;
   }
+
+  /*
+   * Word spacing is relative to font size, so a value that opens up a 20px
+   * heading blows a 88px one apart. The display steps set their own letter
+   * spacing through the type scale, but Tailwind's fontSize config has no slot
+   * for word spacing, so it is walked back down here. Class beats element on
+   * specificity and both rules sit in the same layer, so these win.
+   */
+  .text-display-xl, .text-display-lg { word-spacing: 0.02em; }
+  .text-display-md { word-spacing: 0.05em; }
+  .text-display-sm { word-spacing: 0.07em; }
 
   p { text-wrap: pretty; }
 

@@ -55,7 +55,7 @@ export function Panel({
       {title ? (
         <header className="flex flex-wrap items-center justify-between gap-3 border-b border-ink-800 px-5 py-4">
           <div>
-            <h2 className="text-sm font-semibold text-bone-100">{title}</h2>
+            <h2 className="text-sm font-sans font-semibold text-bone-100">{title}</h2>
             {description ? <p className="mt-1 text-xs text-bone-500">{description}</p> : null}
           </div>
           {actions}

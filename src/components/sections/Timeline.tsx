@@ -69,7 +69,7 @@ export function Timeline({ events }: { events: TimelineView[] }) {
 
             <div className="min-w-0 flex-1 sm:order-3 sm:pl-1">
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <h3 className="text-xl font-semibold text-bone-50 sm:text-2xl">{event.title}</h3>
+                <h3 className="text-xl text-bone-50 sm:text-2xl">{event.title}</h3>
                 <span className="text-[0.6875rem] uppercase tracking-[0.12em] text-bone-500">
                   {CATEGORY_LABELS[event.category] ?? event.category}
                 </span>

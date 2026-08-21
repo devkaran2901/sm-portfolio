@@ -82,7 +82,7 @@ export function EntityWeb({ profile }: { profile: ProfileView }) {
     <nav aria-label="Related topics" className="grid grid-cols-2 gap-5 sm:gap-8 lg:grid-cols-5">
       {groups.map((group) => (
         <div key={group.heading}>
-          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-brass-300">
+          <h3 className="text-xs font-sans font-semibold uppercase tracking-[0.14em] text-brass-300">
             {group.heading}
           </h3>
           <ul className="mt-4 space-y-3">

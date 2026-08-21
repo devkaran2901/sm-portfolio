@@ -317,7 +317,14 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
             one legibility concession, and it costs the image nothing because
             it is drawn on the glyphs rather than over the frame.
           */}
-          <h1 className="whitespace-nowrap text-center text-[clamp(2.25rem,15.5vw,13rem)] leading-[1.05] tracking-[0.005em] text-ink-900 [text-shadow:0_2px_28px_rgba(10,10,11,0.38)]">
+          {/*
+            Word spacing is pinned here rather than inherited. Headings take
+            0.1em from the base rule, which is right at reading sizes and far
+            too much at 13rem - and this line is `whitespace-nowrap` and sized
+            in vw to just fit the viewport, so widening it is what pushes the
+            page into a horizontal scroll.
+          */}
+          <h1 className="whitespace-nowrap text-center text-[clamp(2.25rem,15.5vw,13rem)] leading-[1.05] tracking-[0.005em] [word-spacing:0.02em] text-ink-900 [text-shadow:0_2px_28px_rgba(10,10,11,0.38)]">
             {name}
           </h1>
         </div>

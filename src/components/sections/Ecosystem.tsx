@@ -119,7 +119,7 @@ export function Ecosystem({ facilities }: { facilities: FacilityView[] }) {
       <div className="mt-10 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
         {groups.map((entry) => (
           <div key={entry.group} className="border-t border-ink-700 pt-4">
-            <h3 className="text-sm font-semibold uppercase tracking-[0.12em] text-bone-100">
+            <h3 className="text-sm font-sans font-semibold uppercase tracking-[0.12em] text-bone-100">
               {entry.label}
             </h3>
             <ul className="mt-3 space-y-1.5">

@@ -239,7 +239,7 @@ export default async function MediaPage({
           </div>
 
           <div className="mt-12 rounded-xl2 border border-dashed border-ink-600 bg-ink-900/40 p-6 sm:p-8">
-            <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-bone-100">
+            <h3 className="text-sm font-sans font-semibold uppercase tracking-[0.14em] text-bone-100">
               About this archive
             </h3>
             <div className="prose-editorial mt-4 max-w-3xl text-sm">

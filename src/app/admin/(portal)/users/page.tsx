@@ -26,7 +26,7 @@ export default async function UsersPage() {
             {(Object.keys(ROLE_DESCRIPTIONS) as Array<keyof typeof ROLE_DESCRIPTIONS>).map(
               (role) => (
                 <li key={role} className="rounded-xl2 border border-ink-800 bg-ink-950/40 p-5">
-                  <h3 className="text-sm font-semibold text-bone-100">
+                  <h3 className="text-sm font-sans font-semibold text-bone-100">
                     {ROLE_DESCRIPTIONS[role].label}
                   </h3>
                   <p className="mt-1.5 text-xs leading-relaxed text-bone-500">

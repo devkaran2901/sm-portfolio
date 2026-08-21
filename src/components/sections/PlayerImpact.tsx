@@ -45,7 +45,7 @@ export function PlayerImpact({
       </div>
 
       <div className="lg:col-span-7">
-        <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-bone-100">
+        <h3 className="text-sm font-sans font-semibold uppercase tracking-[0.14em] text-bone-100">
           Players associated with the facility
         </h3>
 
@@ -101,7 +101,7 @@ export function PlayerImpact({
         </ul>
 
         <div className="mt-8 rounded-xl2 border border-dashed border-ink-600 bg-ink-900/40 p-6">
-          <h4 className="text-sm font-semibold text-bone-100">Testimonials and references</h4>
+          <h4 className="text-sm font-sans font-semibold text-bone-100">Testimonials and references</h4>
           <p className="mt-2 text-[0.9375rem] leading-relaxed text-bone-400">
             Player testimonials, photographs and official references are added from the admin portal
             once they have been supplied and verified. Nothing is published here on the strength of
