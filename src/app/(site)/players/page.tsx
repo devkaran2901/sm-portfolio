@@ -70,7 +70,7 @@ export default async function PlayersPage() {
             {[
               'More than 50 players progressed to higher levels',
               'The ground hosts domestic, Ranji and IPL-level players',
-              'Mohit Rathee is associated with the facility (Punjab Kings context)',
+              'Mohit Rathee is associated with the facility (Royal Challengers Bengaluru context)',
               'Nishant Sindhu is associated with the facility (Gujarat Titans context)',
             ].map((claim) => (
               <li

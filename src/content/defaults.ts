@@ -465,10 +465,11 @@ export const PLAYERS: PlayerSeed[] = [
   {
     slug: 'mohit-rathee',
     name: 'Mohit Rathee',
-    teamContext: 'Punjab Kings',
+    teamContext: 'Royal Challengers Bengaluru',
     associationNote: 'Player associated with the facility.',
     photoUrl: '/images/players/mohit-rathee.webp',
-    photoAlt: 'Mohit Rathee, arms folded, in Punjab Kings kit.',
+    photoAlt:
+      'Mohit Rathee walking in the practice nets, in Royal Challengers Bengaluru kit.',
     sortOrder: 10,
   },
   {
@@ -673,7 +674,7 @@ export const FAQS: FaqSeed[] = [
     slug: 'players-associated',
     question: 'Which players are associated with Red Ball?',
     answer:
-      'Mohit Rathee, in a Punjab Kings context, and Nishant Sindhu, in a Gujarat Titans context, are among the players associated with the facility. The ground also hosts domestic, Ranji and IPL-level players. More than 50 players who trained or played at the facility have progressed to higher levels.',
+      'Mohit Rathee, in a Royal Challengers Bengaluru context, and Nishant Sindhu, in a Gujarat Titans context, are among the players associated with the facility. The ground also hosts domestic, Ranji and IPL-level players. More than 50 players who trained or played at the facility have progressed to higher levels.',
     sortOrder: 90,
   },
   {
@@ -778,7 +779,7 @@ export const OPEN_CLAIMS: string[] = [
   'Red Ball Cricket Ground has hosted official BCCI Under-19 matches.',
   'More than 50 players who trained or played at the facility have progressed to higher levels.',
   'The ground hosts domestic, Ranji and IPL-level players.',
-  'Mohit Rathee is associated with the facility, in a Punjab Kings context.',
+  'Mohit Rathee is associated with the facility, in a Royal Challengers Bengaluru context.',
   'Nishant Sindhu is associated with the facility, in a Gujarat Titans context.',
   'Founder and owner of The Page.',
   'Founder and owner of Hotel The Prada.',

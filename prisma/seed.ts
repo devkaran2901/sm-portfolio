@@ -316,6 +316,8 @@ async function seedContent() {
  */
 async function seedOpenClaims() {
   let created = 0;
+  const SEEDED_NOTE = 'Seeded as an open claim. Attach a source, then set the status to Verified.';
+
   for (const claim of OPEN_CLAIMS) {
     const existing = await prisma.verificationRecord.findFirst({ where: { claim } });
     if (existing) continue;
@@ -324,11 +326,30 @@ async function seedOpenClaims() {
         claim,
         status: 'UNVERIFIED',
         subjectType: 'STANDALONE_CLAIM',
-        adminNotes: 'Seeded as an open claim. Attach a source, then set the status to Verified.',
+        adminNotes: SEEDED_NOTE,
       },
     });
     created += 1;
   }
+
+  /*
+   * Records are matched on the claim text, so rewording a claim creates a new
+   * record and strands the old one - the site would then list an open claim it
+   * no longer makes anywhere. Stale rows are pruned, but only when all three
+   * hold: the seed wrote them (its own note is the marker, so a claim an admin
+   * raised through the portal is never touched), they are still UNVERIFIED, and
+   * the text is no longer in OPEN_CLAIMS. A verified record carries attached
+   * evidence and is left alone whatever its text says.
+   */
+  const stale = await prisma.verificationRecord.deleteMany({
+    where: {
+      subjectType: 'STANDALONE_CLAIM',
+      status: 'UNVERIFIED',
+      adminNotes: SEEDED_NOTE,
+      claim: { notIn: [...OPEN_CLAIMS] },
+    },
+  });
+  if (stale.count > 0) console.log(`  pruned ${stale.count} reworded claim(s)`);
   console.log(`  open verification records: ${created} created, ${OPEN_CLAIMS.length - created} already present`);
 }
 
