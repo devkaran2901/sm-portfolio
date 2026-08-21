@@ -42,7 +42,14 @@ export function VentureCards({ businesses }: { businesses: BusinessView[] }) {
                     src={business.images[0]!.url}
                     alt={business.images[0]!.alt}
                     fill
-                    sizes="(min-width: 1024px) 32rem, 100vw"
+                    /*
+                      The grid is two columns at every width, so the card is
+                      always about half the shell - never 100vw. Understating
+                      this picks a smaller candidate from the srcset than the
+                      box needs and softens the image before it is even drawn.
+                    */
+                    sizes="(min-width: 1600px) 736px, 50vw"
+                    quality={90}
                     className="object-cover"
                   />
                 </div>

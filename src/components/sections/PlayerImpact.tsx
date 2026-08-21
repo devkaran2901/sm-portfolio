@@ -65,7 +65,10 @@ export function PlayerImpact({
                       src={player.photoUrl}
                       alt={player.photoAlt ?? player.name}
                       fill
-                      sizes="(min-width: 1024px) 20rem, 45vw"
+                      // Two columns inside a 7-of-12 span: ~418px at a full
+                      // shell, ~29vw between lg and there, ~45vw below it.
+                      sizes="(min-width: 1600px) 418px, (min-width: 1024px) 29vw, 45vw"
+                      quality={90}
                       className="object-cover object-top"
                     />
                   </div>
