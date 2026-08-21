@@ -351,14 +351,6 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
         ) : null}
       </div>
 
-      {/*
-        Marks the end of the runway. SiteHeader observes this to know when the
-        sequence is done, so the nav can stay out of the way until then. A
-        sentinel is used rather than a shared state store because the header
-        lives in the layout and the sequence in the page - they have no common
-        ancestor to hold that state.
-      */}
-      <div data-hero-sequence-end aria-hidden="true" className="absolute bottom-0 h-px w-full" />
     </section>
   );
 }
