@@ -187,6 +187,13 @@ export type FacilitySeed = {
   iconKey: string;
   /** Featured facilities take the large cards that anchor the arena grid. */
   isFeatured: boolean;
+  /**
+   * Photograph of the facility, seeded as a FacilityImage with isPlaceholder
+   * false. A facility without one keeps its labelled placeholder: no stock or
+   * generated picture ever stands in for a place that has not been shot.
+   */
+  imageUrl?: string | null;
+  imageAlt?: string | null;
   sortOrder: number;
 };
 
@@ -208,6 +215,9 @@ export const FACILITIES: FacilitySeed[] = [
       'Dedicated cricket grounds designed for competitive matches, training sessions and cricket events.',
     iconKey: 'target',
     isFeatured: true,
+    imageUrl: '/images/facilities/cricket-grounds.webp',
+    imageAlt:
+      'A floodlit cricket ground at night, photographed through the chain-link boundary fence, with players on the grass beyond.',
     sortOrder: 10,
   },
   {
@@ -496,8 +506,9 @@ export const BUSINESSES: BusinessSeed[] = [
     category: null,
     description:
       'A business founded and owned by Sonu Malik. Full details, imagery and links are managed from the admin portal and published once confirmed.',
-    imageUrl: '/images/ventures/the-page.jpg',
-    imageAlt: 'The Page at night: a lit glass frontage under a patterned canopy, with its sign above the entrance.',
+    imageUrl: '/images/ventures/the-page.webp',
+    imageAlt:
+      'The Page at night, lit from within: a full-height glass frontage under a faceted gold canopy studded with downlights, its sign above the entrance.',
     sortOrder: 10,
   },
   {

@@ -230,9 +230,10 @@ export async function getFacilities(): Promise<FacilityView[]> {
     description: item.description,
     iconKey: item.iconKey,
     isFeatured: item.isFeatured,
-    imageUrl: null,
-    imageAlt: null,
-    imageCount: 0,
+    // The seeded photograph ships with the build, so it survives an outage.
+    imageUrl: item.imageUrl ?? null,
+    imageAlt: item.imageAlt ?? null,
+    imageCount: item.imageUrl ? 1 : 0,
   }));
 
   return safeQuery(async () => {

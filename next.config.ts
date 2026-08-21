@@ -15,6 +15,13 @@ const nextConfig: NextConfig = {
   compress: true,
   images: {
     formats: ['image/avif', 'image/webp'],
+    /*
+     * Next 16 only serves the qualities named here - anything else is a 400,
+     * not a fallback - and the default list is [75] alone. 90 is used on the
+     * supplied photographs: several are close to their display size, where
+     * compression artefacts are magnified rather than hidden.
+     */
+    qualities: [75, 90],
     remotePatterns: [
       { protocol: 'https', hostname: '**.redballsportsarena.in' },
       { protocol: 'https', hostname: 'redballsportsarena.in' },

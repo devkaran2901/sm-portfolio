@@ -151,11 +151,38 @@ async function seedContent() {
       sortOrder: item.sortOrder,
       isPublished: true,
     };
-    await prisma.facility.upsert({
+    const facility = await prisma.facility.upsert({
       where: { slug: item.slug },
       update: data,
       create: { slug: item.slug, ...data },
     });
+
+    // Same contract as BusinessImage above: the seed owns the /images/
+    // namespace for this row and leaves /uploads/ alone.
+    await prisma.facilityImage.deleteMany({
+      where: {
+        facilityId: facility.id,
+        url: { startsWith: '/images/', not: item.imageUrl ?? undefined },
+      },
+    });
+
+    if (item.imageUrl) {
+      const existing = await prisma.facilityImage.findFirst({
+        where: { facilityId: facility.id, url: item.imageUrl },
+        select: { id: true },
+      });
+      const image = {
+        url: item.imageUrl,
+        alt: item.imageAlt ?? item.name,
+        sortOrder: 0,
+        isPlaceholder: false,
+      };
+      if (existing) {
+        await prisma.facilityImage.update({ where: { id: existing.id }, data: image });
+      } else {
+        await prisma.facilityImage.create({ data: { facilityId: facility.id, ...image } });
+      }
+    }
   }
   console.log(`  facilities: ${FACILITIES.length}`);
 
@@ -213,9 +240,22 @@ async function seedContent() {
     /*
      * BusinessImage has no unique key to upsert against, so the row is matched
      * on its URL and then updated or created. Re-running the seed therefore
-     * refreshes the alt text rather than stacking duplicate images, and an
-     * image an admin added through the portal is left alone.
+     * refreshes the alt text rather than stacking duplicate images.
+     *
+     * Seeded images live under /images/ and ship with the build; anything an
+     * admin uploads through the portal lands under /uploads/. The seed owns
+     * that first namespace and clears any /images/ row it previously wrote for
+     * this business, so changing a URL replaces the old row instead of leaving
+     * it behind pointing at a file that is no longer on disk. Portal uploads
+     * are never touched.
      */
+    await prisma.businessImage.deleteMany({
+      where: {
+        businessId: business.id,
+        url: { startsWith: '/images/', not: item.imageUrl ?? undefined },
+      },
+    });
+
     if (item.imageUrl) {
       const existing = await prisma.businessImage.findFirst({
         where: { businessId: business.id, url: item.imageUrl },

@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import {
   Circle,
   Dumbbell,
@@ -60,11 +61,25 @@ export function FacilityShowcase({ facilities }: { facilities: FacilityView[] })
               return (
                 <Reveal as="li" key={facility.id} delay={Math.min(index * 60, 240)}>
                   <article className="group h-full overflow-hidden rounded-xl2 border border-ink-700/70 bg-ink-900/60 transition-all duration-300 ease-editorial hover:-translate-y-1 hover:border-brass-500/40 hover:shadow-lift">
-                    <MediaPlaceholder
-                      label={`${facility.name} photograph`}
-                      aspect="aspect-[16/10]"
-                      className="rounded-none border-0 border-b border-dashed border-ink-700"
-                    />
+                    {facility.imageUrl ? (
+                      <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-ink-700 bg-ink-950">
+                        <Image
+                          src={facility.imageUrl}
+                          alt={facility.imageAlt ?? `${facility.name} photograph`}
+                          fill
+                          // Three columns inside the shell above lg, two below.
+                          sizes="(min-width: 1600px) 485px, (min-width: 1024px) 31vw, 47vw"
+                          quality={90}
+                          className="object-cover transition-transform duration-500 ease-editorial group-hover:scale-[1.03]"
+                        />
+                      </div>
+                    ) : (
+                      <MediaPlaceholder
+                        label={`${facility.name} photograph`}
+                        aspect="aspect-[16/10]"
+                        className="rounded-none border-0 border-b border-dashed border-ink-700"
+                      />
+                    )}
 
                     <div className="p-6">
                       <div className="flex items-start justify-between gap-4">
