@@ -144,7 +144,15 @@ export function SiteHeader() {
       <div className="shell flex h-[4.5rem] items-center justify-between gap-6">
         <Link
           href="/"
-          className="group flex min-h-[44px] items-center gap-2.5 font-display text-lg font-semibold tracking-tight text-bone-50"
+          /*
+            Anton is condensed and ships one weight, so the old
+            `font-semibold tracking-tight` pair worked against it twice: the
+            weight request had no 600 to resolve to and got synthesised by
+            stroke-widening, and the negative tracking closed the gaps that
+            widening had already eaten. At 1.125rem the two words ran together.
+            The face carries its own weight - it needs air, not more ink.
+          */
+          className="group flex min-h-[44px] items-center gap-2.5 font-display text-lg tracking-[0.015em] [word-spacing:0.16em] text-bone-50"
         >
           Sonu Malik
           <span

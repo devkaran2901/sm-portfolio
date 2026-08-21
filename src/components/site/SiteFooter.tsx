@@ -24,7 +24,11 @@ export function SiteFooter({
     <footer className="border-t border-ink-800 bg-ink-950">
       <div className="shell grid grid-cols-2 gap-8 py-16 lg:grid-cols-12 lg:gap-8">
         <div className="col-span-2 lg:col-span-5">
-          <p className="font-display text-2xl font-semibold text-bone-50">{profile.fullName}</p>
+          {/* Same wordmark as the header, same reasoning: no synthetic bold, and
+              enough word spacing that the two names read as two names. */}
+          <p className="font-display text-2xl tracking-[0.01em] [word-spacing:0.14em] text-bone-50">
+            {profile.fullName}
+          </p>
           <p className="mt-4 max-w-sm text-[0.9375rem] leading-relaxed text-bone-400">{profile.shortBio}</p>
 
           {profile.currentCity ? (

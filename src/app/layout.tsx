@@ -9,8 +9,10 @@ import './globals.css';
  * Fonts are self-hosted by next/font at build time: no runtime request to a
  * third party, no layout shift from a late swap, and no cookie set by a font CDN.
  */
-// Anton ships a single heavy weight by design, so `font-semibold` and friends
-// are no-ops on display text - the face is already the poster weight.
+// Anton ships a single heavy weight by design. `font-semibold` and friends are
+// not no-ops on it: with no 600 to resolve to, the browser synthesises one by
+// widening the strokes, which on a condensed face closes up the counters and
+// the word gaps. Display text should carry no weight utility at all.
 const display = Anton({
   subsets: ['latin'],
   weight: '400',
