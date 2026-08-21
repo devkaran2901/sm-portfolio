@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { MapPin } from 'lucide-react';
 
 import { buttonClass } from '@/components/ui/Button';
-import type { ProfileView, StatView } from '@/lib/content';
+import type { ProfileView } from '@/lib/content';
 import { cn } from '@/lib/utils';
 
 /**
@@ -16,12 +16,10 @@ import { cn } from '@/lib/utils';
  * sequence's no-frames fallback and the Person structured data.
  */
 export function Hero({
-  profile,
-  stats,
+  profile,
   showHeadline = true,
 }: {
-  profile: ProfileView;
-  stats: StatView[];
+  profile: ProfileView;
   /**
    * Off when the scroll sequence above already carries the name as the page
    * h1 - two giant identical headings would be a duplicate h1 and read as a
@@ -30,8 +28,7 @@ export function Hero({
   showHeadline?: boolean;
 }) {
   const location = [profile.currentCity, profile.region].filter(Boolean).join(', ');
-  const positioning = profile.positioning.split('·').map((part) => part.trim()).filter(Boolean);
-  const heroStats = stats.slice(0, 3);
+  const positioning = profile.positioning.split('·').map((part) => part.trim()).filter(Boolean);
 
   return (
     <section className="grain relative overflow-hidden border-b border-ink-800">
@@ -71,27 +68,21 @@ export function Hero({
 
         <p className="mt-8 max-w-2xl text-xl leading-relaxed text-bone-300">{profile.shortBio}</p>
 
+        {/*
+          The two routes out, and nothing after them. This block used to end on
+          a row of counters - grounds, academies, players progressed - which
+          asked the reader to absorb figures before they had been told who the
+          man is. The same numbers are still on the page, in the Red Ball
+          section, where a reader has the context to care about them.
+        */}
         <div className="mt-10 flex flex-wrap items-center gap-3">
           <Link href="/about" className={buttonClass('primary', 'lg')}>
             Explore Journey
           </Link>
           <Link href="/contact" className={buttonClass('secondary', 'lg')}>
-            Contact Sonu
+            Contact Me
           </Link>
         </div>
-
-        {heroStats.length > 0 ? (
-          <dl className="mt-14 grid max-w-3xl grid-cols-3 gap-4 border-t border-ink-800 pt-8 sm:gap-8">
-            {heroStats.map((stat) => (
-              <div key={stat.key}>
-                <dt className="text-sm uppercase tracking-[0.12em] text-bone-500">{stat.label}</dt>
-                <dd className="mt-2 font-display text-4xl text-brass-200 tabular-nums">
-                  {stat.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        ) : null}
       </div>
     </section>
   );

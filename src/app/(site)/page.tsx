@@ -69,7 +69,7 @@ export default async function HomePage() {
         fallbackAlt={profile.portraitAlt}
       />
 
-      <Hero profile={profile} stats={stats} showHeadline={false} />
+      <Hero profile={profile} showHeadline={false} />
 
       <Section id="what-he-runs" tone="raised" className="py-16">
         <div className="shell">
