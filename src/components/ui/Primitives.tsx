@@ -5,6 +5,38 @@ import { cn } from '@/lib/utils';
 // Section scaffolding
 // ---------------------------------------------------------------------------
 
+/**
+ * Remaps the light-ground content tokens for use inside a navy band.
+ *
+ * Every component on the site writes its type in `bone` and `brass` steps
+ * chosen against white. Inside a dark band each of those has to move to its
+ * navy counterpart at the same position in the hierarchy. Doing that by adding
+ * a `tone` prop to each component means threading a prop through every one of
+ * them; doing it here keys the override on the class the component already
+ * carries, and a descendant selector outranks a plain utility, so it wins.
+ *
+ * Two things to know before reaching for it:
+ *  - It is indiscriminate. Apply it only to a section whose type sits directly
+ *    on the band. A section containing white cards must NOT use it, or the card
+ *    copy goes pale on white - `what-he-runs` is navy without it for exactly
+ *    that reason.
+ *  - It is coupled to the class names it lists. Rename a token inside a
+ *    component and the override stops applying, silently.
+ */
+export const ON_NAVY = [
+  '[&_.text-bone-50]:text-navy-200',
+  '[&_.text-bone-100]:text-navy-200',
+  '[&_.text-bone-200]:text-navy-300',
+  '[&_.text-bone-300]:text-navy-300',
+  '[&_.text-bone-400]:text-navy-400',
+  '[&_.text-bone-500]:text-navy-500',
+  '[&_.text-brass-100]:text-brass-600',
+  '[&_.text-brass-200]:text-brass-600',
+  '[&_.text-brass-300]:text-brass-600',
+  '[&_.border-ink-800]:border-navy-700',
+  '[&_.border-ink-950]:border-navy-900',
+].join(' ');
+
 export function Section({
   id,
   children,
@@ -14,15 +46,23 @@ export function Section({
   id?: string;
   children: ReactNode;
   className?: string;
-  tone?: 'default' | 'raised' | 'paper';
+  /**
+   * `navy` is a full-bleed dark band. Anything inside one needs its own light
+   * type - pass `tone="light"` to SectionHeading, and check nested components,
+   * because the defaults everywhere are tuned for the white ground.
+   */
+  tone?: 'default' | 'raised' | 'paper' | 'navy';
 }) {
   return (
     <section
       id={id}
       className={cn(
         'py-section',
-        tone === 'raised' && 'bg-ink-900/60',
+        // A wash, not a translucent white. The ground is white now, so
+        // `bg-ink-900/60` - white at 60% over white - separated nothing.
+        tone === 'raised' && 'bg-ink-tint',
         tone === 'paper' && 'bg-bone-100 text-ink-900',
+        tone === 'navy' && 'bg-navy-900 text-navy-300 [&_.eyebrow]:text-brass-600',
         className,
       )}
     >

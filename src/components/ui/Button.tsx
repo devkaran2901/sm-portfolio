@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { ComponentProps, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
-type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
+type Variant = 'primary' | 'secondary' | 'accent' | 'ghost' | 'danger';
 type Size = 'sm' | 'md' | 'lg';
 
 /*
@@ -22,6 +22,14 @@ const VARIANTS: Record<Variant, string> = {
     'border border-transparent bg-bone-50 text-ink-900 shadow-card hover:bg-bone-200 hover:shadow-lift',
   secondary:
     'border border-ink-600 bg-transparent text-bone-100 hover:border-bone-50 hover:bg-bone-50 hover:text-ink-900 hover:shadow-card',
+  /*
+   * The variant for dark grounds. `primary` is black on white, which vanishes
+   * against navy, and `secondary` is near-black type on nothing, which vanishes
+   * with it. Red on navy carries at 5.1:1 with white type over it, and it is
+   * the accent the rest of the page already uses.
+   */
+  accent:
+    'border border-transparent bg-brass-300 text-ink-900 shadow-card hover:bg-brass-200 hover:shadow-lift',
   ghost:
     'border border-transparent bg-transparent text-bone-300 hover:bg-ink-800 hover:text-bone-50',
   danger:

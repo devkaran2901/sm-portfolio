@@ -77,7 +77,7 @@ export function TrafficChart({ data }: { data: TrafficPoint[] }) {
             height={30}
             iconType="circle"
             iconSize={7}
-            wrapperStyle={{ fontSize: 12, color: '#9C9081' }}
+            wrapperStyle={{ fontSize: 12, color: '#93AECB' }}
           />
 
           <Area

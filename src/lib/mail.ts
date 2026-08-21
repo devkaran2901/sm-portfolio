@@ -74,17 +74,17 @@ export async function sendMail(message: MailMessage): Promise<{ sent: boolean; r
 function layout(title: string, bodyHtml: string): string {
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(title)}</title></head>
-<body style="margin:0;background:#f6f2ea;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#15181a;">
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f6f2ea;padding:32px 16px;">
+<body style="margin:0;background:#ffffff;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#0a0a0b;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#ffffff;padding:32px 16px;">
     <tr><td align="center">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border:1px solid #ede7db;border-radius:14px;overflow:hidden;">
-        <tr><td style="background:#0e1011;padding:22px 28px;">
-          <div style="color:#f6f2ea;font-size:17px;font-weight:600;letter-spacing:-0.01em;">Sonu Malik</div>
-          <div style="color:#d4b65a;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;margin-top:4px;">${escapeHtml(title)}</div>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border:1px solid #e2e2e5;border-radius:14px;overflow:hidden;">
+        <tr><td style="background:#0c1a30;padding:22px 28px;">
+          <div style="color:#ffffff;font-size:17px;font-weight:600;letter-spacing:-0.01em;">Sonu Malik</div>
+          <div style="color:#a9c6e4;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;margin-top:4px;">${escapeHtml(title)}</div>
         </td></tr>
         <tr><td style="padding:28px;">${bodyHtml}</td></tr>
-        <tr><td style="padding:18px 28px;background:#faf8f4;border-top:1px solid #ede7db;color:#6b6257;font-size:12px;line-height:1.6;">
-          Sent automatically from <a href="${siteUrl()}" style="color:#866718;">${escapeHtml(siteUrl())}</a>.
+        <tr><td style="padding:18px 28px;background:#f6f6f7;border-top:1px solid #e2e2e5;color:#4a4b4e;font-size:12px;line-height:1.6;">
+          Sent automatically from <a href="${siteUrl()}" style="color:#17457e;">${escapeHtml(siteUrl())}</a>.
         </td></tr>
       </table>
     </td></tr>
@@ -95,8 +95,8 @@ function layout(title: string, bodyHtml: string): string {
 function row(label: string, value: string | null | undefined): string {
   if (!value) return '';
   return `<tr>
-    <td style="padding:7px 0;color:#6b6257;font-size:12px;text-transform:uppercase;letter-spacing:0.08em;width:132px;vertical-align:top;">${escapeHtml(label)}</td>
-    <td style="padding:7px 0;font-size:14px;color:#15181a;">${escapeHtml(value)}</td>
+    <td style="padding:7px 0;color:#4a4b4e;font-size:12px;text-transform:uppercase;letter-spacing:0.08em;width:132px;vertical-align:top;">${escapeHtml(label)}</td>
+    <td style="padding:7px 0;font-size:14px;color:#0a0a0b;">${escapeHtml(value)}</td>
   </tr>`;
 }
 
@@ -117,7 +117,7 @@ export type InquiryEmailData = {
 export function adminNotificationTemplate(data: InquiryEmailData): { html: string; text: string } {
   const body = `
     <p style="margin:0 0 16px;font-size:15px;line-height:1.6;">A new inquiry arrived through the website contact form.</p>
-    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-top:1px solid #ede7db;">
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-top:1px solid #e2e2e5;">
       ${row('Reference', data.reference)}
       ${row('Type', data.inquiryTypeLabel)}
       ${row('Name', data.name)}
@@ -129,12 +129,12 @@ export function adminNotificationTemplate(data: InquiryEmailData): { html: strin
       ${row('Campaign', data.campaign)}
       ${row('Received', data.submittedAt.toISOString())}
     </table>
-    <div style="margin-top:20px;padding:16px;background:#faf8f4;border-left:3px solid #237f52;border-radius:0 8px 8px 0;">
-      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:#6b6257;margin-bottom:8px;">Message</div>
+    <div style="margin-top:20px;padding:16px;background:#f6f6f7;border-left:3px solid #1d4e89;border-radius:0 8px 8px 0;">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:#4a4b4e;margin-bottom:8px;">Message</div>
       <div style="font-size:14px;line-height:1.65;white-space:pre-wrap;">${escapeHtml(data.message)}</div>
     </div>
     <p style="margin:22px 0 0;">
-      <a href="${siteUrl()}/admin/inquiries" style="display:inline-block;background:#0e1011;color:#f6f2ea;text-decoration:none;padding:11px 20px;border-radius:8px;font-size:14px;font-weight:600;">Open in admin portal</a>
+      <a href="${siteUrl()}/admin/inquiries" style="display:inline-block;background:#0c1a30;color:#ffffff;text-decoration:none;padding:11px 20px;border-radius:8px;font-size:14px;font-weight:600;">Open in admin portal</a>
     </p>`;
 
   const text = [
@@ -163,8 +163,8 @@ export function acknowledgementTemplate(data: InquiryEmailData): { html: string;
       Thank you for getting in touch. Your message has been received and will be reviewed personally.
       Your reference number is <strong>${escapeHtml(data.reference)}</strong>.
     </p>
-    <div style="margin:18px 0;padding:16px;background:#faf8f4;border-left:3px solid #237f52;border-radius:0 8px 8px 0;">
-      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:#6b6257;margin-bottom:8px;">Your message</div>
+    <div style="margin:18px 0;padding:16px;background:#f6f6f7;border-left:3px solid #1d4e89;border-radius:0 8px 8px 0;">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:#4a4b4e;margin-bottom:8px;">Your message</div>
       <div style="font-size:14px;line-height:1.65;white-space:pre-wrap;">${escapeHtml(data.message)}</div>
     </div>
     <p style="margin:0;font-size:15px;line-height:1.65;">Regards,<br>Sonu Malik</p>`;
@@ -192,9 +192,9 @@ export function passwordResetTemplate(name: string, resetUrl: string): { html: s
       If you did not request it, no action is needed.
     </p>
     <p style="margin:0 0 18px;">
-      <a href="${resetUrl}" style="display:inline-block;background:#0e1011;color:#f6f2ea;text-decoration:none;padding:11px 20px;border-radius:8px;font-size:14px;font-weight:600;">Reset password</a>
+      <a href="${resetUrl}" style="display:inline-block;background:#0c1a30;color:#ffffff;text-decoration:none;padding:11px 20px;border-radius:8px;font-size:14px;font-weight:600;">Reset password</a>
     </p>
-    <p style="margin:0;font-size:12px;color:#6b6257;word-break:break-all;">${escapeHtml(resetUrl)}</p>`;
+    <p style="margin:0;font-size:12px;color:#4a4b4e;word-break:break-all;">${escapeHtml(resetUrl)}</p>`;
 
   const text = [
     `Hello ${name},`,

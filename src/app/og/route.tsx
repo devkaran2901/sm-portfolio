@@ -31,8 +31,8 @@ export function GET(request: Request) {
           flexDirection: 'column',
           justifyContent: 'space-between',
           padding: '72px 80px',
-          background: 'linear-gradient(135deg, #08090A 0%, #0E1011 55%, #0A291B 100%)',
-          color: '#F6F2EA',
+          background: 'linear-gradient(135deg, #070E1A 0%, #0C1A30 55%, #132743 100%)',
+          color: '#E3EDF6',
           fontFamily: 'sans-serif',
         }}
       >
@@ -42,7 +42,7 @@ export function GET(request: Request) {
               width: 14,
               height: 14,
               borderRadius: 999,
-              background: '#3F9C6E',
+              background: '#A9C6E4',
               display: 'flex',
             }}
           />
@@ -51,7 +51,7 @@ export function GET(request: Request) {
               fontSize: 22,
               letterSpacing: 6,
               textTransform: 'uppercase',
-              color: '#D4B65A',
+              color: '#A9C6E4',
               display: 'flex',
             }}
           >
@@ -63,7 +63,7 @@ export function GET(request: Request) {
           <div style={{ fontSize: 82, lineHeight: 1.05, fontWeight: 700, display: 'flex' }}>
             {title}
           </div>
-          <div style={{ fontSize: 30, color: '#C3B9A5', lineHeight: 1.3, display: 'flex' }}>
+          <div style={{ fontSize: 30, color: '#C4D6E8', lineHeight: 1.3, display: 'flex' }}>
             {subtitle}
           </div>
         </div>
@@ -73,10 +73,10 @@ export function GET(request: Request) {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderTop: '1px solid #2A2F33',
+            borderTop: '1px solid #1E3A5F',
             paddingTop: 28,
             fontSize: 24,
-            color: '#9C9081',
+            color: '#93AECB',
           }}
         >
           <div style={{ display: 'flex' }}>Red Ball Cricket Ground</div>

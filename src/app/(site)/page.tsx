@@ -7,13 +7,11 @@ import { HeroSequence } from '@/components/sections/HeroSequence';
 import { Timeline } from '@/components/sections/Timeline';
 import { Ecosystem } from '@/components/sections/Ecosystem';
 import { PlayerImpact } from '@/components/sections/PlayerImpact';
-import { VentureCards } from '@/components/sections/VentureCards';
 import { Faq } from '@/components/sections/Faq';
-import { AnswerBlocks, EntityWeb } from '@/components/sections/EntityContext';
-import { ContactCta, RedBallCta } from '@/components/sections/CallToAction';
+import { ContactCta } from '@/components/sections/CallToAction';
 import { Counter } from '@/components/ui/Counter';
 import { JsonLd } from '@/components/ui/JsonLd';
-import { Section, SectionHeading, StatBlock } from '@/components/ui/Primitives';
+import { ON_NAVY, Section, SectionHeading, StatBlock } from '@/components/ui/Primitives';
 import { Reveal } from '@/components/ui/Reveal';
 import { buttonClass } from '@/components/ui/Button';
 import { SITE } from '@/content/defaults';
@@ -71,9 +69,21 @@ export default async function HomePage() {
 
       <Hero profile={profile} showHeadline={false} />
 
-      <Section id="what-he-runs" tone="raised" className="py-16">
+      {/*
+        Navy without ON_NAVY: every word here sits inside a white card and has
+        to stay dark. The one thing the band does reach is `.eyebrow`, which the
+        navy tone re-points to its light variant - correct for the section
+        heading, wrong for the eyebrow inside each card, so that one is put
+        back. The deeper selector wins.
+      */}
+      <Section
+        id="what-he-runs"
+        tone="navy"
+        className="py-16 [&_article_.eyebrow]:text-brass-300"
+      >
         <div className="shell">
           <SectionHeading
+            tone="light"
             eyebrow="At a Glance"
             title="The arena and the ventures"
             lead="Two places to go next, depending on what brought you here."
@@ -85,7 +95,7 @@ export default async function HomePage() {
       </Section>
 
       {/* Who, in one screen. The 10-second answer the brief asks for. */}
-      <Section id="overview" tone="raised">
+      <Section id="overview">
         <div className="shell grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <SectionHeading eyebrow="Who is Sonu Malik" title="Cricket, then infrastructure." />
@@ -104,9 +114,10 @@ export default async function HomePage() {
         </div>
       </Section>
 
-      <Section id="journey">
+      <Section id="journey" tone="navy" className={ON_NAVY}>
         <div className="shell">
           <SectionHeading
+            tone="light"
             eyebrow="Cricket Journey"
             title="From Mokhra to the Norwegian Cup"
             lead="Village cricket, collegiate cricket, and international club cricket abroad. Not a BCCI professional playing career &mdash; club cricket, accurately described."
@@ -120,7 +131,7 @@ export default async function HomePage() {
         </div>
       </Section>
 
-      <Section id="red-ball" tone="raised">
+      <Section id="red-ball">
         <div className="shell">
           <SectionHeading
             eyebrow="Red Ball Cricket Ground"
@@ -153,7 +164,7 @@ export default async function HomePage() {
         </div>
       </Section>
 
-      <Section id="players">
+      <Section id="players" tone="raised">
         <div className="shell">
           <SectionHeading
             eyebrow="Player Development"
@@ -166,38 +177,13 @@ export default async function HomePage() {
         </div>
       </Section>
 
-      <Section id="ventures" tone="raised">
+
+
+
+      <Section id="faq" tone="navy" className={ON_NAVY}>
         <div className="shell">
           <SectionHeading
-            eyebrow="Business Ventures"
-            title="Founder & owner"
-            lead="Two businesses alongside the sports infrastructure work."
-          />
-          <div className="mt-14">
-            <VentureCards businesses={businesses} />
-          </div>
-        </div>
-      </Section>
-
-      <Section>
-        <div className="shell">
-          <RedBallCta />
-        </div>
-      </Section>
-
-      {/* Entity-oriented passages: short, factual, quotable by generative engines. */}
-      <Section id="quick-answers" tone="raised">
-        <div className="shell">
-          <SectionHeading eyebrow="Quick Answers" title="The essentials, stated plainly" />
-          <div className="mt-12">
-            <AnswerBlocks faqs={faqs} limit={6} />
-          </div>
-        </div>
-      </Section>
-
-      <Section id="faq">
-        <div className="shell">
-          <SectionHeading
+            tone="light"
             eyebrow="Frequently Asked"
             title="Questions people actually ask"
             lead="Answers are limited to what is known and supportable."
@@ -208,14 +194,6 @@ export default async function HomePage() {
         </div>
       </Section>
 
-      <Section tone="raised" className="py-16">
-        <div className="shell">
-          <h2 className="eyebrow">Explore</h2>
-          <div className="mt-8">
-            <EntityWeb profile={profile} />
-          </div>
-        </div>
-      </Section>
 
       <Section>
         <ContactCta />

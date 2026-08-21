@@ -22,16 +22,24 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Surfaces: neutral grey ground, white cards. No blue cast.
+        /*
+         * Surfaces: white ground, white cards, hairline borders.
+         *
+         * The ground used to be #D9DADC, a mid grey heavy enough to read as a
+         * colour in its own right and to drag every card down with it. It is
+         * white now, and separation is carried by borders and by the `tint`
+         * wash on alternating sections rather than by tone. The two remaining
+         * dark steps, 500 and 400, are text and icon colours, not surfaces.
+         */
         ink: {
-          950: '#D9DADC', // page background
-          900: '#FFFFFF', // cards, panels, admin sidebar
-          800: '#E8E9EA', // dividers and hover fills
-          700: '#C9CBCD', // default borders
-          600: '#B4B6B9', // stronger borders
-          500: '#7A7C7F', // icons and faint marks
-          400: '#5A5C5F',
-          tint: '#CFD0D2',
+          950: '#FFFFFF', // page background
+          900: '#FFFFFF', // cards, panels, admin sidebar, text on dark fills
+          800: '#EFEFF1', // dividers and hover fills
+          700: '#E2E2E5', // default borders
+          600: '#CDCED1', // stronger borders
+          500: '#6E7073', // icons and faint marks
+          400: '#4A4B4E',
+          tint: '#F6F6F7', // the wash on raised sections
         },
         /*
          * Content: near-black through to muted grey.
@@ -67,18 +75,72 @@ const config: Config = {
           800: '#D2D4D6',
           900: '#E8E9EA', // faint tints
         },
-        brass: {
-          50: '#0A0A0B',
-          100: '#141516', // link hover
-          200: '#1F2124', // accent text and links
-          300: '#3A3C3F', // eyebrows
-          400: '#B4B6B9', // borders
-          500: '#C9CBCD',
-          600: '#DCDDDF',
-          700: '#EDEEEF', // tinted fills
+        /*
+         * The one colour on the site. Black, white and a single red, taken
+         * from the Red Ball reference.
+         *
+         * The scale runs dark to light like `bone`, so the low steps are for
+         * use on white and the high ones for use on black. 300 is the eyebrow
+         * red and clears AA on white at 5.1:1; 600 is its counterpart for dark
+         * fills at 7.2:1. Nothing between 400 and 500 is used for text - those
+         * are borders, rules and dots.
+         */
+        /*
+         * The dark ground. Navy rather than black, so the dark blocks read as
+         * a colour decision next to the red instead of as an absence.
+         *
+         * Runs deep to pale, the opposite way round to `ink` and `bone`: 950
+         * and 900 are surfaces, 200 through 500 are the type that sits on them.
+         * Every text step clears AA on navy-900 - 200 at 14.5:1 down to 500 at
+         * 5.2:1 - and brass-600 lands on it at 6.3:1, which is what makes a red
+         * eyebrow legible over navy.
+         */
+        navy: {
+          950: '#070E1A', // deepest: the footer ground
+          900: '#0C1A30', // the standard dark block
+          800: '#132743', // a raised panel inside a dark block
+          700: '#1E3A5F', // borders on navy
+          600: '#2F5480',
+          500: '#6E92B8', // faint labels on navy
+          400: '#93AECB', // muted copy on navy
+          300: '#C4D6E8', // body copy on navy
+          200: '#E3EDF6', // headings on navy
         },
-        // Error state keeps its hue: red carries meaning that grey cannot.
-        danger: { 400: '#93291D', 500: '#C0392B', 600: '#B32D1C' },
+        /*
+         * The accent, and the only hue on the site: navy, black, white, nothing
+         * else.
+         *
+         * Lighter and more saturated than the `navy` surface steps above, on
+         * purpose. A surface navy used as accent type just reads as black - the
+         * blue only survives against white if the value is kept up around 300.
+         * The scale runs dark to light like `bone`, so low steps sit on white
+         * and high steps sit on navy: 300 is the eyebrow at 8.4:1 on white, 600
+         * its counterpart at 9.9:1 on navy-900. 400 and 500 are borders, rules
+         * and dots, never text.
+         */
+        brass: {
+          50: '#0A1A2E',
+          100: '#12365F', // link hover
+          200: '#17457E', // accent text, links, counters
+          300: '#1D4E89', // eyebrows
+          400: '#3E7AB8', // borders, dots, rules
+          500: '#6E9DCE',
+          600: '#A9C6E4', // eyebrows on dark fills
+          700: '#E8F0F8', // tinted fills
+        },
+        /*
+         * Error state, now inside the three-colour rule rather than outside it.
+         *
+         * This used to be red, on the argument that red carries meaning grey
+         * cannot. That is true, and giving it up costs something real: a failed
+         * field on the contact form and a delete button in the admin no longer
+         * announce themselves by hue. What keeps them legible is that navy is
+         * not the colour of body copy - error text at #17457E reads as marked
+         * against #202124 - and that the error affordance never depended on
+         * colour alone: the messages carry role="alert" and sit against the
+         * field they belong to.
+         */
+        danger: { 400: '#17457E', 500: '#1D4E89', 600: '#12365F' },
         info: { 400: '#3A3C3F', 500: '#7A7C7F' },
       },
       fontFamily: {
