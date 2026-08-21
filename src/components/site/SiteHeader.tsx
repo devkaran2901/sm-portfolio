@@ -130,9 +130,15 @@ export function SiteHeader() {
     <header
       className={cn(
         'fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-editorial',
-        scrolled || open
-          ? 'border-b border-ink-700/70 bg-ink-950/88 backdrop-blur-lg'
-          : 'border-b border-transparent bg-transparent',
+        /*
+          Solid white, not a translucent pane over a blur. The ground is light
+          grey and the cards are white, so a semi-transparent bar let card
+          edges and body copy read straight through the nav and the links had
+          to compete with whatever happened to be behind them. Depth comes from
+          a shadow once the page has moved instead.
+        */
+        'border-b border-ink-700 bg-ink-900',
+        scrolled || open ? 'shadow-card' : 'shadow-none',
         // `invisible` matters as much as the opacity: it takes the links out of
         // the tab order while the nav is off screen, so focus cannot land on
         // something the reader cannot see.
@@ -186,8 +192,20 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link href="/contact" className={cn(buttonClass('primary', 'sm'), 'hidden sm:inline-flex')}>
-            Get in Touch
+          {/*
+            Shown at every width. It used to be `hidden sm:inline-flex`, which
+            removed the one direct route to contact on exactly the devices with
+            the least patience for hunting through a menu. `primary` is already
+            black on white, so it reads as the single action in the bar.
+
+            Padding tightens on mobile: at 320px the wordmark, this and the
+            menu trigger have to share the row.
+          */}
+          <Link
+            href="/contact"
+            className={cn(buttonClass('primary', 'sm'), 'px-4 sm:px-5')}
+          >
+            Contact Me
           </Link>
 
           <button
@@ -211,7 +229,7 @@ export function SiteHeader() {
           role="dialog"
           aria-modal="true"
           aria-label="Site navigation"
-          className="border-t border-ink-700/70 bg-ink-950/97 backdrop-blur-lg lg:hidden"
+          className="border-t border-ink-700 bg-ink-900 lg:hidden"
         >
           <nav aria-label="Mobile" className="shell flex flex-col py-4">
             {NAV_LINKS.map((link) => (
@@ -219,13 +237,20 @@ export function SiteHeader() {
                 key={link.href}
                 href={link.href}
                 aria-current={isActive(link.href) ? 'page' : undefined}
+                /*
+                  Black on white, and the active item is carried by weight
+                  rather than colour. It used to be brass-200 against
+                  bone-200 - #1F2124 against #202124 - which is a three-value
+                  difference nobody can see, so the panel had no visible
+                  current-page state at all.
+                */
                 className={cn(
-                  'flex items-center justify-between border-b border-ink-800 py-3.5 text-[0.9375rem] transition-colors last:border-b-0',
-                  isActive(link.href) ? 'text-brass-200' : 'text-bone-200 hover:text-bone-50',
+                  'flex items-center justify-between border-b border-ink-800 py-3.5 text-[0.9375rem] text-bone-50 transition-colors last:border-b-0 hover:text-bone-300',
+                  isActive(link.href) ? 'font-semibold' : 'font-normal',
                 )}
               >
                 {link.label}
-                <span aria-hidden="true" className="text-ink-500">
+                <span aria-hidden="true" className="text-ink-400">
                   &rarr;
                 </span>
               </Link>
