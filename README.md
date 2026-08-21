@@ -52,8 +52,14 @@ date, URL, uploaded evidence, review status and admin notes.
 - The seed opens an `UNVERIFIED` record for every launch claim that still needs backing
   (see `OPEN_CLAIMS` in `src/content/defaults.ts`), so the archive starts honest rather than empty.
 
-Placeholder imagery is a labelled empty frame (`MediaPlaceholder`), never a stock or generated
-photograph standing in for a real one.
+Imagery is the one place this discipline is deliberately relaxed. The sport cards on `/red-ball`
+carry openly-licensed stock photography of each sport, chosen by the site owner in preference to
+empty frames. They are **not** photographs of Red Ball's own facilities, and a reader has no way to
+tell that from the page — the trade was made knowingly. Every licence and author is recorded in
+[`CREDITS.md`](CREDITS.md); see the note there about attribution still owed.
+
+Everywhere else the rule holds: a subject with no photograph gets a labelled empty frame
+(`MediaPlaceholder`), never a generated one, and alt text describes only what is in the frame.
 
 ---
 

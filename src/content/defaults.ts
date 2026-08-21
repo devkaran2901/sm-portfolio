@@ -188,9 +188,14 @@ export type FacilitySeed = {
   /** Featured facilities take the large cards that anchor the arena grid. */
   isFeatured: boolean;
   /**
-   * Photograph of the facility, seeded as a FacilityImage with isPlaceholder
-   * false. A facility without one keeps its labelled placeholder: no stock or
-   * generated picture ever stands in for a place that has not been shot.
+   * Card image, seeded as a FacilityImage with isPlaceholder false. A facility
+   * without one keeps its labelled placeholder.
+   *
+   * Only cricket-grounds is a photograph of Red Ball. The rest are
+   * openly-licensed stock images of the sport, carried at the owner's request
+   * in preference to empty frames, and the cards do not mark them as such -
+   * see CREDITS.md. The alt text still describes only what is in the frame,
+   * so it never claims the picture was taken here.
    */
   imageUrl?: string | null;
   imageAlt?: string | null;
@@ -230,6 +235,9 @@ export const FACILITIES: FacilitySeed[] = [
       'A dedicated environment for cricket training, skill development and structured practice.',
     iconKey: 'graduation',
     isFeatured: false,
+    imageUrl: '/images/facilities/cricket-academy.webp',
+    imageAlt:
+      'Cricket practice nets on grass, netting stretched the length of the run-ups.',
     sortOrder: 20,
   },
   {
@@ -241,6 +249,9 @@ export const FACILITIES: FacilitySeed[] = [
     description: 'A dedicated space for fast-paced recreational and competitive box cricket.',
     iconKey: 'box',
     isFeatured: false,
+    imageUrl: '/images/facilities/box-cricket.webp',
+    imageAlt:
+      'An indoor cricket match in progress inside a netted hall.',
     sortOrder: 30,
   },
   {
@@ -252,6 +263,9 @@ export const FACILITIES: FacilitySeed[] = [
     description: 'Dedicated badminton facilities for training, practice and recreational play.',
     iconKey: 'racquet',
     isFeatured: false,
+    imageUrl: '/images/facilities/badminton.webp',
+    imageAlt:
+      'An outdoor badminton court, its lines marked in white on a green and red surface.',
     sortOrder: 40,
   },
   {
@@ -263,6 +277,9 @@ export const FACILITIES: FacilitySeed[] = [
     description: 'Dedicated pickleball courts for recreational and competitive play.',
     iconKey: 'racquet',
     isFeatured: false,
+    imageUrl: '/images/facilities/pickleball.webp',
+    imageAlt:
+      'A player mid-rally on an outdoor pickleball court.',
     sortOrder: 50,
   },
   {
@@ -274,6 +291,9 @@ export const FACILITIES: FacilitySeed[] = [
     description: 'Tennis facilities designed for practice, training and recreational matches.',
     iconKey: 'racquet',
     isFeatured: false,
+    imageUrl: '/images/facilities/tennis.webp',
+    imageAlt:
+      'A tennis racquet and two balls resting on the baseline of a court.',
     sortOrder: 60,
   },
   {
@@ -286,6 +306,9 @@ export const FACILITIES: FacilitySeed[] = [
       'An outdoor football facility suitable for training, games and recreational activities.',
     iconKey: 'football',
     isFeatured: true,
+    imageUrl: '/images/facilities/football-ground.webp',
+    imageAlt:
+      'A football pitch with a match in play and stands behind.',
     sortOrder: 70,
   },
   {
@@ -297,6 +320,9 @@ export const FACILITIES: FacilitySeed[] = [
     description: 'A dedicated volleyball facility for practice, games and recreational play.',
     iconKey: 'volleyball',
     isFeatured: false,
+    imageUrl: '/images/facilities/volleyball.webp',
+    imageAlt:
+      'Players contesting the net during an indoor volleyball match.',
     sortOrder: 80,
   },
   {
@@ -309,6 +335,9 @@ export const FACILITIES: FacilitySeed[] = [
       'Indoor table tennis facilities for practice, training and recreational games.',
     iconKey: 'racquet',
     isFeatured: false,
+    imageUrl: '/images/facilities/table-tennis.webp',
+    imageAlt:
+      'A table tennis rally under way in an indoor hall.',
     sortOrder: 90,
   },
   {
@@ -321,6 +350,9 @@ export const FACILITIES: FacilitySeed[] = [
       'A dedicated swimming facility for fitness, recreation and swimming activities.',
     iconKey: 'waves',
     isFeatured: false,
+    imageUrl: '/images/facilities/swimming-pool.webp',
+    imageAlt:
+      'A lane-marked indoor swimming pool.',
     sortOrder: 100,
   },
   {
@@ -333,6 +365,9 @@ export const FACILITIES: FacilitySeed[] = [
       'A dedicated fitness facility supporting strength, conditioning and general physical fitness.',
     iconKey: 'dumbbell',
     isFeatured: false,
+    imageUrl: '/images/facilities/gym.webp',
+    imageAlt:
+      'Resistance and cardio machines lined up along a gym floor.',
     sortOrder: 110,
   },
   {
@@ -344,6 +379,9 @@ export const FACILITIES: FacilitySeed[] = [
     description: 'A dedicated space for archery practice and recreational activities.',
     iconKey: 'target',
     isFeatured: false,
+    imageUrl: '/images/facilities/archery.webp',
+    imageAlt:
+      'Arrows grouped in the gold of an archery target.',
     sortOrder: 120,
   },
   {
@@ -356,6 +394,9 @@ export const FACILITIES: FacilitySeed[] = [
       'A dedicated shooting facility for supervised sporting and recreational activities.',
     iconKey: 'crosshair',
     isFeatured: false,
+    imageUrl: '/images/facilities/shooting.webp',
+    imageAlt:
+      'A competitor sighting down a rifle on a shooting range.',
     sortOrder: 130,
   },
   {
@@ -370,6 +411,9 @@ export const FACILITIES: FacilitySeed[] = [
       'An on-site restaurant serving players, families and spectators through the day.',
     iconKey: 'utensils',
     isFeatured: false,
+    imageUrl: '/images/facilities/restaurant.webp',
+    imageAlt:
+      'A restaurant dining room laid for service.',
     sortOrder: 200,
   },
 ];

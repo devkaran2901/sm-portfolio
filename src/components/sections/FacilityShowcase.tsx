@@ -32,9 +32,15 @@ const GROUP_ORDER: Array<FacilityView['group']> = ['CRICKET', 'RACQUET', 'FITNES
 /**
  * Photography-led facility grid.
  *
- * Real images are rendered when a facility has them; otherwise a clearly
- * labelled placeholder appears. No stock or generated photography stands in for
- * a facility that has not been photographed yet.
+ * An image is rendered when a facility has one; otherwise a clearly labelled
+ * placeholder appears.
+ *
+ * Note on what these images are: every card except cricket-grounds carries
+ * openly-licensed stock photography of the sport, not a photograph of Red
+ * Ball's own facility, and nothing on the card says so. That was the owner's
+ * call, made against the alternative of empty frames. Licences and authors are
+ * in CREDITS.md. If real photographs of the arena arrive, they should replace
+ * these rather than sit alongside them.
  */
 export function FacilityShowcase({ facilities }: { facilities: FacilityView[] }) {
   const grouped = GROUP_ORDER.map((group) => ({
