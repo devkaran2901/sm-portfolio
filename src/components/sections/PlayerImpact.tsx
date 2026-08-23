@@ -23,7 +23,7 @@ export function PlayerImpact({
     <div className="grid gap-14 lg:grid-cols-12 lg:gap-12">
       <div className="lg:col-span-5">
         <div className="rounded-xl2 border border-ink-700/70 bg-gradient-to-b from-ink-900/90 to-ink-950 p-8">
-          <p className="font-display text-[clamp(3.5rem,9vw,5.5rem)] leading-none text-brass-200 tabular-nums">
+          <p className="font-serif text-[clamp(3.5rem,9vw,5.5rem)] leading-none text-brass-200 tabular-nums">
             <Counter value={playersStat?.value ?? '50+'} />
           </p>
           <p className="mt-4 text-lg font-semibold text-bone-50">
@@ -80,7 +80,7 @@ export function PlayerImpact({
                   />
                 )}
                 <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-5">
-                  <h4 className="break-words font-display text-lg text-bone-50 sm:text-xl">{player.name}</h4>
+                  <h4 className="break-words font-serif text-lg text-bone-50 sm:text-xl">{player.name}</h4>
                   {player.teamContext ? (
                     <p className="mt-1 text-xs uppercase tracking-[0.12em] text-brass-300">
                       {player.teamContext}

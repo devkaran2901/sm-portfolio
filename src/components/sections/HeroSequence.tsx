@@ -264,8 +264,18 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
     <section
       ref={sectionRef}
       aria-label={`${name} — introduction`}
-      // Pulled up under the fixed header so the stage runs edge to edge.
-      className="relative -mt-[4.5rem] bg-bone-50"
+      /*
+        Pulled up under the fixed header so the stage runs edge to edge.
+
+        The near-black and the white below are literals, not palette tokens,
+        and that is deliberate. This stage sits outside the site restyle, but
+        it used to reach the ground it wanted through `bone-50` and `ink-900`
+        - surface and content roles - and the rest of the site went dark by
+        changing what those roles resolve to. Left as tokens, the stage would
+        have flipped to white-with-navy-type along with everything else. These
+        are the values the tokens carried before that change.
+      */
+      className="relative -mt-[4.5rem] bg-[#0A0A0B]"
       style={{ height: hasFrames ? `${RUNWAY_VH}vh` : undefined }}
     >
       <div className="sticky top-0 flex h-dvh w-full items-center justify-center overflow-hidden">
@@ -324,7 +334,7 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
             in vw to just fit the viewport, so widening it is what pushes the
             page into a horizontal scroll.
           */}
-          <h1 className="whitespace-nowrap text-center text-[clamp(2.25rem,15.5vw,13rem)] leading-[1.05] tracking-[0.005em] [word-spacing:0.02em] text-ink-900 [text-shadow:0_2px_28px_rgba(10,10,11,0.38)]">
+          <h1 className="whitespace-nowrap text-center text-[clamp(2.25rem,15.5vw,13rem)] leading-[1.05] tracking-[0.005em] [word-spacing:0.02em] text-white [text-shadow:0_2px_28px_rgba(10,10,11,0.38)]">
             {name}
           </h1>
         </div>
@@ -335,7 +345,7 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
           className="absolute bottom-10 left-1/2 -translate-x-1/2 transition-opacity duration-500"
           style={{ opacity: started ? 0 : 1 }}
         >
-          <span className="text-sm uppercase tracking-[0.2em] text-ink-900/70">Scroll</span>
+          <span className="text-sm uppercase tracking-[0.2em] text-white/70">Scroll</span>
         </div>
 
         {/* Scroll cue and loading readout sit above; sentinel is below. */}
@@ -344,7 +354,7 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
         {hasFrames && loadState.loaded < loadState.planned && loadState.loaded > 0 ? (
           <div
             aria-hidden="true"
-            className="absolute bottom-10 right-[var(--shell-gutter)] text-xs uppercase tracking-[0.16em] text-ink-900/45"
+            className="absolute bottom-10 right-[var(--shell-gutter)] text-xs uppercase tracking-[0.16em] text-white/45"
           >
             {Math.round((loadState.loaded / loadState.planned) * 100)}%
           </div>

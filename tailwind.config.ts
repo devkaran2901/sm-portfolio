@@ -14,7 +14,11 @@ import type { Config } from 'tailwindcss';
  *           low numbers are text, high numbers are fills and tints.
  *
  * Every component already uses `bg-ink-*` for surfaces and `text-bone-*` for
- * copy, so the values below define the theme in one place.
+ * copy, so the values below define the theme in one place. The site reads deep
+ * navy now, and it moved there by rewriting these values rather than by
+ * rewriting the components.
+ *
+ *   paper = the single light ground (Press & Recognition), and its type.
  */
 const config: Config = {
   content: ['./src/**/*.{ts,tsx,mdx}'],
@@ -23,151 +27,156 @@ const config: Config = {
     extend: {
       colors: {
         /*
-         * Surfaces: white ground, white cards, hairline borders.
+         * Surfaces: deep navy-black ground, deep navy panels, hairline borders.
          *
-         * The ground used to be #D9DADC, a mid grey heavy enough to read as a
-         * colour in its own right and to drag every card down with it. It is
-         * white now, and separation is carried by borders and by the `tint`
-         * wash on alternating sections rather than by tone. The two remaining
-         * dark steps, 500 and 400, are text and icon colours, not surfaces.
+         * The site reads dark now. Because the scale is keyed to ROLE rather
+         * than to literal lightness, the flip happens here and every component
+         * that already writes `bg-ink-*` follows it without being touched.
+         * 950 is the page itself, 900 the panel navy, 800/700/600 the dividers
+         * and borders - each one a white wash over the ground, so they land as
+         * the hairlines the design asks for - and 500/400 are icon and
+         * faint-mark colours rather than surfaces.
          */
         ink: {
-          950: '#FFFFFF', // page background
-          900: '#FFFFFF', // cards, panels, admin sidebar, text on dark fills
-          800: '#EFEFF1', // dividers and hover fills
-          700: '#E2E2E5', // default borders
-          600: '#CDCED1', // stronger borders
-          500: '#6E7073', // icons and faint marks
-          400: '#4A4B4E',
-          tint: '#F6F6F7', // the wash on raised sections
+          950: '#0A0E1A', // page background
+          900: '#0E1428', // cards, panels, the secondary navy
+          800: '#161E36', // dividers and hover fills
+          700: '#222B45', // default borders (~white 12% over the ground)
+          600: '#33405E', // stronger borders
+          500: '#8892A8', // icons and faint marks
+          400: '#A8B2C6',
+          tint: '#0B1122', // the wash on raised sections
         },
         /*
-         * Content: near-black through to muted grey.
+         * Content: off-white through to muted slate.
          *
-         * The ground sits at 61% relative luminance, so 4.5:1 forces the whole
-         * range darker than a dark theme would need. The steps are compressed
-         * rather than extended: every shade here clears AA against ink-950, and
-         * hierarchy is carried by the remaining separation.
+         * Every step clears AA against ink-950 - 50 at 17.6:1 down to 600 at
+         * 5.2:1 - so hierarchy is carried by the separation between steps and
+         * nothing in the range needs a size exemption to be legible.
          */
         bone: {
-          50: '#0A0A0B', // headings
-          100: '#141516',
-          200: '#202124', // body copy
-          300: '#2C2E31', // secondary copy
-          400: '#3A3C3F', // muted copy
-          500: '#45474A', // captions
-          600: '#4E5053', // faintest labels
+          50: '#F5F5F0', // headings
+          100: '#E9EAE7',
+          200: '#D5D8DE', // body copy
+          300: '#B6BCCB', // secondary copy
+          400: '#9AA2B5', // muted copy
+          500: '#8B94A9', // captions
+          600: '#7E8799', // faintest labels
         },
         /*
-         * Accents are neutral greys, not colours. The palette is deliberately
-         * black / grey / white, so what used to be turf green and brass gold now
-         * read as tone alone - the same scale positions, none of the hue.
+         * Neutrals with a trace of warmth: markers, rings and the quieter
+         * chips. The scale runs light to dark like `bone`, so low steps are
+         * type on the dark ground and high steps are fills and tints that sit
+         * underneath it.
          */
         turf: {
-          50: '#0A0A0B',
-          100: '#141516',
-          200: '#1A1B1D', // accent text
-          300: '#26282B',
-          400: '#33363A', // dots and markers
-          500: '#3A3D41', // fills (carries a white checkmark)
-          600: '#8E9195', // avatar fill under near-black text
-          700: '#B4B6B9',
-          800: '#D2D4D6',
-          900: '#E8E9EA', // faint tints
+          50: '#F2F4F2',
+          100: '#E4E7E5',
+          200: '#CBD1CE', // accent text
+          300: '#AEB6B4',
+          400: '#8C9598', // dots and markers
+          500: '#5E6870', // fills (carries a white checkmark at 4.6:1)
+          600: '#46505A',
+          700: '#333C46',
+          800: '#232B36',
+          900: '#161D28', // faint tints
         },
         /*
-         * The one colour on the site. Black, white and a single red, taken
-         * from the Red Ball reference.
+         * The accent, and the only hue on the site: crimson, taken from the
+         * Red Ball mark.
          *
-         * The scale runs dark to light like `bone`, so the low steps are for
-         * use on white and the high ones for use on black. 300 is the eyebrow
-         * red and clears AA on white at 5.1:1; 600 is its counterpart for dark
-         * fills at 7.2:1. Nothing between 400 and 500 is used for text - those
-         * are borders, rules and dots.
+         * The scale runs light to dark, so low steps are type on the dark
+         * ground and high steps are fills and washes beneath it. 200 is a link
+         * at 6.0:1, 300 the eyebrow red at 4.7:1, and 400 is the brand red
+         * itself - rules, dots and solid fills, where white type lands on it at
+         * 5.5:1. Nothing above 400 is ever type.
          */
+        brass: {
+          50: '#F6DBD4',
+          100: '#E9917F', // link hover
+          200: '#E0705C', // accent text, links, counters
+          300: '#D6533C', // eyebrows
+          400: '#C0392B', // the brand red: rules, dots, solid fills
+          500: '#96291D', // pressed, and hover on a solid red
+          600: '#E0705C', // eyebrows on a dark fill, where 300 loses contrast
+          700: '#2A1310', // tinted fills
+        },
         /*
-         * The dark ground. Navy rather than black, so the dark blocks read as
-         * a colour decision next to the red instead of as an absence.
+         * The panel navy, a shade deeper than the ground it sits on.
          *
          * Runs deep to pale, the opposite way round to `ink` and `bone`: 950
          * and 900 are surfaces, 200 through 500 are the type that sits on them.
-         * Every text step clears AA on navy-900 - 200 at 14.5:1 down to 500 at
-         * 5.2:1 - and brass-600 lands on it at 6.3:1, which is what makes a red
-         * eyebrow legible over navy.
          */
         navy: {
-          950: '#070E1A', // deepest: the footer ground
-          900: '#0C1A30', // the standard dark block
-          800: '#132743', // a raised panel inside a dark block
-          700: '#1E3A5F', // borders on navy
-          600: '#2F5480',
-          500: '#6E92B8', // faint labels on navy
-          400: '#93AECB', // muted copy on navy
-          300: '#C4D6E8', // body copy on navy
-          200: '#E3EDF6', // headings on navy
+          950: '#070B16', // deepest: the closing band and the micro-footer
+          900: '#0E1428', // the standard panel block
+          800: '#141C33', // a raised panel inside a panel
+          700: '#232C47', // borders on navy
+          600: '#33405E',
+          500: '#7E8799', // faint labels on navy
+          400: '#9AA2B5', // muted copy on navy
+          300: '#B6BCCB', // body copy on navy
+          200: '#F5F5F0', // headings on navy
         },
         /*
-         * The accent, and the only hue on the site: navy, black, white, nothing
-         * else.
-         *
-         * Lighter and more saturated than the `navy` surface steps above, on
-         * purpose. A surface navy used as accent type just reads as black - the
-         * blue only survives against white if the value is kept up around 300.
-         * The scale runs dark to light like `bone`, so low steps sit on white
-         * and high steps sit on navy: 300 is the eyebrow at 8.4:1 on white, 600
-         * its counterpart at 9.9:1 on navy-900. 400 and 500 are borders, rules
-         * and dots, never text.
+         * The one light ground on the site: Press & Recognition. Kept as its
+         * own token rather than a `bone` step, because it is a surface and the
+         * `bone` scale is content.
          */
-        brass: {
-          50: '#0A1A2E',
-          100: '#12365F', // link hover
-          200: '#17457E', // accent text, links, counters
-          300: '#1D4E89', // eyebrows
-          400: '#3E7AB8', // borders, dots, rules
-          500: '#6E9DCE',
-          600: '#A9C6E4', // eyebrows on dark fills
-          700: '#E8F0F8', // tinted fills
+        paper: {
+          DEFAULT: '#F2F1EE',
+          50: '#F7F6F4',
+          100: '#F2F1EE', // the section ground
+          200: '#E4E2DD', // hairlines and dividers on paper
+          300: '#CFCCC5',
+          600: '#5A5C63', // secondary copy on paper
+          700: '#3A3C42',
+          900: '#0B0F1E', // headings on paper
         },
         /*
-         * Error state, now inside the three-colour rule rather than outside it.
-         *
-         * This used to be red, on the argument that red carries meaning grey
-         * cannot. That is true, and giving it up costs something real: a failed
-         * field on the contact form and a delete button in the admin no longer
-         * announce themselves by hue. What keeps them legible is that navy is
-         * not the colour of body copy - error text at #17457E reads as marked
-         * against #202124 - and that the error affordance never depended on
-         * colour alone: the messages carry role="alert" and sit against the
-         * field they belong to.
+         * Error state. Red carries the brand as well as the warning now, so
+         * these are steps of the same crimson rather than a second hue. The
+         * error affordance never depended on colour alone: the messages carry
+         * role="alert" and sit against the field they belong to.
          */
-        danger: { 400: '#17457E', 500: '#1D4E89', 600: '#12365F' },
-        info: { 400: '#3A3C3F', 500: '#7A7C7F' },
+        danger: { 400: '#E0705C', 500: '#C0392B', 600: '#96291D' },
+        info: { 400: '#A8B2C6', 500: '#7E8799' },
       },
       fontFamily: {
+        /*
+         * `serif` is the display face for the restyle: Playfair Display, a
+         * tall high-contrast serif. It is a separate slot rather than a
+         * redefinition of `display`, because the scroll hero still paints its
+         * name in Anton and that is deliberately left alone.
+         */
+        serif: ['var(--font-serif)', 'Playfair Display', 'Georgia', 'Times New Roman', 'serif'],
         display: ['var(--font-display)', 'Haettenschweiler', 'Impact', 'sans-serif'],
         sans: ['var(--font-sans)', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif'],
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
       /*
-       * Anton is condensed, so tracking runs the opposite way to a normal-width
-       * face: it needs air as it gets smaller, not as it gets bigger. The small
-       * steps used to carry negative tracking, which closed them up at exactly
-       * the sizes that could least afford it. Tracking now opens as the size
-       * drops, and only the poster sizes sit near zero.
+       * Tuned for Playfair, which is normal-width rather than condensed, so
+       * tracking runs the usual way round: it closes up as the size grows and
+       * opens as it drops. The old values were the inverse of this because the
+       * face they served was Anton.
+       *
+       * `eyebrow` is the exception and stays wide - it is set in the sans at
+       * 12px in all caps, where the letter-spacing is what makes it read as a
+       * label rather than as shouting.
        */
       fontSize: {
-        'display-xl': ['clamp(2.75rem, 10.5vw, 9rem)', { lineHeight: '0.95', letterSpacing: '0.005em' }],
-        'display-lg': ['clamp(2.25rem, 6.8vw, 5.5rem)', { lineHeight: '1.0', letterSpacing: '0.008em' }],
-        'display-md': ['clamp(1.75rem, 4.6vw, 3.5rem)', { lineHeight: '1.06', letterSpacing: '0.012em' }],
-        'display-sm': ['clamp(1.4375rem, 3.1vw, 2.25rem)', { lineHeight: '1.18', letterSpacing: '0.016em' }],
-        eyebrow: ['0.8125rem', { lineHeight: '1', letterSpacing: '0.2em' }],
+        'display-xl': ['clamp(2.75rem, 10.5vw, 9rem)', { lineHeight: '0.94', letterSpacing: '-0.022em' }],
+        'display-lg': ['clamp(2.25rem, 6.8vw, 5.5rem)', { lineHeight: '1.02', letterSpacing: '-0.018em' }],
+        'display-md': ['clamp(1.875rem, 4.6vw, 3.5rem)', { lineHeight: '1.1', letterSpacing: '-0.014em' }],
+        'display-sm': ['clamp(1.5rem, 3.1vw, 2.25rem)', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
+        eyebrow: ['0.75rem', { lineHeight: '1', letterSpacing: '0.24em' }],
       },
       maxWidth: { shell: '100rem', prose: '72ch' },
-      spacing: { section: 'clamp(3.25rem, 9vw, 8.5rem)' },
-      borderRadius: { xl2: '1.25rem' },
+      spacing: { section: 'clamp(4.5rem, 8.5vw, 8.75rem)', band: 'clamp(5.5rem, 10vw, 10.5rem)' },
+      borderRadius: { xl2: '1.25rem', card: '0.5rem' },
       boxShadow: {
-        card: '0 1px 2px rgba(12,14,16,0.05), 0 12px 32px -18px rgba(12,14,16,0.22)',
-        lift: '0 2px 4px rgba(12,14,16,0.07), 0 28px 60px -28px rgba(12,14,16,0.30)',
+        card: '0 1px 2px rgba(0,0,0,0.35), 0 14px 34px -20px rgba(0,0,0,0.75)',
+        lift: '0 4px 10px rgba(0,0,0,0.4), 0 34px 70px -30px rgba(0,0,0,0.85)',
       },
       transitionTimingFunction: { editorial: 'cubic-bezier(0.22, 1, 0.36, 1)' },
       keyframes: {

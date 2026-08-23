@@ -24,7 +24,7 @@ export function PageHeader({
     <div className="grain relative overflow-hidden border-b border-ink-800">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(90%_70%_at_85%_-20%,rgba(255,255,255,0.5),transparent_60%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(90%_70%_at_85%_-20%,rgba(255,255,255,0.07),transparent_62%),radial-gradient(70%_60%_at_5%_120%,rgba(192,57,43,0.10),transparent_60%)]"
       />
 
       <div className="shell relative py-16 sm:py-20">

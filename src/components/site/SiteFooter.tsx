@@ -1,16 +1,28 @@
 import Link from 'next/link';
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react';
 
 import { NAV_LINKS, SITE } from '@/content/defaults';
 import type { BusinessView, ProfileView } from '@/lib/content';
+import { buttonClass } from '@/components/ui/Button';
+import { cn } from '@/lib/utils';
 import { ExternalTrackedLink } from './ExternalTrackedLink';
+import { SocialMark } from './SocialMark';
 
 const LEGAL_LINKS = [
   { href: '/privacy', label: 'Privacy Policy' },
-  { href: '/terms', label: 'Terms & Conditions' },
-  { href: '/cookies', label: 'Cookie & Analytics Policy' },
+  { href: '/terms', label: 'Terms' },
+  { href: '/cookies', label: 'Cookies' },
 ];
 
+/**
+ * The closing band, and the micro-footer under it.
+ *
+ * The headline is the largest type on any page below the hero, set over two
+ * lines with the break written into the markup rather than left to the wrap.
+ * "THE NEXT CHAPTER" and "IS ALREADY IN MOTION" are two halves of a sentence
+ * and the line ending is the pause between them; a soft wrap would put the
+ * break wherever the viewport happened to fall.
+ */
 export function SiteFooter({
   profile,
   businesses,
@@ -19,125 +31,198 @@ export function SiteFooter({
   businesses: BusinessView[];
 }) {
   const year = new Date().getFullYear();
+  const location = [profile.currentCity, profile.region, profile.country].filter(Boolean).join(', ');
+
+  const contacts = [
+    location ? { key: 'location', Icon: MapPin, label: location, href: null } : null,
+    profile.email
+      ? { key: 'email', Icon: Mail, label: profile.email, href: `mailto:${profile.email}` }
+      : null,
+    profile.phone
+      ? { key: 'phone', Icon: Phone, label: profile.phone, href: `tel:${profile.phone}` }
+      : null,
+  ].flatMap((entry) => (entry ? [entry] : []));
+
+  const ventureLinks = [
+    { key: 'red-ball', label: 'Red Ball Sports Arena', href: SITE.redBallUrl, external: true },
+    ...businesses.map((business) => ({
+      key: business.slug,
+      label: business.name,
+      href: business.websiteUrl ?? `/ventures/${business.slug}`,
+      external: Boolean(business.websiteUrl),
+    })),
+  ];
 
   return (
-    /*
-      Two global classes are tuned for the white ground and have to be
-      re-pointed here: `.eyebrow` is brass-300, the red that clears AA on white,
-      and `.link-underline` is near-black type. Both are overridden on the
-      footer root rather than at each call site.
-    */
-    <footer className="border-t border-navy-800 bg-navy-950 [&_.eyebrow]:text-brass-600 [&_.link-underline]:text-navy-300 [&_.link-underline:hover]:text-brass-600">
-      <div className="shell grid grid-cols-2 gap-8 py-16 lg:grid-cols-12 lg:gap-8">
-        <div className="col-span-2 lg:col-span-5">
-          {/* Same wordmark as the header, same reasoning: no synthetic bold, and
-              enough word spacing that the two names read as two names. */}
-          <p className="font-display text-2xl tracking-[0.01em] [word-spacing:0.14em] text-navy-200">
-            {profile.fullName}
-          </p>
-          <p className="mt-4 max-w-sm text-[0.9375rem] leading-relaxed text-navy-400">{profile.shortBio}</p>
+    <footer className="bg-navy-950">
+      <div className="shell py-band">
+        <div className="grid gap-14 lg:grid-cols-12 lg:gap-12">
+          <div className="lg:col-span-6">
+            <p className="eyebrow">What&rsquo;s Next</p>
+            <h2 className="mt-7 font-serif text-[clamp(2.25rem,5.6vw,4.75rem)] font-medium uppercase leading-[1.03] tracking-[0.01em] text-bone-50">
+              The Next Chapter
+              <br />
+              Is Already In Motion.
+            </h2>
+          </div>
 
-          {profile.currentCity ? (
-            <p className="mt-6 text-sm uppercase tracking-[0.16em] text-navy-500">
-              {[profile.currentCity, profile.region, profile.country].filter(Boolean).join(', ')}
+          <div className="lg:col-span-3">
+            <p className="max-w-xs text-[1.0625rem] leading-[1.7] text-bone-300">
+              {profile.shortBio}
             </p>
-          ) : null}
+            <Link href="/contact" className={cn(buttonClass('outline', 'md'), 'mt-8')}>
+              Let&rsquo;s Talk
+              <ArrowUpRight size={15} aria-hidden="true" />
+            </Link>
+          </div>
 
-          {profile.socialLinks.length > 0 ? (
-            <ul className="mt-6 flex flex-wrap gap-x-5 gap-y-2">
-              {profile.socialLinks.map((link) => (
-                <li key={link.url}>
-                  <ExternalTrackedLink
-                    href={link.url}
-                    event="external_link_click"
-                    className="link-underline text-sm"
-                  >
-                    {link.label}
-                  </ExternalTrackedLink>
+          <div className="lg:col-span-3">
+            <h3 className="font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-bone-500">
+              Get in touch
+            </h3>
+
+            <ul className="mt-6 space-y-4">
+              {contacts.map(({ key, Icon, label, href }) => (
+                <li key={key} className="flex items-start gap-3 text-[0.9375rem] text-bone-300">
+                  <Icon size={15} aria-hidden="true" className="mt-1 shrink-0 text-brass-200" />
+                  {href ? (
+                    <a href={href} className="transition-colors hover:text-bone-50">
+                      {label}
+                    </a>
+                  ) : (
+                    <span>{label}</span>
+                  )}
                 </li>
               ))}
             </ul>
-          ) : null}
+
+            {/*
+              No published email or phone is the normal state for this record,
+              so the column says where the reliable route is instead of leaving
+              a heading over a single line of address.
+            */}
+            {!profile.email && !profile.phone ? (
+              <p className="mt-4 max-w-xs text-[0.8125rem] leading-relaxed text-bone-500">
+                No public email or phone is published. The contact form is the monitored route.
+              </p>
+            ) : null}
+
+            {profile.socialLinks.length > 0 ? (
+              <ul className="mt-8 flex flex-wrap gap-3">
+                {profile.socialLinks.map((link) => (
+                  <li key={link.url}>
+                    <ExternalTrackedLink
+                      href={link.url}
+                      event="external_link_click"
+                      aria-label={link.label}
+                      className="grid h-11 w-11 place-items-center rounded-full border border-white/20 text-bone-200 transition-colors duration-300 hover:border-bone-50 hover:bg-bone-50 hover:text-ink-950"
+                    >
+                      <SocialMark label={link.label} />
+                    </ExternalTrackedLink>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
         </div>
 
-        <nav aria-label="Footer" className="col-span-1 lg:col-span-3">
-          <h2 className="eyebrow">Navigate</h2>
-          <ul className="mt-4 space-y-0.5">
-            {NAV_LINKS.map((link) => (
-              <li key={link.href}>
-                <Link href={link.href} className="flex min-h-[44px] items-center text-[0.9375rem] text-navy-300 transition-colors hover:text-brass-600">
-                  {link.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </nav>
-
-        <div className="col-span-1 lg:col-span-4">
-          <h2 className="eyebrow">Ventures</h2>
-          <ul className="mt-4 space-y-0.5">
-            <li>
-              <ExternalTrackedLink
-                href={SITE.redBallUrl}
-                event="red_ball_link_click"
-                className="group inline-flex min-h-[44px] items-center gap-1.5 text-[0.9375rem] text-navy-300 transition-colors hover:text-brass-600"
-              >
-                Red Ball Sports Arena
-                <ArrowUpRight
-                  size={14}
-                  aria-hidden="true"
-                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                />
-              </ExternalTrackedLink>
-            </li>
-            {businesses.map((business) =>
-              business.websiteUrl ? (
-                <li key={business.slug}>
-                  <ExternalTrackedLink
-                    href={business.websiteUrl}
-                    event="business_link_click"
-                    metadata={{ business: business.slug }}
-                    className="group inline-flex min-h-[44px] items-center gap-1.5 text-[0.9375rem] text-navy-300 transition-colors hover:text-brass-600"
-                  >
-                    {business.name}
-                    <ArrowUpRight size={14} aria-hidden="true" />
-                  </ExternalTrackedLink>
-                </li>
-              ) : (
-                <li key={business.slug}>
+        {/*
+          The route list, kept as one hairline-separated strip rather than the
+          three stacked columns it used to be. The closing band above is the
+          part of the footer that is doing work; this is the index, and it
+          should read as one.
+        */}
+        <nav
+          aria-label="Footer"
+          className="mt-20 grid gap-10 border-t border-white/10 pt-10 sm:grid-cols-2"
+        >
+          <div>
+            <h3 className="font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-bone-500">
+              Navigate
+            </h3>
+            <ul className="mt-5 flex flex-wrap gap-x-7 gap-y-2">
+              {NAV_LINKS.map((link) => (
+                <li key={link.href}>
                   <Link
-                    href={`/ventures#${business.slug}`}
-                    className="flex min-h-[44px] items-center text-[0.9375rem] text-navy-300 transition-colors hover:text-brass-600"
+                    href={link.href}
+                    className="inline-flex min-h-[36px] items-center text-[0.9375rem] text-bone-300 transition-colors hover:text-bone-50"
                   >
-                    {business.name}
+                    {link.label}
                   </Link>
                 </li>
-              ),
-            )}
-          </ul>
+              ))}
+            </ul>
+          </div>
 
-          <h2 className="eyebrow mt-8">Legal</h2>
-          <ul className="mt-4 space-y-0.5">
+          <div>
+            <h3 className="font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-bone-500">
+              Ventures
+            </h3>
+            <ul className="mt-5 flex flex-wrap gap-x-7 gap-y-2">
+              {ventureLinks.map((venture) => (
+                <li key={venture.key}>
+                  {venture.external ? (
+                    <ExternalTrackedLink
+                      href={venture.href}
+                      event="external_link_click"
+                      metadata={{ venture: venture.key }}
+                      className="group inline-flex min-h-[36px] items-center gap-1.5 text-[0.9375rem] text-bone-300 transition-colors hover:text-bone-50"
+                    >
+                      {venture.label}
+                      <ArrowUpRight
+                        size={13}
+                        aria-hidden="true"
+                        className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      />
+                    </ExternalTrackedLink>
+                  ) : (
+                    <Link
+                      href={venture.href}
+                      className="inline-flex min-h-[36px] items-center text-[0.9375rem] text-bone-300 transition-colors hover:text-bone-50"
+                    >
+                      {venture.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </nav>
+
+        {/*
+          The disclosure the site has always carried. It reads as small print
+          and it is small print, but it is the sentence that makes every
+          unsourced claim on the page honest, so it stays above the fold of the
+          micro-footer rather than in it.
+        */}
+        <p className="mt-10 max-w-2xl text-[0.8125rem] leading-relaxed text-bone-500">
+          Details marked &ldquo;verification required&rdquo; are published only once a source is
+          attached.
+        </p>
+      </div>
+
+      {/*
+        The micro-footer: three groups on one hairline, all of it small caps.
+        The centre line is the only piece of copy on the site with no
+        informational job at all, which is exactly why it belongs down here.
+      */}
+      <div className="border-t border-white/10">
+        <div className="shell flex flex-col gap-4 py-7 font-sans text-[0.6875rem] uppercase tracking-[0.16em] text-bone-500 md:flex-row md:items-center md:justify-between">
+          <p>
+            &copy; {year} {profile.fullName}
+          </p>
+
+          <p className="text-bone-400">Built with Passion. Driven by Purpose.</p>
+
+          <ul className="flex flex-wrap gap-x-6 gap-y-2">
             {LEGAL_LINKS.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="flex min-h-[44px] items-center text-[0.9375rem] text-navy-300 transition-colors hover:text-brass-600">
+                <Link href={link.href} className="transition-colors hover:text-bone-200">
                   {link.label}
                 </Link>
               </li>
             ))}
           </ul>
-        </div>
-      </div>
-
-      <div className="border-t border-navy-800/80">
-        <div className="shell flex flex-col gap-3 py-6 text-xs text-navy-500 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            &copy; {year} {profile.fullName}. All rights reserved.
-          </p>
-          <p>
-            Details marked &ldquo;verification required&rdquo; are published only once a source is
-            attached.
-          </p>
         </div>
       </div>
     </footer>

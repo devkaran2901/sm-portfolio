@@ -65,7 +65,7 @@ export function VentureCards({ businesses }: { businesses: BusinessView[] }) {
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="eyebrow">{business.role}</p>
-                    <h3 className="mt-3 break-words font-display text-xl text-bone-50 sm:text-2xl">{business.name}</h3>
+                    <h3 className="mt-3 break-words font-serif text-xl text-bone-50 sm:text-2xl">{business.name}</h3>
                     {business.category ? (
                       <p className="mt-1 text-xs uppercase tracking-[0.12em] text-bone-500">
                         {business.category}

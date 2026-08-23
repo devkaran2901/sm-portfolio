@@ -26,7 +26,7 @@ export function AnswerBlocks({ faqs, limit = 5 }: { faqs: FaqView[]; limit?: num
     <dl className="grid grid-cols-2 gap-x-5 gap-y-6 sm:gap-x-10 sm:gap-y-8">
       {items.map((faq) => (
         <div key={faq.slug} className="border-l-2 border-turf-700/60 pl-5">
-          <dt className="font-display text-lg text-bone-50">{faq.question}</dt>
+          <dt className="font-serif text-lg text-bone-50">{faq.question}</dt>
           <dd className="mt-2 text-[1.0625rem] leading-relaxed text-bone-300">{faq.answer}</dd>
         </div>
       ))}

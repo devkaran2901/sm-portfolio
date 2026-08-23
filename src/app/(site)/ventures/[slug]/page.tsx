@@ -149,7 +149,7 @@ export default async function VenturePage({ params }: { params: Promise<{ slug: 
 
           <aside className="lg:col-span-5">
             <div className="surface p-6 sm:p-7">
-              <h2 className="font-display text-xl text-bone-50">Details</h2>
+              <h2 className="font-serif text-xl text-bone-50">Details</h2>
 
               {details.length > 0 ? (
                 <ul className="mt-5 space-y-4">
@@ -198,7 +198,7 @@ export default async function VenturePage({ params }: { params: Promise<{ slug: 
 
             {others.length > 0 ? (
               <div className="surface mt-6 p-6 sm:p-7">
-                <h2 className="font-display text-xl text-bone-50">Other ventures</h2>
+                <h2 className="font-serif text-xl text-bone-50">Other ventures</h2>
                 <ul className="mt-4 space-y-1">
                   {others.map((other) => (
                     <li key={other.slug}>

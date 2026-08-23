@@ -63,7 +63,7 @@ export default async function MediaPage({
               { label: 'Claims awaiting a source', value: summary.open },
             ].map((stat) => (
               <div key={stat.label}>
-                <p className="font-display text-3xl text-brass-200 tabular-nums">{stat.value}</p>
+                <p className="font-serif text-3xl text-brass-200 tabular-nums">{stat.value}</p>
                 <p className="mt-1.5 text-xs uppercase tracking-[0.12em] text-bone-500">
                   {stat.label}
                 </p>
@@ -143,7 +143,7 @@ export default async function MediaPage({
                           {item.status === 'VERIFIED' ? <Badge tone="turf">Verified</Badge> : null}
                         </div>
 
-                        <h3 className="mt-3.5 font-display text-base leading-snug text-bone-50">
+                        <h3 className="mt-3.5 font-serif text-base leading-snug text-bone-50">
                           {item.title}
                         </h3>
 

@@ -31,8 +31,8 @@ export function GET(request: Request) {
           flexDirection: 'column',
           justifyContent: 'space-between',
           padding: '72px 80px',
-          background: 'linear-gradient(135deg, #070E1A 0%, #0C1A30 55%, #132743 100%)',
-          color: '#E3EDF6',
+          background: 'linear-gradient(135deg, #070B16 0%, #0A0E1A 52%, #141C33 100%)',
+          color: '#F5F5F0',
           fontFamily: 'sans-serif',
         }}
       >
@@ -42,7 +42,7 @@ export function GET(request: Request) {
               width: 14,
               height: 14,
               borderRadius: 999,
-              background: '#A9C6E4',
+              background: '#C0392B',
               display: 'flex',
             }}
           />
@@ -51,7 +51,7 @@ export function GET(request: Request) {
               fontSize: 22,
               letterSpacing: 6,
               textTransform: 'uppercase',
-              color: '#A9C6E4',
+              color: '#E0705C',
               display: 'flex',
             }}
           >
@@ -60,10 +60,18 @@ export function GET(request: Request) {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-          <div style={{ fontSize: 82, lineHeight: 1.05, fontWeight: 700, display: 'flex' }}>
+          <div
+            style={{
+              fontSize: 82,
+              lineHeight: 1.05,
+              fontWeight: 700,
+              fontFamily: 'serif',
+              display: 'flex',
+            }}
+          >
             {title}
           </div>
-          <div style={{ fontSize: 30, color: '#C4D6E8', lineHeight: 1.3, display: 'flex' }}>
+          <div style={{ fontSize: 30, color: '#B6BCCB', lineHeight: 1.3, display: 'flex' }}>
             {subtitle}
           </div>
         </div>
@@ -73,10 +81,10 @@ export function GET(request: Request) {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            borderTop: '1px solid #1E3A5F',
+            borderTop: '1px solid rgba(255,255,255,0.15)',
             paddingTop: 28,
             fontSize: 24,
-            color: '#93AECB',
+            color: '#9AA2B5',
           }}
         >
           <div style={{ display: 'flex' }}>Red Ball Cricket Ground</div>

@@ -96,7 +96,7 @@ export function WorkSummary({
             <div className="flex min-w-0 flex-1 flex-col p-4 sm:p-7">
               <p className="eyebrow break-words">{card.eyebrow}</p>
 
-              <h3 className="mt-3 break-words font-display text-lg text-bone-50 sm:text-2xl">
+              <h3 className="mt-3 break-words font-serif text-lg text-bone-50 sm:text-2xl">
                 {card.title}
               </h3>
 

@@ -31,6 +31,28 @@ export const NAV_LINKS = [
   { href: '/contact', label: 'Contact' },
 ] as const;
 
+/**
+ * The bar nav.
+ *
+ * A shorter, editorial reading of the same routes NAV_LINKS carries: six
+ * one-word labels that fit on a single row without wrapping at 1024px, which
+ * is what the design asks for. NAV_LINKS stays the canonical list and is what
+ * the footer, the mobile panel and the breadcrumbs still use - this one is a
+ * presentation of it, not a replacement.
+ *
+ * "Sports" and "Journey" are the two that are not a straight relabel: Sports
+ * points at the arena, and Journey at the timeline section inside the about
+ * page rather than at a route of its own.
+ */
+export const PRIMARY_NAV = [
+  { href: '/about', label: 'About' },
+  { href: '/ventures', label: 'Ventures' },
+  { href: '/red-ball', label: 'Sports' },
+  { href: '/about#journey', label: 'Journey' },
+  { href: '/media', label: 'Press' },
+  { href: '/contact', label: 'Contact' },
+] as const;
+
 export const PROFILE = {
   id: 'primary',
   fullName: 'Sonu Malik',
@@ -41,8 +63,9 @@ export const PROFILE = {
   longBio: [
     'Sonu Malik was born on 23 March 1988 in Mokhra village, Rohtak district, Haryana, and lives in Rohtak today. Cricket started where most Haryana careers start: on village ground with the local Mokhra team, then at the collegiate level for Vaish College.',
     'He did not take the professional BCCI route as a player. Instead his cricket took him abroad, into international club cricket - turning out with Dolphin Club in South Africa, playing club cricket in Nepal, and taking part in the Norwegian Cup in Norway.',
+    'He holds an LLM from Kalinga University, balancing his legal education alongside building Red Ball Cricket Ground into a multi-sport facility.',
     'That travelling grounding shaped what came next. For roughly six years he has founded and run Red Ball Cricket Ground in Rohtak, growing it from a cricket ground into a multi-sport arena spanning cricket, racquet sports, outdoor games, precision sports, fitness and aquatics, alongside an on-site restaurant.',
-    'Alongside the sports infrastructure he holds an LLM from Kalinga University and runs two businesses as founder and owner: The Page and Hotel The Prada.',
+    'Alongside the sports infrastructure he runs two businesses as founder and owner: The Page and Hotel The Prada.',
   ].join('\n\n'),
   birthDate: '1988-03-23',
   birthPlace: 'Mokhra, Rohtak, Haryana, India',
@@ -676,7 +699,7 @@ export const FAQS: FaqSeed[] = [
   {
     slug: 'education',
     question: 'What is Sonu Malik educational background?',
-    answer: 'He holds an LLM from Kalinga University.',
+    answer: 'Sonu Malik holds an LLM (Master of Laws) from Kalinga University.',
     sortOrder: 30,
   },
   {

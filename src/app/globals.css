@@ -42,36 +42,37 @@
   }
 
   /*
-   * Every heading is Anton, which is condensed and ships a single 400 weight.
-   * Two consequences worth stating, because both have bitten:
+   * Every heading is Playfair Display: a tall, high-contrast serif, normal
+   * width rather than condensed, shipping real weights from 400 to 700.
    *
-   * 1. A `font-semibold`/`font-bold` utility here has no 600 to resolve to, so
-   *    the browser synthesises one by widening the strokes. On a condensed face
-   *    that eats the counters and the word gaps and the text closes up. Display
-   *    headings carry no weight utility; anything that needs a real weight
-   *    wants `font-sans`, where the weights actually exist.
-   * 2. At text-base through text-2xl the face needs air that it does not need
-   *    at poster sizes. The default tracking and word spacing below supply it.
-   *    The text-display-* steps set their own letter-spacing and override this,
-   *    which is intended - they are tuned per size.
+   * Two consequences of the switch, both the opposite of what Anton needed:
+   *
+   * 1. `font-semibold` is now a real instruction rather than a request the
+   *    browser has to fake by widening strokes, so weight utilities on a
+   *    heading are safe. Headings still sit at 400-500 by default - the face
+   *    carries its contrast through its own shapes, not through weight.
+   * 2. It needs LESS air, not more. Anton was condensed and had to be opened
+   *    up as it got smaller; Playfair is generously spaced already, so the
+   *    tracking in the type scale closes as the size grows and the word
+   *    spacing that used to be added here is gone entirely.
    */
   h1, h2, h3, h4 {
-    @apply font-display text-bone-50;
-    letter-spacing: 0.012em;
-    word-spacing: 0.1em;
+    @apply font-serif text-bone-50;
     text-wrap: balance;
   }
 
   /*
-   * Word spacing is relative to font size, so a value that opens up a 20px
-   * heading blows a 88px one apart. The display steps set their own letter
-   * spacing through the type scale, but Tailwind's fontSize config has no slot
-   * for word spacing, so it is walked back down here. Class beats element on
-   * specificity and both rules sit in the same layer, so these win.
+   * The one heading that stays in Anton.
+   *
+   * The scroll hero paints the name over its own image sequence and is out of
+   * scope for the restyle - the face is part of that composition. Keyed on the
+   * section aria-label the sequence already carries (`<name> - introduction`)
+   * so the component itself needs no marker class, and the extra element in
+   * the selector is what lets it outrank the rule above.
    */
-  .text-display-xl, .text-display-lg { word-spacing: 0.02em; }
-  .text-display-md { word-spacing: 0.05em; }
-  .text-display-sm { word-spacing: 0.07em; }
+  section[aria-label$="introduction"] h1 {
+    @apply font-display;
+  }
 
   p { text-wrap: pretty; }
 
@@ -95,9 +96,27 @@
     @apply mx-auto w-full max-w-shell px-[var(--shell-gutter)];
   }
 
+  /*
+   * The label above every section heading.
+   *
+   * Sans, not the display serif: the serif is what carries the headline, and
+   * a small serif in all caps directly above it competes with it. Set at 12px
+   * with 0.24em of tracking, which is the thing that makes a six-letter word
+   * read as a label rather than as a shout.
+   */
   .eyebrow {
     @apply font-sans text-eyebrow font-semibold uppercase text-brass-300;
   }
+
+  /*
+   * The divider of the dark theme: a single white hairline at 15%, which is
+   * the one value that separates two navies without drawing a line the eye
+   * stops on. Named rather than repeated, because it appears on section
+   * boundaries, card edges, table rules and the micro-footer alike.
+   */
+  .hairline { border-color: rgb(255 255 255 / 0.15); }
+  .hairline-t { border-top: 1px solid rgb(255 255 255 / 0.15); }
+  .hairline-b { border-bottom: 1px solid rgb(255 255 255 / 0.15); }
 
   .rule {
     @apply h-px w-full origin-left bg-gradient-to-r from-ink-600 via-ink-700 to-transparent;
@@ -110,6 +129,52 @@
   .link-underline {
     @apply relative inline-flex items-center gap-1.5 text-bone-100 transition-colors hover:text-brass-200;
   }
+
+  /*
+   * The secondary call to action: small caps in the sans, over a red rule that
+   * draws itself in from the left on hover. It sits beside section headings
+   * where a filled button would read as a second primary action.
+   *
+   * The rule is a pseudo-element rather than `text-decoration`, because an
+   * underline cannot be given its own colour, its own offset and a transition
+   * all at once across browsers.
+   */
+  .cta-link {
+    @apply relative inline-flex items-center gap-2 pb-1 font-sans text-[0.8125rem] font-semibold
+           uppercase tracking-[0.16em] text-bone-100 transition-colors duration-300 hover:text-brass-200;
+  }
+  .cta-link::after {
+    content: '';
+    @apply absolute inset-x-0 bottom-0 h-px origin-left bg-brass-400 transition-transform duration-300 ease-editorial;
+  }
+  .cta-link:hover::after { transform: scaleX(0.82); }
+  .cta-link svg { @apply transition-transform duration-300 ease-editorial; }
+  .cta-link:hover svg { transform: translateX(3px); }
+
+  /*
+   * The one light ground on the site.
+   *
+   * Every component writes its type in `bone` steps chosen against the dark
+   * ground, so inside the paper band each of those has to move to its dark
+   * counterpart at the same position in the hierarchy. Keying the override on
+   * the class the component already carries means no component needs a `tone`
+   * prop threaded into it, and a descendant selector outranks a plain utility,
+   * so it wins.
+   *
+   * It is indiscriminate, in the same way `ON_NAVY` was: apply it to a section
+   * whose type sits directly on the paper, never to one holding dark cards.
+   */
+  .on-paper { @apply bg-paper text-paper-700; }
+  .on-paper h1, .on-paper h2, .on-paper h3, .on-paper h4 { @apply text-paper-900; }
+  .on-paper .eyebrow { @apply text-brass-400; }
+  .on-paper .text-bone-50, .on-paper .text-bone-100 { @apply text-paper-900; }
+  .on-paper .text-bone-200, .on-paper .text-bone-300 { @apply text-paper-700; }
+  .on-paper .text-bone-400, .on-paper .text-bone-500, .on-paper .text-bone-600 { @apply text-paper-600; }
+  .on-paper .border-ink-700, .on-paper .border-ink-800, .on-paper .border-ink-600 { @apply border-paper-200; }
+  .on-paper .cta-link { @apply text-paper-900 hover:text-brass-400; }
+  .on-paper .hairline { border-color: theme('colors.paper.200'); }
+  .on-paper .hairline-t { border-top-color: theme('colors.paper.200'); }
+  .on-paper .hairline-b { border-bottom-color: theme('colors.paper.200'); }
 
   .prose-editorial {
     @apply max-w-prose text-[1.125rem] leading-[1.72] text-bone-300;

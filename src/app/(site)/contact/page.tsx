@@ -46,7 +46,7 @@ export default async function ContactPage() {
 
           <aside className="lg:col-span-5">
             <div className="surface p-7">
-              <h2 className="font-display text-xl text-bone-50">What you can write about</h2>
+              <h2 className="font-serif text-xl text-bone-50">What you can write about</h2>
               <ul className="mt-5 space-y-2.5">
                 {Object.values(INQUIRY_TYPE_LABELS).map((label) => (
                   <li key={label} className="flex items-center gap-3 text-sm text-bone-300">
@@ -58,7 +58,7 @@ export default async function ContactPage() {
             </div>
 
             <div className="surface mt-6 p-7">
-              <h2 className="font-display text-xl text-bone-50">Direct</h2>
+              <h2 className="font-serif text-xl text-bone-50">Direct</h2>
 
               <ul className="mt-5 space-y-3">
                 <li className="flex items-start gap-3 text-sm text-bone-300">
@@ -89,7 +89,7 @@ export default async function ContactPage() {
             </div>
 
             <div className="surface mt-6 p-7">
-              <h2 className="font-display text-xl text-bone-50">Red Ball Sports Arena</h2>
+              <h2 className="font-serif text-xl text-bone-50">Red Ball Sports Arena</h2>
               <p className="mt-3 text-sm leading-relaxed text-bone-400">
                 For facility bookings and arena-specific enquiries, the arena site is the fastest
                 route.

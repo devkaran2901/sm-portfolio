@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Anton, Inter } from 'next/font/google';
+import { Anton, Inter, Playfair_Display } from 'next/font/google';
 
 import { SITE } from '@/content/defaults';
 import { siteUrl } from '@/lib/env';
@@ -17,6 +17,21 @@ const display = Anton({
   subsets: ['latin'],
   weight: '400',
   variable: '--font-display',
+  display: 'swap',
+});
+
+/*
+ * The display face for the site: a tall, high-contrast serif carrying every
+ * section heading. Loaded across 400-700 because the headings sit at 500 and
+ * the small serif numerals in the stats bar want the heavier end.
+ *
+ * Anton stays loaded alongside it: the scroll hero paints the name in it and
+ * that sequence is deliberately left untouched by the restyle.
+ */
+const serif = Playfair_Display({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-serif',
   display: 'swap',
 });
 
@@ -44,7 +59,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#D9DADC',
+  themeColor: '#0A0E1A',
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
@@ -52,7 +67,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-IN" className={`${display.variable} ${sans.variable}`} suppressHydrationWarning>
+    <html
+      lang="en-IN"
+      className={`${display.variable} ${serif.variable} ${sans.variable}`}
+      suppressHydrationWarning
+    >
       <body className="min-h-dvh bg-ink-950 text-bone-200">{children}</body>
     </html>
   );

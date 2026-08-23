@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { ComponentProps, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
-type Variant = 'primary' | 'secondary' | 'accent' | 'ghost' | 'danger';
+type Variant = 'primary' | 'secondary' | 'accent' | 'outline' | 'ghost' | 'danger';
 type Size = 'sm' | 'md' | 'lg';
 
 /*
@@ -19,17 +19,25 @@ type Size = 'sm' | 'md' | 'lg';
  */
 const VARIANTS: Record<Variant, string> = {
   primary:
-    'border border-transparent bg-bone-50 text-ink-900 shadow-card hover:bg-bone-200 hover:shadow-lift',
+    'border border-transparent bg-bone-50 text-ink-950 shadow-card hover:bg-white hover:shadow-lift',
   secondary:
-    'border border-ink-600 bg-transparent text-bone-100 hover:border-bone-50 hover:bg-bone-50 hover:text-ink-900 hover:shadow-card',
+    'border border-ink-600 bg-transparent text-bone-100 hover:border-bone-50 hover:bg-bone-50 hover:text-ink-950 hover:shadow-card',
   /*
-   * The variant for dark grounds. `primary` is black on white, which vanishes
-   * against navy, and `secondary` is near-black type on nothing, which vanishes
-   * with it. Red on navy carries at 5.1:1 with white type over it, and it is
-   * the accent the rest of the page already uses.
+   * The brand red, filled. White type on #C0392B lands at 5.5:1, which is why
+   * the label is `bone-50` rather than the near-black it used to be - the red
+   * moved from a mid blue to a saturated crimson and stopped being a colour
+   * dark type could sit on.
    */
   accent:
-    'border border-transparent bg-brass-300 text-ink-900 shadow-card hover:bg-brass-200 hover:shadow-lift',
+    'border border-transparent bg-brass-400 text-bone-50 shadow-card hover:bg-brass-500 hover:shadow-lift',
+  /*
+   * The default button of the restyle: a hairline pill, small caps, an arrow,
+   * and a fill that arrives on hover. It reads as an action without ever
+   * competing with the section heading above it, which is what lets a page
+   * carry four or five of them without any one of them shouting.
+   */
+  outline:
+    'border border-white/25 bg-transparent font-semibold uppercase tracking-[0.14em] text-bone-100 hover:border-bone-50 hover:bg-bone-50 hover:text-ink-950 hover:shadow-lift',
   ghost:
     'border border-transparent bg-transparent text-bone-300 hover:bg-ink-800 hover:text-bone-50',
   danger:
@@ -44,8 +52,21 @@ const SIZES: Record<Size, string> = {
   lg: 'h-14 min-h-[48px] gap-3 px-9 text-base',
 };
 
+/*
+ * Small caps run wider and read larger than sentence case at the same size,
+ * so the outline pill steps its label down a notch at every height. It has to
+ * be applied after SIZES rather than inside the variant: `cn` is
+ * tailwind-merge, which resolves two competing `text-*` utilities in favour of
+ * whichever is written last.
+ */
+const UPPERCASE_SIZES: Record<Size, string> = {
+  sm: 'text-[0.6875rem]',
+  md: 'text-[0.75rem]',
+  lg: 'text-[0.8125rem]',
+};
+
 const BASE = [
-  'group/btn inline-flex items-center justify-center rounded-full font-semibold tracking-tight',
+  'group/btn inline-flex items-center justify-center rounded-full font-semibold',
   'transition-[transform,box-shadow,background-color,border-color,color] duration-300 ease-editorial',
   'hover:-translate-y-0.5 active:translate-y-0 active:duration-75',
   // Any icon inside nudges along with the lift.
@@ -54,7 +75,13 @@ const BASE = [
 ].join(' ');
 
 export function buttonClass(variant: Variant = 'primary', size: Size = 'md', className?: string) {
-  return cn(BASE, VARIANTS[variant], SIZES[size], className);
+  return cn(
+    BASE,
+    VARIANTS[variant],
+    SIZES[size],
+    variant === 'outline' && UPPERCASE_SIZES[size],
+    className,
+  );
 }
 
 type ButtonProps = ComponentProps<'button'> & {

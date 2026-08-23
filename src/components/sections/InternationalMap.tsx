@@ -72,7 +72,7 @@ export function InternationalMap() {
             className="scroll-mt-28 border-b border-ink-800 py-6 first:pt-0 last:border-b-0"
           >
             <div className="flex items-baseline justify-between gap-4">
-              <h3 className="font-display text-2xl text-bone-50">{place.country}</h3>
+              <h3 className="font-serif text-2xl text-bone-50">{place.country}</h3>
               <span className="text-xs uppercase tracking-[0.14em] text-brass-300">
                 {place.code}
               </span>

@@ -75,7 +75,7 @@ export function Ecosystem({ facilities }: { facilities: FacilityView[] }) {
             x={cx}
             y={cy - 6}
             textAnchor="middle"
-            className="fill-bone-50 font-display text-[15px]"
+            className="fill-bone-50 font-serif text-[15px]"
           >
             Red Ball
           </text>

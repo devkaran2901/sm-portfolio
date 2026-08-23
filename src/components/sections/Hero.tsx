@@ -32,10 +32,10 @@ export function Hero({
 
   return (
     <section className="grain relative overflow-hidden border-b border-ink-800">
-      {/* Neutral light wash and a faint vertical rule: depth without colour. */}
+      {/* A low white lift where the light falls and a red sink opposite it. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_75%_-10%,rgba(255,255,255,0.55),transparent_58%),radial-gradient(90%_60%_at_10%_110%,rgba(10,10,11,0.06),transparent_60%)]"
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_80%_at_75%_-10%,rgba(255,255,255,0.06),transparent_58%),radial-gradient(90%_60%_at_10%_110%,rgba(192,57,43,0.09),transparent_60%)]"
       />
 
       <div className="shell relative py-20 lg:py-28">

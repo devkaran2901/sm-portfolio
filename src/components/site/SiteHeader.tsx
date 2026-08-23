@@ -5,15 +5,20 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { Menu, X } from 'lucide-react';
 
-import { NAV_LINKS } from '@/content/defaults';
+import { NAV_LINKS, PRIMARY_NAV, SITE } from '@/content/defaults';
 import { cn } from '@/lib/utils';
-import { buttonClass } from '@/components/ui/Button';
 
 /**
- * Sticky site header.
+ * Fixed site header.
  *
- * The mobile panel is a focus-trapped dialog: Escape closes it, focus moves to
- * the first item on open and returns to the trigger on close, and background
+ * Wordmark left, the six primary routes right, and a circular trigger on the
+ * far end that opens the full route list. The trigger is shown at every width,
+ * not just on a phone: the bar carries a shortened nav by design, so the panel
+ * behind it is the only place the complete list exists, and hiding it on the
+ * desktop would make routes like Players & Impact unreachable from the bar.
+ *
+ * The panel is a focus-trapped dialog: Escape closes it, focus moves to the
+ * first item on open and returns to the trigger on close, and background
  * scrolling is locked while it is open.
  */
 export function SiteHeader() {
@@ -76,95 +81,91 @@ export function SiteHeader() {
     };
   }, [open]);
 
-  const isActive = (href: string) =>
-    href === '/' ? pathname === '/' : pathname.startsWith(href);
+  /*
+   * `/about#journey` and `/about` are different nav entries pointing at the same
+   * document, so the trailing fragment has to be dropped before the comparison
+   * or neither would ever match. Both light up on /about, which is honest: the
+   * reader is on the page both of them lead to.
+   */
+  const isActive = (href: string) => {
+    const path = href.split('#')[0]!;
+    return path === '/' ? pathname === '/' : pathname.startsWith(path);
+  };
 
   return (
     <header
       className={cn(
-        'fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-editorial',
+        'fixed inset-x-0 top-0 z-50 bg-ink-950 transition-[box-shadow,border-color] duration-500 ease-editorial',
         /*
-          Solid white, not a translucent pane over a blur. The ground is light
-          grey and the cards are white, so a semi-transparent bar let card
-          edges and body copy read straight through the nav and the links had
-          to compete with whatever happened to be behind them. Depth comes from
-          a shadow once the page has moved instead.
+          Solid at every scroll position, not a pane that fades in.
+
+          A transparent bar over the opening frames of the scroll sequence looks
+          better in a screenshot and worse in use: the links then sit on
+          whatever the sequence happens to be showing, and the sequence is a
+          moving image. The bar stays opaque and only its edge changes - the
+          hairline and the shadow arrive once the page has moved, which is the
+          part that needs to signal depth.
         */
-        'border-b border-ink-700 bg-ink-900',
-        scrolled || open ? 'shadow-card' : 'shadow-none',
+        scrolled || open ? 'border-b border-white/10 shadow-card' : 'border-b border-transparent',
       )}
     >
       <div className="shell flex h-[4.5rem] items-center justify-between gap-6">
+        {/*
+          The wordmark, split across two weights of the same serif. "SONU" is
+          the light half and "MALIK" the solid one, which is the whole device -
+          no second colour, no second face, just the surname carrying more ink
+          than the given name. Tracking is wide because the two words are set in
+          caps at 1rem, where a serif closes up without it.
+        */}
         <Link
           href="/"
-          /*
-            Anton is condensed and ships one weight, so the old
-            `font-semibold tracking-tight` pair worked against it twice: the
-            weight request had no 600 to resolve to and got synthesised by
-            stroke-widening, and the negative tracking closed the gaps that
-            widening had already eaten. At 1.125rem the two words ran together.
-            The face carries its own weight - it needs air, not more ink.
-          */
-          className="group flex min-h-[44px] items-center gap-2.5 font-display text-lg tracking-[0.015em] [word-spacing:0.16em] text-bone-50"
+          className="group flex min-h-[44px] items-center font-serif text-[1.0625rem] uppercase tracking-[0.22em] text-bone-50"
         >
-          Sonu Malik
-          <span
-            aria-hidden="true"
-            className="hidden h-1.5 w-1.5 rounded-full bg-turf-400 transition-transform duration-300 group-hover:scale-150 sm:block"
-          />
+          <span className="font-normal text-bone-200 transition-colors duration-300 group-hover:text-bone-50">
+            Sonu
+          </span>
+          <span className="ml-[0.4em] font-bold text-bone-50">Malik</span>
+          <span className="sr-only">{SITE.name} — home</span>
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
-          {NAV_LINKS.filter((link) => link.href !== '/contact').map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              aria-current={isActive(link.href) ? 'page' : undefined}
-              className={cn(
-                'relative rounded-full px-4 py-2 text-[0.9375rem] font-medium transition-colors duration-200',
-                isActive(link.href)
-                  ? 'text-bone-50'
-                  : 'text-bone-400 hover:text-bone-100',
-              )}
-            >
-              {link.label}
-              {isActive(link.href) ? (
-                <span
-                  aria-hidden="true"
-                  className="absolute inset-x-3.5 -bottom-0.5 h-px bg-brass-400/80"
-                />
-              ) : null}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="flex items-center gap-3">
-          {/*
-            Shown at every width. It used to be `hidden sm:inline-flex`, which
-            removed the one direct route to contact on exactly the devices with
-            the least patience for hunting through a menu. `primary` is already
-            black on white, so it reads as the single action in the bar.
-
-            Padding tightens on mobile: at 320px the wordmark, this and the
-            menu trigger have to share the row.
-          */}
-          <Link
-            href="/contact"
-            className={cn(buttonClass('primary', 'sm'), 'px-4 sm:px-5')}
-          >
-            Contact Me
-          </Link>
+        <div className="flex items-center gap-2 sm:gap-4">
+          <nav aria-label="Primary" className="hidden items-center lg:flex">
+            {PRIMARY_NAV.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                aria-current={isActive(link.href) ? 'page' : undefined}
+                className={cn(
+                  'relative px-4 py-2 font-sans text-[0.8125rem] font-medium uppercase tracking-[0.14em] transition-colors duration-200',
+                  isActive(link.href) ? 'text-bone-50' : 'text-bone-400 hover:text-bone-50',
+                )}
+              >
+                {link.label}
+                {/*
+                  The accent under the current route. Red rather than white, and
+                  the only place the accent appears in the bar, so it reads as
+                  position rather than as decoration.
+                */}
+                {isActive(link.href) ? (
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-x-4 bottom-1 h-px bg-brass-400"
+                  />
+                ) : null}
+              </Link>
+            ))}
+          </nav>
 
           <button
             ref={triggerRef}
             type="button"
             onClick={() => setOpen((value) => !value)}
             aria-expanded={open}
-            aria-controls="mobile-navigation"
+            aria-controls="site-navigation"
             aria-label={open ? 'Close menu' : 'Open menu'}
-            className="grid h-10 w-10 min-h-[44px] min-w-[44px] place-items-center rounded-full border border-ink-600 text-bone-100 transition-colors hover:border-brass-400/60 lg:hidden"
+            className="grid h-11 w-11 min-h-[44px] min-w-[44px] place-items-center rounded-full border border-white/25 text-bone-100 transition-colors duration-300 hover:border-bone-50 hover:bg-bone-50 hover:text-ink-950"
           >
-            {open ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
+            {open ? <X size={17} aria-hidden="true" /> : <Menu size={17} aria-hidden="true" />}
           </button>
         </div>
       </div>
@@ -172,32 +173,35 @@ export function SiteHeader() {
       {open ? (
         <div
           ref={panelRef}
-          id="mobile-navigation"
+          id="site-navigation"
           role="dialog"
           aria-modal="true"
           aria-label="Site navigation"
-          className="border-t border-ink-700 bg-ink-900 lg:hidden"
+          className="border-t border-white/10 bg-ink-950"
         >
-          <nav aria-label="Mobile" className="shell flex flex-col py-4">
+          {/*
+            The complete route list, including the two the bar leaves out. Set
+            in the serif at a reading size rather than as a stack of small nav
+            links - the panel is the whole screen on a phone, and at that size
+            the list is the page.
+          */}
+          <nav aria-label="All pages" className="shell flex flex-col py-4">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
+                onClick={() => setOpen(false)}
                 aria-current={isActive(link.href) ? 'page' : undefined}
-                /*
-                  Black on white, and the active item is carried by weight
-                  rather than colour. It used to be brass-200 against
-                  bone-200 - #1F2124 against #202124 - which is a three-value
-                  difference nobody can see, so the panel had no visible
-                  current-page state at all.
-                */
                 className={cn(
-                  'flex items-center justify-between border-b border-ink-800 py-3.5 text-[0.9375rem] text-bone-50 transition-colors last:border-b-0 hover:text-bone-300',
-                  isActive(link.href) ? 'font-semibold' : 'font-normal',
+                  'group flex items-center justify-between border-b border-white/10 py-4 font-serif text-xl transition-colors last:border-b-0',
+                  isActive(link.href) ? 'text-bone-50' : 'text-bone-300 hover:text-bone-50',
                 )}
               >
                 {link.label}
-                <span aria-hidden="true" className="text-ink-400">
+                <span
+                  aria-hidden="true"
+                  className="font-sans text-sm text-bone-500 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-brass-200"
+                >
                   &rarr;
                 </span>
               </Link>

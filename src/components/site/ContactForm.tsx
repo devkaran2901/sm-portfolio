@@ -154,7 +154,7 @@ export function ContactForm() {
         className="rounded-xl2 border border-turf-600/50 bg-turf-900/25 p-8 text-center focus-visible:outline-none sm:p-12"
       >
         <CheckCircle2 size={40} aria-hidden="true" className="mx-auto text-turf-300" />
-        <h2 className="mt-5 font-display text-2xl text-bone-50">Message received</h2>
+        <h2 className="mt-5 font-serif text-2xl text-bone-50">Message received</h2>
         <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-bone-300">
           Thank you for getting in touch. Your message has been recorded and will be reviewed
           personally.

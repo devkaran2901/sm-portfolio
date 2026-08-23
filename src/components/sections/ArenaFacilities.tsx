@@ -114,9 +114,9 @@ function FacilityCard({
   return (
     <article
       className={cn(
-        'group relative flex h-full flex-col overflow-hidden rounded-xl2 border border-ink-700',
+        'group relative flex h-full flex-col overflow-hidden rounded-xl2 border border-white/10',
         'bg-ink-900 transition-[border-color,transform] duration-500 ease-editorial',
-        'hover:-translate-y-1 hover:border-ink-600',
+        'hover:-translate-y-1 hover:border-white/15',
       )}
     >
       <div className={cn('relative w-full overflow-hidden bg-ink-800', ASPECTS[size])}>
@@ -145,7 +145,7 @@ function FacilityCard({
         <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
           <h3
             className={cn(
-              'break-words font-display text-bone-50',
+              'break-words font-serif text-bone-50',
               size === 'hero' ? 'text-display-sm' : 'text-lg sm:text-2xl',
             )}
           >
@@ -196,11 +196,11 @@ function ImageSlot({ label, size }: { label: string; size: keyof typeof ASPECTS 
     <div
       role="img"
       aria-label={`Photograph of ${label} at Red Ball Sports Arena to be added`}
-      className="absolute inset-0 flex flex-col items-center justify-center gap-3 border-b border-dashed border-ink-700 bg-ink-800"
+      className="absolute inset-0 flex flex-col items-center justify-center gap-3 border-b border-dashed border-white/10 bg-ink-800"
     >
       <span
         aria-hidden="true"
-        className="h-10 w-10 rounded-full border border-dashed border-ink-600"
+        className="h-10 w-10 rounded-full border border-dashed border-white/15"
       />
       <p
         className={cn(
@@ -287,7 +287,7 @@ function FacilityDialog({
         role="dialog"
         aria-modal="true"
         aria-labelledby="facility-dialog-title"
-        className="relative max-h-full w-full max-w-3xl overflow-y-auto rounded-xl2 border border-ink-700 bg-ink-900 shadow-lift"
+        className="relative max-h-full w-full max-w-3xl overflow-y-auto rounded-xl2 border border-white/10 bg-ink-900 shadow-lift"
       >
         <div className="relative aspect-[16/9] w-full overflow-hidden bg-ink-800">
           {facility.imageUrl ? (
@@ -307,7 +307,7 @@ function FacilityDialog({
           <p className="text-sm uppercase tracking-[0.14em] text-bone-600">
             {FACILITY_GROUP_LABELS[facility.group as keyof typeof FACILITY_GROUP_LABELS]}
           </p>
-          <h3 id="facility-dialog-title" className="mt-3 font-display text-display-sm text-bone-50">
+          <h3 id="facility-dialog-title" className="mt-3 font-serif text-display-sm text-bone-50">
             {facility.name}
           </h3>
           {facility.quantity ? (
@@ -324,7 +324,7 @@ function FacilityDialog({
           ref={closeRef}
           type="button"
           onClick={onClose}
-          className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full border border-ink-600 bg-ink-900/90 text-bone-100 transition-colors hover:border-bone-50 hover:bg-bone-50 hover:text-ink-900"
+          className="absolute right-4 top-4 grid h-10 w-10 place-items-center rounded-full border border-white/15 bg-ink-900/95 text-bone-100 transition-colors hover:border-bone-50 hover:bg-bone-50 hover:text-ink-900"
         >
           <X size={17} aria-hidden="true" />
           <span className="sr-only">Close</span>

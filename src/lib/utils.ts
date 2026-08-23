@@ -1,5 +1,24 @@
 import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { extendTailwindMerge } from 'tailwind-merge';
+
+/**
+ * The display steps, declared to tailwind-merge as font sizes.
+ *
+ * Without this it has no way to know what `text-display-md` is. Its fallback
+ * for an unrecognised `text-*` is to treat it as a colour, which puts it in the
+ * same conflict group as `text-paper-900` - so `cn('text-display-md',
+ * 'text-paper-900')` silently dropped the size and left a section heading
+ * rendering at body size. Every step in `theme.fontSize` has to be listed here.
+ */
+const DISPLAY_SIZES = ['display-xl', 'display-lg', 'display-md', 'display-sm', 'eyebrow'];
+
+const twMerge = extendTailwindMerge({
+  extend: {
+    classGroups: {
+      'font-size': [{ text: DISPLAY_SIZES }],
+    },
+  },
+});
 
 /** Tailwind-aware class merge. Safe to use on both server and client. */
 export function cn(...inputs: ClassValue[]): string {

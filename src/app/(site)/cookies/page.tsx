@@ -93,7 +93,7 @@ export default function CookiePolicyPage() {
           </div>
 
           <div className="mt-12 max-w-2xl">
-            <h2 className="font-display text-xl text-bone-50">Your choice</h2>
+            <h2 className="font-serif text-xl text-bone-50">Your choice</h2>
             <p className="mt-3 text-sm leading-relaxed text-bone-400">
               Measurement can be switched off in this browser at any time. A Do Not Track signal is
               honoured automatically without you doing anything.

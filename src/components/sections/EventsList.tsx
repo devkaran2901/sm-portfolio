@@ -22,7 +22,7 @@ export function EventsList({ events }: { events: EventView[] }) {
                 event.category}
             </p>
 
-            <h3 className="mt-3 break-words font-display text-lg text-bone-50 sm:text-xl">{event.name}</h3>
+            <h3 className="mt-3 break-words font-serif text-lg text-bone-50 sm:text-xl">{event.name}</h3>
 
             <p className="mt-2.5 line-clamp-3 flex-1 text-[0.875rem] leading-relaxed text-bone-400 sm:line-clamp-none sm:text-[0.9375rem]">{event.summary}</p>
 

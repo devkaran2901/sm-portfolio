@@ -1,24 +1,24 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { ArrowRight } from 'lucide-react';
 
-import { Hero } from '@/components/sections/Hero';
-import { WorkSummary } from '@/components/sections/WorkSummary';
 import { HeroSequence } from '@/components/sections/HeroSequence';
-import { Timeline } from '@/components/sections/Timeline';
-import { Ecosystem } from '@/components/sections/Ecosystem';
-import { PlayerImpact } from '@/components/sections/PlayerImpact';
+import { StatsBar } from '@/components/sections/StatsBar';
+import { VenturesShowcase } from '@/components/sections/VenturesShowcase';
+import { JourneyStrip } from '@/components/sections/JourneyStrip';
+import { FeaturedVenture } from '@/components/sections/FeaturedVenture';
+import { PlayersShowcase } from '@/components/sections/PlayersShowcase';
+import { PressRecognition } from '@/components/sections/PressRecognition';
 import { Faq } from '@/components/sections/Faq';
-import { ContactCta } from '@/components/sections/CallToAction';
-import { Counter } from '@/components/ui/Counter';
 import { JsonLd } from '@/components/ui/JsonLd';
-import { ON_NAVY, Section, SectionHeading, StatBlock } from '@/components/ui/Primitives';
-import { Reveal } from '@/components/ui/Reveal';
+import { Section, SectionHeading } from '@/components/ui/Primitives';
 import { buttonClass } from '@/components/ui/Button';
-import { SITE } from '@/content/defaults';
+import { INTERNATIONAL, SITE } from '@/content/defaults';
 import {
   getBusinesses,
   getFacilities,
   getFaqs,
+  getMedia,
   getPlayers,
   getProfile,
   getStats,
@@ -45,19 +45,49 @@ export const metadata: Metadata = buildMetadata({
 // Content is served from the database with a static fallback; revalidate hourly.
 export const revalidate = 3600;
 
+/**
+ * A small caps link with an arrow, used beside a section heading where a filled
+ * button would read as a second primary action. `.cta-link` carries the rule
+ * that draws itself in on hover.
+ */
+function HeadingLink({ href, children }: { href: string; children: string }) {
+  return (
+    <Link href={href} className="cta-link">
+      {children}
+      <ArrowRight size={14} aria-hidden="true" />
+    </Link>
+  );
+}
+
 export default async function HomePage() {
-  const [profile, stats, timeline, facilities, players, businesses, faqs] = await Promise.all([
-    getProfile(),
-    getStats(),
-    getTimeline(),
-    getFacilities(),
-    getPlayers(),
-    getBusinesses(),
-    getFaqs(),
-  ]);
+  const [profile, stats, timeline, facilities, players, businesses, faqs, press] = await Promise.all(
+    [
+      getProfile(),
+      getStats(),
+      getTimeline(),
+      getFacilities(),
+      getPlayers(),
+      getBusinesses(),
+      getFaqs(),
+      getMedia(),
+    ],
+  );
 
   const playersStat = stats.find((stat) => stat.key === 'players-progressed');
-  const journeyPreview = timeline.slice(0, 5);
+  // Six nodes is what the horizontal strip holds before the labels start
+  // colliding: birth, village cricket, college, and the three trips abroad.
+  const journeyPreview = timeline.slice(0, 6);
+  /*
+   * The homepage carries the opening of the bio; the about page prints all of
+   * it. Taking a slice rather than indexing two fixed positions is what lets a
+   * paragraph be inserted into the record without this section silently
+   * dropping it - which is what happened to the education paragraph.
+   */
+  const bioParagraphs = profile.longBio.split('\n\n').filter(Boolean).slice(0, 3);
+  const positioning = profile.positioning
+    .split('·')
+    .map((part) => part.trim())
+    .filter(Boolean);
 
   return (
     <>
@@ -67,136 +97,129 @@ export default async function HomePage() {
         fallbackAlt={profile.portraitAlt}
       />
 
-      <Hero profile={profile} showHeadline={false} />
+      <StatsBar stats={stats} internationalCount={INTERNATIONAL.length} />
 
-      {/*
-        Navy without ON_NAVY: every word here sits inside a white card and has
-        to stay dark. The one thing the band does reach is `.eyebrow`, which the
-        navy tone re-points to its light variant - correct for the section
-        heading, wrong for the eyebrow inside each card, so that one is put
-        back. The deeper selector wins.
-      */}
-      <Section
-        id="what-he-runs"
-        tone="navy"
-        className="py-16 [&_article_.eyebrow]:text-brass-300"
-      >
+      <Section id="ventures">
         <div className="shell">
           <SectionHeading
-            tone="light"
-            eyebrow="At a Glance"
-            title="The arena and the ventures"
-            lead="Two places to go next, depending on what brought you here."
+            layout="split"
+            eyebrow="Ventures"
+            title="Business Built With Purpose"
+            lead="Three operations, one method: build the place first, then let the sport and the trade that belong in it arrive."
+            action={<HeadingLink href="/ventures">View All Ventures</HeadingLink>}
           />
-          <div className="mt-12">
-            <WorkSummary facilities={facilities} businesses={businesses} />
+          <div className="mt-16">
+            <VenturesShowcase facilities={facilities} businesses={businesses} />
           </div>
         </div>
       </Section>
 
-      {/* Who, in one screen. The 10-second answer the brief asks for. */}
-      <Section id="overview">
-        <div className="shell grid gap-12 lg:grid-cols-12">
-          <div className="lg:col-span-5">
-            <SectionHeading eyebrow="Who is Sonu Malik" title="Cricket, then infrastructure." />
-          </div>
-          <div className="lg:col-span-7">
-            <p className="prose-editorial">
-              {profile.longBio.split('\n\n')[0]}
-            </p>
-            <p className="prose-editorial mt-5">
-              {profile.longBio.split('\n\n')[1]}
-            </p>
-            <Link href="/about" className={`${buttonClass('secondary', 'md')} mt-8`}>
-              Read the full profile
-            </Link>
-          </div>
-        </div>
-      </Section>
-
-      <Section id="journey" tone="navy" className={ON_NAVY}>
+      <Section id="journey" tone="panel">
         <div className="shell">
           <SectionHeading
-            tone="light"
-            eyebrow="Cricket Journey"
-            title="From Mokhra to the Norwegian Cup"
-            lead="Village cricket, collegiate cricket, and international club cricket abroad. Not a BCCI professional playing career &mdash; club cricket, accurately described."
+            layout="split"
+            eyebrow="The Journey"
+            title="A Journey Beyond Boundaries"
+            lead="Village cricket, collegiate cricket, and international club cricket abroad. Not a BCCI professional playing career — club cricket, accurately described."
+            action={<HeadingLink href="/about#journey">View Full Journey</HeadingLink>}
           />
-          <div className="mt-14">
-            <Timeline events={journeyPreview} />
+          <div className="mt-20">
+            <JourneyStrip events={journeyPreview} />
           </div>
-          <Link href="/about#journey" className={buttonClass('secondary', 'md')}>
-            See the full timeline
-          </Link>
         </div>
       </Section>
 
       <Section id="red-ball">
         <div className="shell">
-          <SectionHeading
-            eyebrow="Red Ball Cricket Ground"
-            title="A multi-sports complex, six years in"
-            lead="Founded and operated by Sonu Malik in Rohtak, Haryana. What began as a cricket ground now spans cricket, racquet sports, fitness and hospitality."
+          {/*
+            The events line names the categories in EVENTS - corporate leagues,
+            open tournaments, and the three BCCI age groups - so the sentence
+            stays inside what the content records already carry.
+
+            The age groups are written with a non-breaking hyphen (U+2011). An
+            ordinary hyphen is a break opportunity, and in this column the line
+            landed mid-label: "BCCI U-" then "14, U-16" on the next line.
+          */}
+          <FeaturedVenture
+            facilities={facilities}
+            description="Founded and operated by Sonu Malik in Rohtak, Haryana. What began as a cricket ground now spans cricket, racquet sports, fitness and hospitality, six years in, and regularly hosts BCCI U‑14, U‑16 and U‑19 matches alongside corporate leagues and open tournaments."
           />
+        </div>
+      </Section>
 
-          <Reveal className="mt-14">
-            <dl className="grid grid-cols-3 gap-4 border-y border-ink-800 py-10 sm:gap-8 lg:grid-cols-5">
-              {stats.map((stat) => (
-                <StatBlock key={stat.key} label={stat.label} description={stat.description}>
-                  <Counter value={stat.value} />
-                </StatBlock>
-              ))}
-            </dl>
-          </Reveal>
+      <Section id="players" tone="deep">
+        <div className="shell">
+          <PlayersShowcase players={players} playersStat={playersStat} />
+        </div>
+      </Section>
 
+      {/*
+        The one light band on the page. `tone="paper"` carries `.on-paper`,
+        which re-points every content token inside it, so the components below
+        need no light variant of their own.
+      */}
+      <Section id="press" tone="paper">
+        <div className="shell">
+          <SectionHeading
+            layout="split"
+            tone="paper"
+            eyebrow="As Seen In"
+            title="Press & Recognition"
+            lead="Coverage is listed here once the clipping, link or recording behind it has been attached."
+            action={<HeadingLink href="/media">View All Articles</HeadingLink>}
+          />
           <div className="mt-16">
-            <Ecosystem facilities={facilities} />
+            <PressRecognition articles={press} />
+          </div>
+        </div>
+      </Section>
+
+      {/* Who, in one screen. The ten-second answer the brief asks for. */}
+      <Section id="overview">
+        <div className="shell grid gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-5">
+            <SectionHeading eyebrow="Who is Sonu Malik" title="Cricket, then infrastructure." />
+            <ul className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-8">
+              {positioning.map((item) => (
+                <li
+                  key={item}
+                  className="font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-bone-400"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <div className="mt-14 flex flex-wrap gap-3">
-            <Link href="/red-ball" className={buttonClass('primary', 'md')}>
-              Explore the facility
-            </Link>
-            <Link href="/players" className={buttonClass('secondary', 'md')}>
-              Players &amp; impact
+          <div className="lg:col-span-7">
+            {bioParagraphs.map((paragraph, index) => (
+              <p
+                key={paragraph.slice(0, 40)}
+                className={index === 0 ? 'prose-editorial' : 'prose-editorial mt-5'}
+              >
+                {paragraph}
+              </p>
+            ))}
+            <Link href="/about" className={`${buttonClass('outline', 'md')} mt-10`}>
+              Read the full profile
+              <ArrowRight size={15} aria-hidden="true" />
             </Link>
           </div>
         </div>
       </Section>
 
-      <Section id="players" tone="raised">
+      <Section id="faq" tone="panel">
         <div className="shell">
           <SectionHeading
-            eyebrow="Player Development"
-            title="A platform for players moving up"
-            lead="Players who trained or played at the facility have progressed to higher levels of competitive cricket. The relationship described here is association with the ground, nothing more."
-          />
-          <div className="mt-14">
-            <PlayerImpact players={players} playersStat={playersStat} />
-          </div>
-        </div>
-      </Section>
-
-
-
-
-      <Section id="faq" tone="navy" className={ON_NAVY}>
-        <div className="shell">
-          <SectionHeading
-            tone="light"
+            layout="split"
             eyebrow="Frequently Asked"
             title="Questions people actually ask"
             lead="Answers are limited to what is known and supportable."
           />
-          <div className="mt-12">
+          <div className="mt-16">
             <Faq faqs={faqs} />
           </div>
         </div>
-      </Section>
-
-
-      <Section>
-        <ContactCta />
       </Section>
 
       <JsonLd

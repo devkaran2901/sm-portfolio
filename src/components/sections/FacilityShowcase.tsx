@@ -54,7 +54,7 @@ export function FacilityShowcase({ facilities }: { facilities: FacilityView[] })
       {grouped.map((section) => (
         <div key={section.group}>
           <div className="flex items-baseline gap-4">
-            <h3 className="font-display text-2xl text-bone-50">{section.label}</h3>
+            <h3 className="font-serif text-2xl text-bone-50">{section.label}</h3>
             <span aria-hidden="true" className="rule flex-1" />
             <span className="text-xs uppercase tracking-[0.14em] text-bone-500">
               {section.items.length} {section.items.length === 1 ? 'facility' : 'facilities'}
@@ -90,7 +90,7 @@ export function FacilityShowcase({ facilities }: { facilities: FacilityView[] })
                     <div className="p-6">
                       <div className="flex items-start justify-between gap-4">
                         <div>
-                          <h4 className="font-display text-xl text-bone-50">{facility.name}</h4>
+                          <h4 className="font-serif text-xl text-bone-50">{facility.name}</h4>
                           {facility.quantity ? (
                             <p className="mt-1 text-xs uppercase tracking-[0.12em] text-brass-300">
                               {facility.quantity} {facility.unitLabel ?? ''}
