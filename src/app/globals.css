@@ -39,6 +39,18 @@
   body {
     @apply bg-ink-950 font-sans text-bone-200 antialiased;
     text-rendering: optimizeLegibility;
+    /*
+     * Depth on the dark ground. Two very low-opacity radial washes fixed to the
+     * viewport - a cool highlight top-left, a faint brand-red bloom lower right -
+     * so the default (transparent) sections read as a lit navy space rather than
+     * flat black. Panels (navy-900/950) and the paper band paint their own
+     * ground over this, so the effect only reaches the open dark sections.
+     */
+    background-image:
+      radial-gradient(1200px 760px at 12% -6%, rgba(126, 148, 205, 0.18), transparent 58%),
+      radial-gradient(1050px 820px at 94% 12%, rgba(192, 57, 43, 0.12), transparent 55%),
+      radial-gradient(900px 900px at 50% 120%, rgba(126, 148, 205, 0.10), transparent 60%);
+    background-attachment: fixed;
   }
 
   /*
@@ -105,7 +117,13 @@
    * read as a label rather than as a shout.
    */
   .eyebrow {
-    @apply font-sans text-eyebrow font-semibold uppercase text-brass-300;
+    @apply inline-flex items-center gap-3 font-sans text-eyebrow font-semibold uppercase text-brass-300;
+  }
+  /* A short accent rule before every section label — the editorial "— LABEL" mark. */
+  .eyebrow::before {
+    content: '';
+    @apply inline-block h-px w-9 bg-current;
+    opacity: 0.85;
   }
 
   /*
@@ -123,7 +141,9 @@
   }
 
   .surface {
-    @apply rounded-xl2 border border-ink-700/70 bg-ink-900/70 backdrop-blur-[2px];
+    @apply rounded-xl2 border border-ink-600/80 bg-ink-900/80 shadow-card backdrop-blur-[2px];
+    /* A soft top-lit sheen so raised cards read as raised, not as flat panels. */
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.055), transparent 40%);
   }
 
   .link-underline {
@@ -177,10 +197,10 @@
   .on-paper .hairline-b { border-bottom-color: theme('colors.paper.200'); }
 
   .prose-editorial {
-    @apply max-w-prose text-[1.125rem] leading-[1.72] text-bone-300;
+    @apply max-w-prose text-[1.15rem] leading-[1.75] text-bone-200;
   }
   .prose-editorial p + p { @apply mt-5; }
-  .prose-editorial strong { @apply font-semibold text-bone-100; }
+  .prose-editorial strong { @apply font-semibold text-bone-50; }
   .prose-editorial a { @apply text-brass-200 underline underline-offset-4 hover:text-brass-100; }
 
   /* Skip link — visible only on keyboard focus. */

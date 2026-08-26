@@ -1,0 +1,12 @@
+import { chromium } from 'playwright';
+const browser = await chromium.launch();
+const ctx = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+const page = await ctx.newPage();
+await page.goto('http://localhost:3000/', { waitUntil: 'networkidle', timeout: 60000 });
+await page.waitForTimeout(2000);
+await page.evaluate(() => document.getElementById('faq')?.scrollIntoView());
+await page.evaluate(() => window.scrollBy(0, 340));
+await page.waitForTimeout(800);
+await page.screenshot({ path: 'scripts/shots/faq-closed.png' });
+console.log('done');
+await browser.close();

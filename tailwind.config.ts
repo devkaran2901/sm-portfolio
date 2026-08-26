@@ -55,13 +55,13 @@ const config: Config = {
          * nothing in the range needs a size exemption to be legible.
          */
         bone: {
-          50: '#F5F5F0', // headings
-          100: '#E9EAE7',
-          200: '#D5D8DE', // body copy
-          300: '#B6BCCB', // secondary copy
-          400: '#9AA2B5', // muted copy
-          500: '#8B94A9', // captions
-          600: '#7E8799', // faintest labels
+          50: '#F7F7F3', // headings
+          100: '#ECEDEA',
+          200: '#E3E5EA', // body copy — lifted for comfortable reading on navy
+          300: '#CBD0DA', // secondary copy — lifted from a dim blue-grey
+          400: '#B0B6C4', // muted copy
+          500: '#9EA5B5', // captions
+          600: '#929AAB', // faintest labels
         },
         /*
          * Neutrals with a trace of warmth: markers, rings and the quieter
@@ -113,10 +113,10 @@ const config: Config = {
           800: '#141C33', // a raised panel inside a panel
           700: '#232C47', // borders on navy
           600: '#33405E',
-          500: '#7E8799', // faint labels on navy
-          400: '#9AA2B5', // muted copy on navy
-          300: '#B6BCCB', // body copy on navy
-          200: '#F5F5F0', // headings on navy
+          500: '#929AAB', // faint labels on navy
+          400: '#B0B6C4', // muted copy on navy
+          300: '#CBD0DA', // body copy on navy — lifted to match bone
+          200: '#F7F7F3', // headings on navy
         },
         /*
          * The one light ground on the site: Press & Recognition. Kept as its
