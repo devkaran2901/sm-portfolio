@@ -119,12 +119,26 @@ export function SiteHeader() {
         */}
         <Link
           href="/"
-          className="group flex min-h-[44px] items-center font-serif text-[1.0625rem] uppercase tracking-[0.22em] text-bone-50"
+          className="group flex min-h-[44px] items-center gap-3 font-serif text-[1.0625rem] uppercase tracking-[0.22em] text-bone-50"
         >
-          <span className="font-normal text-bone-200 transition-colors duration-300 group-hover:text-bone-50">
-            Sonu
+          {/*
+            The monogram: a gold-ringed "SM", set apart from the wordmark it
+            precedes. It is what the giant watermark in the hero echoes, so the
+            same two letters appear at both the smallest and the largest scale
+            on the page.
+          */}
+          <span
+            aria-hidden="true"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-brass-400/70 font-serif text-[0.8125rem] font-semibold tracking-[0.02em] text-brass-300 transition-colors duration-300 group-hover:border-brass-400 group-hover:text-brass-200"
+          >
+            SM
           </span>
-          <span className="ml-[0.4em] font-bold text-bone-50">Malik</span>
+          <span>
+            <span className="font-normal text-bone-200 transition-colors duration-300 group-hover:text-bone-50">
+              Sonu
+            </span>
+            <span className="ml-[0.4em] font-bold text-bone-50">Malik</span>
+          </span>
           <span className="sr-only">{SITE.name} — home</span>
         </Link>
 
@@ -163,7 +177,7 @@ export function SiteHeader() {
             aria-expanded={open}
             aria-controls="site-navigation"
             aria-label={open ? 'Close menu' : 'Open menu'}
-            className="grid h-11 w-11 min-h-[44px] min-w-[44px] place-items-center rounded-full border border-white/25 text-bone-100 transition-colors duration-300 hover:border-bone-50 hover:bg-bone-50 hover:text-ink-950"
+            className="grid h-11 w-11 min-h-[44px] min-w-[44px] place-items-center rounded-full border border-brass-400/50 text-bone-100 transition-colors duration-300 hover:border-brass-400 hover:bg-brass-400 hover:text-ink-950"
           >
             {open ? <X size={17} aria-hidden="true" /> : <Menu size={17} aria-hidden="true" />}
           </button>

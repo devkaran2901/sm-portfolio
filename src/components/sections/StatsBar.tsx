@@ -1,5 +1,15 @@
+import { GraduationCap, Target, Timer, Trophy, Globe2, type LucideIcon } from 'lucide-react';
+
 import { Counter } from '@/components/ui/Counter';
 import type { StatView } from '@/lib/content';
+
+const ICONS: Record<string, LucideIcon> = {
+  'years-operating': Timer,
+  'players-progressed': Trophy,
+  'cricket-grounds': Target,
+  'cricket-academies': GraduationCap,
+  'international-destinations': Globe2,
+};
 
 /**
  * The figures, in one strip directly under the scroll sequence.
@@ -115,42 +125,55 @@ export function StatsBar({
           because this is the width they have to survive.
         */}
         <dl className="grid grid-cols-5 gap-x-2 py-12 sm:gap-x-5 sm:py-16 lg:gap-x-8 lg:py-20">
-          {items.map((item, index) => (
-            /*
-              Term before definition in the markup, so a screen reader reads
-              "Cricket Grounds, 2" rather than the other way round, and the
-              column reversed in the layout so the eye still meets the figure
-              first. The two orders want to be different here.
+          {items.map((item, index) => {
+            const Icon = ICONS[item.key];
+            return (
+              /*
+                Term before definition in the markup, so a screen reader reads
+                "Cricket Grounds, 2" rather than the other way round, and the
+                column reversed in the layout so the eye still meets the figure
+                first. The two orders want to be different here.
 
-              `justify-end` is what puts the figures on one line. In a reversed
-              column the main axis runs upward, so the end of it is the top -
-              without this the cells pack from the bottom and the caption that
-              wraps deepest pushes its figure above all the others.
-            */
-            <div
-              key={item.key}
-              className={`flex flex-col-reverse justify-end ${dividerClass(index)}`}
-            >
-              {/*
-                The captions are the constraint here, not the figures. "Players
-                Progressed to Higher Levels" is 35 characters in a 66px column,
-                so on a phone the tracking comes almost all the way off - the
-                0.18em the label carries on a desktop is 1.4px per letter, and
-                across thirteen letters that alone is a quarter of the column.
+                `justify-end` is what puts the figures on one line. In a reversed
+                column the main axis runs upward, so the end of it is the top -
+                without this the cells pack from the bottom and the caption that
+                wraps deepest pushes its figure above all the others. The icon is
+                the last DOM child so it lands at the very top of the reversed
+                column, above the figure.
+              */
+              <div
+                key={item.key}
+                className={`flex flex-col-reverse items-center justify-end text-center sm:items-start sm:text-left ${dividerClass(index)}`}
+              >
+                {/*
+                  The captions are the constraint here, not the figures. "Players
+                  Progressed to Higher Levels" is 35 characters in a 66px column,
+                  so on a phone the tracking comes almost all the way off - the
+                  0.18em the label carries on a desktop is 1.4px per letter, and
+                  across thirteen letters that alone is a quarter of the column.
 
-                `break-words` stays as the last resort behind the soft hyphens,
-                for a caption longer than anything currently in the database:
-                an ugly break is still better than text crossing the rule into
-                the next figure.
-              */}
-              <dt className="mt-2.5 break-words font-sans text-[0.5rem] font-semibold uppercase leading-[1.55] tracking-[0.03em] text-bone-400 sm:mt-3.5 sm:text-[0.5625rem] sm:tracking-[0.1em] lg:mt-4 lg:max-w-[16ch] lg:text-[0.6875rem] lg:leading-[1.7] lg:tracking-[0.18em]">
-                {withBreakHints(item.label)}
-              </dt>
-              <dd className="font-serif text-[clamp(1.75rem,0.73rem+4.2vw,4.5rem)] font-medium leading-[0.95] tabular-nums text-bone-50">
-                <Counter value={item.value} />
-              </dd>
-            </div>
-          ))}
+                  `break-words` stays as the last resort behind the soft hyphens,
+                  for a caption longer than anything currently in the database:
+                  an ugly break is still better than text crossing the rule into
+                  the next figure.
+                */}
+                <dt className="mt-2.5 break-words font-sans text-[0.5rem] font-semibold uppercase leading-[1.55] tracking-[0.03em] text-bone-400 sm:mt-3.5 sm:text-[0.5625rem] sm:tracking-[0.1em] lg:mt-4 lg:max-w-[16ch] lg:text-[0.6875rem] lg:leading-[1.7] lg:tracking-[0.18em]">
+                  {withBreakHints(item.label)}
+                </dt>
+                <dd className="font-serif text-[clamp(1.75rem,0.73rem+4.2vw,4.5rem)] font-medium leading-[0.95] tabular-nums text-bone-50">
+                  <Counter value={item.value} />
+                </dd>
+                {Icon ? (
+                  <span
+                    aria-hidden="true"
+                    className="mb-3 grid h-8 w-8 shrink-0 place-items-center rounded-full border border-brass-400/50 text-brass-300 sm:mb-4 sm:h-9 sm:w-9"
+                  >
+                    <Icon size={15} aria-hidden="true" />
+                  </span>
+                ) : null}
+              </div>
+            );
+          })}
         </dl>
       </div>
     </section>

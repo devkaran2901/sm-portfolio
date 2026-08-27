@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Anton, Inter, Playfair_Display } from 'next/font/google';
+import { Anton, Dancing_Script, Inter, Playfair_Display } from 'next/font/google';
 
 import { SITE } from '@/content/defaults';
 import { siteUrl } from '@/lib/env';
@@ -41,6 +41,18 @@ const sans = Inter({
   display: 'swap',
 });
 
+/**
+ * A decorative flourish only: rendered once, under the About Me bio, as a
+ * signature-styled treatment of the name. It is typography, not a scanned
+ * autograph, and nothing on the page presents it as one.
+ */
+const script = Dancing_Script({
+  subsets: ['latin'],
+  weight: ['500', '600'],
+  variable: '--font-script',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   title: {
@@ -59,7 +71,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#0A0E1A',
+  themeColor: '#0B0A08',
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
@@ -69,7 +81,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en-IN"
-      className={`${display.variable} ${serif.variable} ${sans.variable}`}
+      className={`${display.variable} ${serif.variable} ${sans.variable} ${script.variable}`}
       suppressHydrationWarning
     >
       <body className="min-h-dvh bg-ink-950 text-bone-200">{children}</body>

@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { ArrowRight } from 'lucide-react';
 
 import { HeroSequence } from '@/components/sections/HeroSequence';
+import { AboutIntro } from '@/components/sections/AboutIntro';
 import { StatsBar } from '@/components/sections/StatsBar';
 import { VenturesShowcase } from '@/components/sections/VenturesShowcase';
 import { JourneyStrip } from '@/components/sections/JourneyStrip';
@@ -12,7 +13,6 @@ import { PressRecognition } from '@/components/sections/PressRecognition';
 import { Faq } from '@/components/sections/Faq';
 import { JsonLd } from '@/components/ui/JsonLd';
 import { Section, SectionHeading } from '@/components/ui/Primitives';
-import { buttonClass } from '@/components/ui/Button';
 import { INTERNATIONAL, SITE } from '@/content/defaults';
 import {
   getBusinesses,
@@ -84,10 +84,6 @@ export default async function HomePage() {
    * dropping it - which is what happened to the education paragraph.
    */
   const bioParagraphs = profile.longBio.split('\n\n').filter(Boolean).slice(0, 3);
-  const positioning = profile.positioning
-    .split('·')
-    .map((part) => part.trim())
-    .filter(Boolean);
 
   return (
     <>
@@ -95,7 +91,21 @@ export default async function HomePage() {
         name={profile.fullName}
         fallbackImageUrl={profile.portraitUrl}
         fallbackAlt={profile.portraitAlt}
+        positioning={profile.positioning}
+        shortBio={profile.shortBio}
       />
+
+      {/* Who, in one screen, right after the hero — the ten-second answer. */}
+      <Section id="overview" tone="paper">
+        <div className="shell">
+          <AboutIntro
+            profile={profile}
+            bioParagraphs={bioParagraphs}
+            stats={stats}
+            internationalCount={INTERNATIONAL.length}
+          />
+        </div>
+      </Section>
 
       <StatsBar stats={stats} internationalCount={INTERNATIONAL.length} />
 
@@ -170,40 +180,6 @@ export default async function HomePage() {
           />
           <div className="mt-16">
             <PressRecognition articles={press} />
-          </div>
-        </div>
-      </Section>
-
-      {/* Who, in one screen. The ten-second answer the brief asks for. */}
-      <Section id="overview">
-        <div className="shell grid gap-12 lg:grid-cols-12 lg:gap-16">
-          <div className="lg:col-span-5">
-            <SectionHeading eyebrow="Who is Sonu Malik" title="Cricket, then infrastructure." />
-            <ul className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-8">
-              {positioning.map((item) => (
-                <li
-                  key={item}
-                  className="font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.18em] text-bone-400"
-                >
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="lg:col-span-7">
-            {bioParagraphs.map((paragraph, index) => (
-              <p
-                key={paragraph.slice(0, 40)}
-                className={index === 0 ? 'prose-editorial' : 'prose-editorial mt-5'}
-              >
-                {paragraph}
-              </p>
-            ))}
-            <Link href="/about" className={`${buttonClass('outline', 'md')} mt-10`}>
-              Read the full profile
-              <ArrowRight size={15} aria-hidden="true" />
-            </Link>
           </div>
         </div>
       </Section>

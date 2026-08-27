@@ -95,7 +95,7 @@ export function VenturesShowcase({
 
             <span
               aria-hidden="true"
-              className="absolute left-6 top-6 font-serif text-[1.75rem] font-medium leading-none text-bone-50/85 transition-colors duration-500 group-hover:text-bone-50"
+              className="absolute left-6 top-6 font-serif text-[1.75rem] font-medium leading-none text-brass-300 transition-colors duration-500 group-hover:text-brass-200"
             >
               {String(index + 1).padStart(2, '0')}
             </span>
@@ -118,7 +118,7 @@ export function VenturesShowcase({
 
               <span
                 aria-hidden="true"
-                className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/30 text-bone-50 transition-[background-color,color,border-color] duration-300 group-hover:border-brass-400 group-hover:bg-brass-400 group-hover:text-bone-50"
+                className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/30 text-bone-50 transition-[background-color,color,border-color] duration-300 group-hover:border-brass-400 group-hover:bg-brass-400 group-hover:text-ink-950"
               >
                 <ArrowUpRight size={17} />
               </span>

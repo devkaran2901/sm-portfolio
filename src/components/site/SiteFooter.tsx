@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react';
 
@@ -55,7 +56,26 @@ export function SiteFooter({
 
   return (
     <footer className="bg-navy-950">
-      <div className="shell py-band">
+      {/*
+        The closing band, now a photograph rather than flat navy: a real
+        facility shot (the cricket ground, the one photograph on the site that
+        was actually taken there, not stock) knocked well back behind a dark
+        wash so the type over it stays at full contrast.
+      */}
+      <div className="relative overflow-hidden border-b border-white/10">
+        <div aria-hidden="true" className="absolute inset-0">
+          <Image
+            src="/images/facilities/cricket-grounds.webp"
+            alt=""
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-navy-950/88" />
+          <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/70 to-navy-950/50" />
+        </div>
+
+        <div className="shell relative py-band">
         <div className="grid gap-14 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-6">
             <p className="eyebrow">What&rsquo;s Next</p>
@@ -70,7 +90,7 @@ export function SiteFooter({
             <p className="max-w-xs text-[1.0625rem] leading-[1.7] text-bone-300">
               {profile.shortBio}
             </p>
-            <Link href="/contact" className={cn(buttonClass('outline', 'md'), 'mt-8')}>
+            <Link href="/contact" className={cn(buttonClass('accent', 'md'), 'mt-8')}>
               Let&rsquo;s Talk
               <ArrowUpRight size={15} aria-hidden="true" />
             </Link>
@@ -134,8 +154,23 @@ export function SiteFooter({
         */}
         <nav
           aria-label="Footer"
-          className="mt-20 grid gap-10 border-t border-white/10 pt-10 sm:grid-cols-2"
+          className="mt-20 grid gap-10 border-t border-white/10 pt-10 sm:grid-cols-3"
         >
+          <div>
+            <span
+              aria-hidden="true"
+              className="grid h-9 w-9 place-items-center rounded-full border border-brass-400/60 font-serif text-[0.75rem] font-semibold text-brass-300"
+            >
+              SM
+            </span>
+            <p aria-hidden="true" className="mt-4 font-script text-3xl text-brass-100">
+              {profile.fullName}
+            </p>
+            <p className="mt-2 max-w-[20ch] text-[0.8125rem] leading-relaxed text-bone-500">
+              {profile.positioning}
+            </p>
+          </div>
+
           <div>
             <h3 className="font-sans text-[0.6875rem] font-semibold uppercase tracking-[0.2em] text-bone-500">
               Navigate
@@ -199,6 +234,7 @@ export function SiteFooter({
           Details marked &ldquo;verification required&rdquo; are published only once a source is
           attached.
         </p>
+        </div>
       </div>
 
       {/*

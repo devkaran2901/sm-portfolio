@@ -41,15 +41,19 @@
     text-rendering: optimizeLegibility;
     /*
      * Depth on the dark ground. Two very low-opacity radial washes fixed to the
-     * viewport - a cool highlight top-left, a faint brand-red bloom lower right -
-     * so the default (transparent) sections read as a lit navy space rather than
+     * viewport - a warm gold bloom top-left, a fainter one lower-right - so the
+     * default (transparent) sections read as a lit warm-black space rather than
      * flat black. Panels (navy-900/950) and the paper band paint their own
      * ground over this, so the effect only reaches the open dark sections.
+     *
+     * Both washes are the brand gold, not blue: the reference palette this site
+     * follows carries no blue anywhere, and a cool highlight here was the one
+     * place that quietly reintroduced it.
      */
     background-image:
-      radial-gradient(1200px 760px at 12% -6%, rgba(126, 148, 205, 0.18), transparent 58%),
-      radial-gradient(1050px 820px at 94% 12%, rgba(192, 57, 43, 0.12), transparent 55%),
-      radial-gradient(900px 900px at 50% 120%, rgba(126, 148, 205, 0.10), transparent 60%);
+      radial-gradient(1200px 760px at 12% -6%, rgba(201, 162, 39, 0.14), transparent 58%),
+      radial-gradient(1050px 820px at 94% 12%, rgba(201, 162, 39, 0.09), transparent 55%),
+      radial-gradient(900px 900px at 50% 120%, rgba(201, 162, 39, 0.07), transparent 60%);
     background-attachment: fixed;
   }
 
@@ -186,12 +190,18 @@
    */
   .on-paper { @apply bg-paper text-paper-700; }
   .on-paper h1, .on-paper h2, .on-paper h3, .on-paper h4 { @apply text-paper-900; }
-  .on-paper .eyebrow { @apply text-brass-400; }
+  /*
+   * `brass-100`, not `brass-400`, on paper: the gold scale runs light for use
+   * on the dark ground, and `brass-400` at ~2.7:1 on near-white paper fails
+   * AA for text this small. `brass-100` is the same hue pulled dark enough to
+   * clear it.
+   */
+  .on-paper .eyebrow { @apply text-brass-100; }
   .on-paper .text-bone-50, .on-paper .text-bone-100 { @apply text-paper-900; }
   .on-paper .text-bone-200, .on-paper .text-bone-300 { @apply text-paper-700; }
   .on-paper .text-bone-400, .on-paper .text-bone-500, .on-paper .text-bone-600 { @apply text-paper-600; }
   .on-paper .border-ink-700, .on-paper .border-ink-800, .on-paper .border-ink-600 { @apply border-paper-200; }
-  .on-paper .cta-link { @apply text-paper-900 hover:text-brass-400; }
+  .on-paper .cta-link { @apply text-paper-900 hover:text-brass-100; }
   .on-paper .hairline { border-color: theme('colors.paper.200'); }
   .on-paper .hairline-t { border-top-color: theme('colors.paper.200'); }
   .on-paper .hairline-b { border-bottom-color: theme('colors.paper.200'); }

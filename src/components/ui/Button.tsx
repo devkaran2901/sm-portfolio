@@ -23,21 +23,23 @@ const VARIANTS: Record<Variant, string> = {
   secondary:
     'border border-ink-600 bg-transparent text-bone-100 hover:border-bone-50 hover:bg-bone-50 hover:text-ink-950 hover:shadow-card',
   /*
-   * The brand red, filled. White type on #C0392B lands at 5.5:1, which is why
-   * the label is `bone-50` rather than the near-black it used to be - the red
-   * moved from a mid blue to a saturated crimson and stopped being a colour
-   * dark type could sit on.
+   * The brand gold, filled - the one solid-fill button on the site, reserved
+   * for the single loudest action per screen (the hero CTA). Gold is light,
+   * not saturated, so the label sits in `ink-950` rather than `bone-50`: white
+   * type on `brass-400` lands under 2:1, dark type lands at 9:1+.
    */
   accent:
-    'border border-transparent bg-brass-400 text-bone-50 shadow-card hover:bg-brass-500 hover:shadow-lift',
+    'border border-transparent bg-brass-400 text-ink-950 shadow-card hover:bg-brass-300 hover:shadow-lift',
   /*
-   * The default button of the restyle: a hairline pill, small caps, an arrow,
-   * and a fill that arrives on hover. It reads as an action without ever
-   * competing with the section heading above it, which is what lets a page
-   * carry four or five of them without any one of them shouting.
+   * The default button of the restyle: a gold hairline pill, small caps, an
+   * arrow, and a fill that arrives on hover. It reads as an action without
+   * ever competing with the section heading above it, which is what lets a
+   * page carry four or five of them without any one of them shouting - and
+   * the gold border is what ties every secondary action on the page back to
+   * the one accent colour.
    */
   outline:
-    'border border-white/25 bg-transparent font-semibold uppercase tracking-[0.14em] text-bone-100 hover:border-bone-50 hover:bg-bone-50 hover:text-ink-950 hover:shadow-lift',
+    'border border-brass-400/60 bg-transparent font-semibold uppercase tracking-[0.14em] text-brass-200 hover:border-brass-400 hover:bg-brass-400 hover:text-ink-950 hover:shadow-lift',
   ghost:
     'border border-transparent bg-transparent text-bone-300 hover:bg-ink-800 hover:text-bone-50',
   danger:

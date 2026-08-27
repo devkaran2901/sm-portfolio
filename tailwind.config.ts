@@ -27,41 +27,44 @@ const config: Config = {
     extend: {
       colors: {
         /*
-         * Surfaces: deep navy-black ground, deep navy panels, hairline borders.
+         * Surfaces: warm near-black ground, warm-black panels, hairline
+         * borders - keyed to the reference image, which carries no blue
+         * anywhere. (An earlier pass here used a navy-blue-tinted black; every
+         * value below replaces that with a neutral, slightly warm black
+         * instead, which is what the image actually shows.)
          *
-         * The site reads dark now. Because the scale is keyed to ROLE rather
-         * than to literal lightness, the flip happens here and every component
-         * that already writes `bg-ink-*` follows it without being touched.
-         * 950 is the page itself, 900 the panel navy, 800/700/600 the dividers
-         * and borders - each one a white wash over the ground, so they land as
-         * the hairlines the design asks for - and 500/400 are icon and
-         * faint-mark colours rather than surfaces.
+         * Because the scale is keyed to ROLE rather than to literal lightness,
+         * the retune happens here and every component that already writes
+         * `bg-ink-*` follows it without being touched. 950 is the page itself,
+         * 900 the panel black, 800/700/600 the dividers and borders - each one
+         * a white wash over the ground - and 500/400 are icon and faint-mark
+         * colours rather than surfaces.
          */
         ink: {
-          950: '#0A0E1A', // page background
-          900: '#0E1428', // cards, panels, the secondary navy
-          800: '#161E36', // dividers and hover fills
-          700: '#222B45', // default borders (~white 12% over the ground)
-          600: '#33405E', // stronger borders
-          500: '#8892A8', // icons and faint marks
-          400: '#A8B2C6',
-          tint: '#0B1122', // the wash on raised sections
+          950: '#0B0A08', // page background
+          900: '#161310', // cards, panels
+          800: '#211D17', // dividers and hover fills
+          700: '#2E2820', // default borders (~white 12% over the ground)
+          600: '#463D2E', // stronger borders
+          500: '#8F8570', // icons and faint marks
+          400: '#A89C84',
+          tint: '#0D0B08', // the wash on raised sections
         },
         /*
-         * Content: off-white through to muted slate.
+         * Content: warm off-white through to warm muted taupe.
          *
-         * Every step clears AA against ink-950 - 50 at 17.6:1 down to 600 at
-         * 5.2:1 - so hierarchy is carried by the separation between steps and
+         * Every step clears AA against ink-950 - 50 at 17+:1 down to 600 at
+         * 5:1 - so hierarchy is carried by the separation between steps and
          * nothing in the range needs a size exemption to be legible.
          */
         bone: {
-          50: '#F7F7F3', // headings
-          100: '#ECEDEA',
-          200: '#E3E5EA', // body copy — lifted for comfortable reading on navy
-          300: '#CBD0DA', // secondary copy — lifted from a dim blue-grey
-          400: '#B0B6C4', // muted copy
-          500: '#9EA5B5', // captions
-          600: '#929AAB', // faintest labels
+          50: '#F8F5EE', // headings
+          100: '#ECE7DB',
+          200: '#DFD9CA', // body copy
+          300: '#C4BBA6', // secondary copy
+          400: '#A79C84', // muted copy
+          500: '#93876E', // captions
+          600: '#867A61', // faintest labels
         },
         /*
          * Neutrals with a trace of warmth: markers, rings and the quieter
@@ -70,68 +73,73 @@ const config: Config = {
          * underneath it.
          */
         turf: {
-          50: '#F2F4F2',
-          100: '#E4E7E5',
-          200: '#CBD1CE', // accent text
-          300: '#AEB6B4',
-          400: '#8C9598', // dots and markers
-          500: '#5E6870', // fills (carries a white checkmark at 4.6:1)
-          600: '#46505A',
-          700: '#333C46',
-          800: '#232B36',
-          900: '#161D28', // faint tints
+          50: '#F3F1EA',
+          100: '#E6E1D4',
+          200: '#CEC6B2', // accent text
+          300: '#B0A68C',
+          400: '#928670', // dots and markers
+          500: '#655B47', // fills (carries a white checkmark)
+          600: '#4C4434',
+          700: '#383225',
+          800: '#272219',
+          900: '#19160F', // faint tints
         },
         /*
-         * The accent, and the only hue on the site: crimson, taken from the
-         * Red Ball mark.
-         *
-         * The scale runs light to dark, so low steps are type on the dark
-         * ground and high steps are fills and washes beneath it. 200 is a link
-         * at 6.0:1, 300 the eyebrow red at 4.7:1, and 400 is the brand red
-         * itself - rules, dots and solid fills, where white type lands on it at
-         * 5.5:1. Nothing above 400 is ever type.
+         * The accent, and the only hue on the site: the warm gold from the
+         * reference image. The scale runs light to dark, so low steps are type
+         * on the dark ground and high steps are fills and washes beneath it.
+         * 200 is a link, 300 the eyebrow gold, and 400 is the brand gold
+         * itself - rules, dots and solid fills, matched to the saturated gold
+         * the image uses for its filled button and the word "LEGACY". Gold is
+         * light rather than dark, so white type does NOT sit on a 400 fill at
+         * readable contrast; anywhere brass-400 is a solid background, the
+         * type on it has to be dark (`ink-950`), which is why the solid button
+         * variants carry their own dark-text override rather than inheriting
+         * `bone-50`.
          */
         brass: {
-          50: '#F6DBD4',
-          100: '#E9917F', // link hover
-          200: '#E0705C', // accent text, links, counters
-          300: '#D6533C', // eyebrows
-          400: '#C0392B', // the brand red: rules, dots, solid fills
-          500: '#96291D', // pressed, and hover on a solid red
-          600: '#E0705C', // eyebrows on a dark fill, where 300 loses contrast
-          700: '#2A1310', // tinted fills
+          50: '#332608',
+          100: '#8A6512', // link hover
+          200: '#E6C976', // accent text, links, counters
+          300: '#DDBB5C', // eyebrows
+          400: '#C9A227', // the brand gold: rules, dots, solid fills
+          500: '#A9861F', // pressed, and hover on a solid gold
+          600: '#EFDA9E', // eyebrows on a dark fill, where 300 loses contrast
+          700: '#2E2408', // tinted fills
         },
         /*
-         * The panel navy, a shade deeper than the ground it sits on.
+         * The panel black, a shade deeper than the ground it sits on - the
+         * same warm neutral as `ink`, not a second hue.
          *
          * Runs deep to pale, the opposite way round to `ink` and `bone`: 950
          * and 900 are surfaces, 200 through 500 are the type that sits on them.
          */
         navy: {
-          950: '#070B16', // deepest: the closing band and the micro-footer
-          900: '#0E1428', // the standard panel block
-          800: '#141C33', // a raised panel inside a panel
-          700: '#232C47', // borders on navy
-          600: '#33405E',
-          500: '#929AAB', // faint labels on navy
-          400: '#B0B6C4', // muted copy on navy
-          300: '#CBD0DA', // body copy on navy — lifted to match bone
-          200: '#F7F7F3', // headings on navy
+          950: '#060504', // deepest: the closing band and the micro-footer
+          900: '#161310', // the standard panel block
+          800: '#1E1A15', // a raised panel inside a panel
+          700: '#332C22', // borders on navy
+          600: '#463D2E',
+          500: '#93876E', // faint labels on navy
+          400: '#A79C84', // muted copy on navy
+          300: '#C4BBA6', // body copy on navy — lifted to match bone
+          200: '#F8F5EE', // headings on navy
         },
         /*
          * The one light ground on the site: Press & Recognition. Kept as its
          * own token rather than a `bone` step, because it is a surface and the
-         * `bone` scale is content.
+         * `bone` scale is content. Warm cream, matched to the one light
+         * section in the reference image - not a cool off-white.
          */
         paper: {
-          DEFAULT: '#F2F1EE',
-          50: '#F7F6F4',
-          100: '#F2F1EE', // the section ground
-          200: '#E4E2DD', // hairlines and dividers on paper
-          300: '#CFCCC5',
-          600: '#5A5C63', // secondary copy on paper
-          700: '#3A3C42',
-          900: '#0B0F1E', // headings on paper
+          DEFAULT: '#F4F0E6',
+          50: '#F8F5EE',
+          100: '#F4F0E6', // the section ground
+          200: '#E6DFCC', // hairlines and dividers on paper
+          300: '#D2C7AC',
+          600: '#5C5440', // secondary copy on paper
+          700: '#3A3425',
+          900: '#171310', // headings on paper
         },
         /*
          * Error state. Red carries the brand as well as the warning now, so
@@ -140,7 +148,7 @@ const config: Config = {
          * role="alert" and sit against the field they belong to.
          */
         danger: { 400: '#E0705C', 500: '#C0392B', 600: '#96291D' },
-        info: { 400: '#A8B2C6', 500: '#7E8799' },
+        info: { 400: '#A79C84', 500: '#8F8570' },
       },
       fontFamily: {
         /*
@@ -152,6 +160,7 @@ const config: Config = {
         serif: ['var(--font-serif)', 'Playfair Display', 'Georgia', 'Times New Roman', 'serif'],
         display: ['var(--font-display)', 'Haettenschweiler', 'Impact', 'sans-serif'],
         sans: ['var(--font-sans)', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Helvetica', 'Arial', 'sans-serif'],
+        script: ['var(--font-script)', 'cursive'],
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
       /*
@@ -186,10 +195,15 @@ const config: Config = {
         },
         'line-grow': { from: { transform: 'scaleX(0)' }, to: { transform: 'scaleX(1)' } },
         shimmer: { '100%': { transform: 'translateX(100%)' } },
+        'soft-bounce': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(6px)' },
+        },
       },
       animation: {
         'fade-rise': 'fade-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both',
         'line-grow': 'line-grow 0.9s cubic-bezier(0.22, 1, 0.36, 1) both',
+        'soft-bounce': 'soft-bounce 2.2s ease-in-out infinite',
       },
     },
   },

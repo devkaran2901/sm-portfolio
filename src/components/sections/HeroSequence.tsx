@@ -1,10 +1,13 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
 import manifest from '@/content/frame-manifest.json';
-import { cn } from '@/lib/utils';
+import { buttonClass } from '@/components/ui/Button';
+import { cn, initials } from '@/lib/utils';
 
 /**
  * Scroll-driven hero: an image sequence painted to a canvas, with the name
@@ -35,6 +38,9 @@ type Props = {
   /** Shown when no frames exist yet, and inside <noscript>. */
   fallbackImageUrl?: string | null;
   fallbackAlt?: string | null;
+  /** Dot-separated roles, e.g. "Cricket Enthusiast · Sports Infrastructure Founder". */
+  positioning?: string | null;
+  shortBio?: string | null;
 };
 
 const FRAME_COUNT = manifest.frameCount;
@@ -73,7 +79,11 @@ function frameUrl(index: number): string {
   return `${BASE_URL}/${manifest.prefix}${number}${manifest.extension}`;
 }
 
-export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
+export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning, shortBio }: Props) {
+  const roles = (positioning ?? '')
+    .split('·')
+    .map((part) => part.trim())
+    .filter(Boolean);
   const sectionRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const framesRef = useRef<Array<HTMLImageElement | null>>([]);
@@ -316,7 +326,33 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
           Legibility is handled on the text itself instead, so nothing dims the
           image to buy it.
         */}
+
+        {/*
+          Giant initials, watermark-style, echoing the header monogram rather
+          than competing with the portrait. Hidden below `lg`: the stage is too
+          narrow there for it to sit clear of the name.
+        */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-[-2vw] top-1/2 hidden -translate-y-1/2 select-none font-display text-[clamp(8rem,22vw,18rem)] leading-none tracking-tight text-transparent [-webkit-text-stroke:1.5px_rgba(201,160,80,0.16)] lg:block"
+        >
+          {initials(name)}
+        </span>
+
         <div className="relative flex w-full flex-col items-center px-[var(--shell-gutter)]">
+          {roles.length > 0 ? (
+            <p className="animate-fade-rise mb-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center text-[0.75rem] font-semibold uppercase tracking-[0.26em] text-brass-300 sm:mb-6 sm:text-[0.8125rem]">
+              {roles.map((role, index) => (
+                <span key={role} className="flex items-center gap-3">
+                  {index > 0 ? (
+                    <span aria-hidden="true" className="h-1 w-1 rounded-full bg-brass-400/70" />
+                  ) : null}
+                  {role}
+                </span>
+              ))}
+            </p>
+          ) : null}
+
           {/*
             One line, sized in vw so it scales to the viewport instead of
             wrapping. `whitespace-nowrap` keeps it on a single line at every
@@ -337,15 +373,40 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt }: Props) {
           <h1 className="whitespace-nowrap text-center text-[clamp(2.25rem,15.5vw,13rem)] leading-[1.05] tracking-[0.005em] [word-spacing:0.02em] text-white [text-shadow:0_2px_28px_rgba(10,10,11,0.38)]">
             {name}
           </h1>
+
+          {shortBio ? (
+            <p
+              className="animate-fade-rise mt-5 max-w-xl text-center text-base leading-relaxed text-bone-200 [text-shadow:0_2px_16px_rgba(0,0,0,0.55)] sm:mt-7 sm:text-lg"
+              style={{ animationDelay: '80ms' }}
+            >
+              {shortBio}
+            </p>
+          ) : null}
+
+          <div className="animate-fade-rise mt-7 sm:mt-9" style={{ animationDelay: '160ms' }}>
+            <Link href="/about#journey" className={cn(buttonClass('accent', 'lg'), 'group')}>
+              Explore My Journey
+              <ArrowRight
+                size={17}
+                aria-hidden="true"
+                className="transition-transform group-hover:translate-x-1"
+              />
+            </Link>
+          </div>
         </div>
 
         {/* Scroll cue, retired once the reader has started. */}
         <div
           aria-hidden="true"
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 transition-opacity duration-500"
+          className="absolute bottom-9 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2.5 transition-opacity duration-500"
           style={{ opacity: started ? 0 : 1 }}
         >
-          <span className="text-sm uppercase tracking-[0.2em] text-white/70">Scroll</span>
+          <span className="text-xs font-semibold uppercase tracking-[0.24em] text-white/70">
+            Scroll to Discover
+          </span>
+          <span className="grid h-8 w-8 place-items-center rounded-full border border-brass-400/50 text-brass-300">
+            <ChevronDown size={15} aria-hidden="true" className="animate-soft-bounce" />
+          </span>
         </div>
 
         {/* Scroll cue and loading readout sit above; sentinel is below. */}

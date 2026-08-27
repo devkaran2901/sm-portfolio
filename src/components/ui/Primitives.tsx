@@ -275,7 +275,7 @@ export function MediaPlaceholder({
           'absolute inset-0 opacity-[0.18]',
           tone === 'dark'
             ? 'bg-[linear-gradient(135deg,transparent_46%,rgba(255,255,255,0.10)_50%,transparent_54%)]'
-            : 'bg-[linear-gradient(135deg,transparent_46%,rgba(11,15,30,0.10)_50%,transparent_54%)]',
+            : 'bg-[linear-gradient(135deg,transparent_46%,rgba(23,19,16,0.10)_50%,transparent_54%)]',
         )}
       />
       <p
