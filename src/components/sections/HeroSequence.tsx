@@ -91,6 +91,13 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
   const startedRef = useRef(false);
   const rafRef = useRef(0);
 
+  const leftLetterRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  const rightLetterRefs = useRef<Array<HTMLSpanElement | null>>([]);
+
+  const words = (name || 'SONU MALIK').trim().split(/\s+/);
+  const leftLetters = (words[0] || 'SONU').split('');
+  const rightLetters = (words.slice(1).join(' ') || 'MALIK').split('');
+
   const [started, setStarted] = useState(false);
   const [ready, setReady] = useState(false);
   const [loadState, setLoadState] = useState({ loaded: 0, planned: FRAME_COUNT });
@@ -159,39 +166,20 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
     };
   }, [hasFrames]);
 
-  // ---- paint --------------------------------------------------------------
+  // ---- paint & scroll animation -------------------------------------------
   useEffect(() => {
-    if (!hasFrames) return;
     const canvas = canvasRef.current;
     const section = sectionRef.current;
-    if (!canvas || !section) return;
+    if (!section) return;
 
-    const context = canvas.getContext('2d', { alpha: false });
-    if (!context) return;
-
+    const context = canvas?.getContext('2d', { alpha: false });
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     /**
      * Draws a frame so the subject is framed head-down, not cropped to a strip.
-     *
-     * A plain cover fit fails badly here: the footage is 720x1280 portrait, so
-     * on a wide stage the width drives the scale, the frame is blown up ~2.6x,
-     * and the visible slice is a band across the middle - torso only, no face.
-     *
-     * Instead the scale is capped so the top SUBJECT_FRACTION of the frame
-     * always fits the stage height, and the frame is anchored to the top. In
-     * this footage the subject runs from ~5% to ~95% of frame height, so 0.75
-     * lands on head-through-mid-shin: three quarters of the body, legs cropped.
-     *
-     * When that leaves the frame narrower than the stage, the margins are
-     * filled with a zoomed, knocked-back copy of the same frame rather than an
-     * invented colour, so the edges always belong to the footage.
-     *
-     * Both draws sample a source rectangle that stops short of the bottom of
-     * the frame, so the watermarked strip is never read - not for the subject
-     * and not for the knocked-back margins either.
      */
     const paint = (image: HTMLImageElement) => {
+      if (!canvas || !context) return;
       const { width: cw, height: ch } = canvas;
       const iw = image.naturalWidth;
       const ih = image.naturalHeight;
@@ -230,11 +218,82 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
     };
 
     const resize = () => {
+      if (!canvas) return;
       // Cap DPR at 2: beyond that the extra pixels cost more than they show.
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = Math.round(canvas.clientWidth * dpr);
       canvas.height = Math.round(canvas.clientHeight * dpr);
       drawnIndexRef.current = -1;
+    };
+
+    const updateSplitText = (scrollValue: number) => {
+      if (reduced) {
+        leftLetterRefs.current.forEach((el) => {
+          if (el) {
+            el.style.transform = 'translate3d(0,0,0)';
+            el.style.opacity = '1';
+          }
+        });
+        rightLetterRefs.current.forEach((el) => {
+          if (el) {
+            el.style.transform = 'translate3d(0,0,0)';
+            el.style.opacity = '1';
+          }
+        });
+        return;
+      }
+
+      // Complete convergence threshold (e.g. by 36% of hero section scroll)
+      const CONVERGE_THRESHOLD = 0.36;
+      const normScroll = Math.min(1, Math.max(0, scrollValue / CONVERGE_THRESHOLD));
+
+      // Animate Left group ("Sonu") from TOP-LEFT corner
+      leftLetters.forEach((_, i) => {
+        const el = leftLetterRefs.current[i];
+        if (!el) return;
+
+        const pairIndex = i;
+        const start = pairIndex * 0.08;
+        const duration = 0.60;
+        const p = Math.min(1, Math.max(0, (normScroll - start) / duration));
+        const easeP = 1 - Math.pow(1 - p, 3);
+
+        // Originates from Top-Left corner
+        const baseOffsetX = 34 + (leftLetters.length - 1 - i) * 4;
+        const baseOffsetY = 22 + (leftLetters.length - 1 - i) * 3;
+
+        const currentX = (1 - easeP) * -baseOffsetX;
+        const currentY = (1 - easeP) * -baseOffsetY;
+
+        const opacity = Math.min(1, 0.85 + p * 0.15);
+
+        el.style.transform = `translate3d(${currentX.toFixed(2)}vw, ${currentY.toFixed(2)}vh, 0)`;
+        el.style.opacity = opacity.toFixed(2);
+      });
+
+      // Animate Right group ("Malik") from BOTTOM-RIGHT corner
+      rightLetters.forEach((_, i) => {
+        const el = rightLetterRefs.current[i];
+        if (!el) return;
+
+        const pairIndex = i;
+        const start = pairIndex * 0.08;
+        const duration = 0.60;
+        const p = Math.min(1, Math.max(0, (normScroll - start) / duration));
+        const easeP = 1 - Math.pow(1 - p, 3);
+
+        // Originates from Bottom-Right corner
+        const baseOffsetX = 34 + i * 4;
+        const baseOffsetY = 22 + i * 3;
+
+        const currentX = (1 - easeP) * baseOffsetX;
+        const currentY = (1 - easeP) * baseOffsetY;
+
+        const opacity = Math.min(1, 0.85 + p * 0.15);
+
+        el.style.transform = `translate3d(${currentX.toFixed(2)}vw, ${currentY.toFixed(2)}vh, 0)`;
+        el.style.opacity = opacity.toFixed(2);
+      });
     };
 
     const render = () => {
@@ -245,11 +304,16 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
       const raw = scrollable > 0 ? -rect.top / scrollable : 0;
       const value = Math.min(1, Math.max(0, raw));
 
+      // Update split text scroll progress on every frame
+      updateSplitText(value);
+
       // Only a threshold crossing reaches React; the float stays in the loop.
       if (value > 0.04 !== startedRef.current) {
         startedRef.current = value > 0.04;
         setStarted(startedRef.current);
       }
+
+      if (!hasFrames) return;
 
       const index = reduced ? 0 : Math.min(FRAME_COUNT - 1, Math.round(value * (FRAME_COUNT - 1)));
       if (index === drawnIndexRef.current) return;
@@ -268,23 +332,12 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener('resize', resize);
     };
-  }, [hasFrames, loadState.loaded]);
+  }, [hasFrames, loadState.loaded, leftLetters, rightLetters]);
 
   return (
     <section
       ref={sectionRef}
       aria-label={`${name} — introduction`}
-      /*
-        Pulled up under the fixed header so the stage runs edge to edge.
-
-        The near-black and the white below are literals, not palette tokens,
-        and that is deliberate. This stage sits outside the site restyle, but
-        it used to reach the ground it wanted through `bone-50` and `ink-900`
-        - surface and content roles - and the rest of the site went dark by
-        changing what those roles resolve to. Left as tokens, the stage would
-        have flipped to white-with-navy-type along with everything else. These
-        are the values the tokens carried before that change.
-      */
       className="relative -mt-[4.5rem] bg-[#0A0A0B]"
       style={{ height: hasFrames ? `${RUNWAY_VH}vh` : undefined }}
     >
@@ -321,17 +374,6 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
           />
         ) : null}
 
-        {/*
-          No scrim over the frames: the clip plays at its own brightness.
-          Legibility is handled on the text itself instead, so nothing dims the
-          image to buy it.
-        */}
-
-        {/*
-          Giant initials, watermark-style, echoing the header monogram rather
-          than competing with the portrait. Hidden below `lg`: the stage is too
-          narrow there for it to sit clear of the name.
-        */}
         <span
           aria-hidden="true"
           className="pointer-events-none absolute right-[-2vw] top-1/2 hidden -translate-y-1/2 select-none font-display text-[clamp(8rem,22vw,18rem)] leading-none tracking-tight text-transparent [-webkit-text-stroke:1.5px_rgba(201,160,80,0.16)] lg:block"
@@ -353,25 +395,34 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
             </p>
           ) : null}
 
-          {/*
-            One line, sized in vw so it scales to the viewport instead of
-            wrapping. `whitespace-nowrap` keeps it on a single line at every
-            width; the clamp floor stops it collapsing on narrow phones.
-
-            The name holds steady for the whole sequence - it does not fade or
-            scale, so only the frames behind it move. The soft shadow is the
-            one legibility concession, and it costs the image nothing because
-            it is drawn on the glyphs rather than over the frame.
-          */}
-          {/*
-            Word spacing is pinned here rather than inherited. Headings take
-            0.1em from the base rule, which is right at reading sizes and far
-            too much at 13rem - and this line is `whitespace-nowrap` and sized
-            in vw to just fit the viewport, so widening it is what pushes the
-            page into a horizontal scroll.
-          */}
-          <h1 className="whitespace-nowrap text-center text-[clamp(2.25rem,15.5vw,13rem)] leading-[1.05] tracking-[0.005em] [word-spacing:0.02em] text-white [text-shadow:0_2px_28px_rgba(10,10,11,0.38)]">
-            {name}
+          <h1 className="flex items-center justify-center whitespace-nowrap text-center text-[clamp(2.25rem,15.5vw,13rem)] leading-[1.05] tracking-[0.005em] [word-spacing:0.02em] text-white [text-shadow:0_2px_28px_rgba(10,10,11,0.38)] overflow-hidden py-1 select-none">
+            <span className="inline-flex items-center">
+              {leftLetters.map((char, i) => (
+                <span
+                  key={`left-${i}`}
+                  ref={(el) => {
+                    leftLetterRefs.current[i] = el;
+                  }}
+                  className="inline-block transition-none will-change-transform"
+                >
+                  {char}
+                </span>
+              ))}
+            </span>
+            <span className="inline-block w-[0.22em]" />
+            <span className="inline-flex items-center">
+              {rightLetters.map((char, i) => (
+                <span
+                  key={`right-${i}`}
+                  ref={(el) => {
+                    rightLetterRefs.current[i] = el;
+                  }}
+                  className="inline-block transition-none will-change-transform"
+                >
+                  {char}
+                </span>
+              ))}
+            </span>
           </h1>
 
           {shortBio ? (
