@@ -341,7 +341,7 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
       className="relative -mt-[4.5rem] bg-[#0A0A0B]"
       style={{ height: hasFrames ? `${RUNWAY_VH}vh` : undefined }}
     >
-      <div className="sticky top-0 flex h-dvh w-full items-center justify-center overflow-hidden">
+      <div className="sticky top-0 flex h-dvh w-full items-end justify-center pb-14 sm:pb-20 overflow-hidden">
         {hasFrames ? (
           <>
             <canvas
@@ -412,30 +412,10 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
             </span>
           </h1>
 
-          {shortBio ? (
-            <p
-              className="animate-fade-rise mt-5 max-w-xl text-center text-base leading-relaxed text-bone-200 [text-shadow:0_2px_16px_rgba(0,0,0,0.55)] sm:mt-7 sm:text-lg"
-              style={{ animationDelay: '80ms' }}
-            >
-              {shortBio}
-            </p>
-          ) : null}
-
-          <div className="animate-fade-rise mt-7 sm:mt-9" style={{ animationDelay: '160ms' }}>
-            <Link href="/about#journey" className={cn(buttonClass('accent', 'lg'), 'group')}>
-              Explore My Journey
-              <ArrowRight
-                size={17}
-                aria-hidden="true"
-                className="transition-transform group-hover:translate-x-1"
-              />
-            </Link>
-          </div>
-
           {roles.length > 0 ? (
             <p
-              className="animate-fade-rise mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center text-[0.75rem] font-semibold uppercase tracking-[0.26em] text-brass-300 sm:text-[0.8125rem]"
-              style={{ animationDelay: '240ms' }}
+              className="animate-fade-rise mt-4 sm:mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center text-[0.75rem] font-semibold uppercase tracking-[0.26em] text-brass-300 sm:text-[0.8125rem]"
+              style={{ animationDelay: '100ms' }}
             >
               {roles.map((role, index) => (
                 <span key={role} className="flex items-center gap-3">
@@ -447,6 +427,17 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
               ))}
             </p>
           ) : null}
+
+          <div className="animate-fade-rise mt-5 sm:mt-7" style={{ animationDelay: '180ms' }}>
+            <Link href="/about#journey" className={cn(buttonClass('accent', 'lg'), 'group')}>
+              Explore My Journey
+              <ArrowRight
+                size={17}
+                aria-hidden="true"
+                className="transition-transform group-hover:translate-x-1"
+              />
+            </Link>
+          </div>
         </div>
 
         {/* Scroll cue, retired once the reader has started. */}
