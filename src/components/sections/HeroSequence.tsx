@@ -382,19 +382,6 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
         </span>
 
         <div className="relative flex w-full flex-col items-center px-[var(--shell-gutter)]">
-          {roles.length > 0 ? (
-            <p className="animate-fade-rise mb-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center text-[0.75rem] font-semibold uppercase tracking-[0.26em] text-brass-300 sm:mb-6 sm:text-[0.8125rem]">
-              {roles.map((role, index) => (
-                <span key={role} className="flex items-center gap-3">
-                  {index > 0 ? (
-                    <span aria-hidden="true" className="h-1 w-1 rounded-full bg-brass-400/70" />
-                  ) : null}
-                  {role}
-                </span>
-              ))}
-            </p>
-          ) : null}
-
           <h1 className="flex items-center justify-center whitespace-nowrap text-center text-[clamp(2.25rem,15.5vw,13rem)] leading-[1.05] tracking-[0.005em] [word-spacing:0.02em] text-white [text-shadow:0_2px_28px_rgba(10,10,11,0.38)] overflow-hidden py-1 select-none">
             <span className="inline-flex items-center">
               {leftLetters.map((char, i) => (
@@ -444,6 +431,22 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
               />
             </Link>
           </div>
+
+          {roles.length > 0 ? (
+            <p
+              className="animate-fade-rise mt-6 sm:mt-8 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-center text-[0.75rem] font-semibold uppercase tracking-[0.26em] text-brass-300 sm:text-[0.8125rem]"
+              style={{ animationDelay: '240ms' }}
+            >
+              {roles.map((role, index) => (
+                <span key={role} className="flex items-center gap-3">
+                  {index > 0 ? (
+                    <span aria-hidden="true" className="h-1 w-1 rounded-full bg-brass-400/70" />
+                  ) : null}
+                  {role}
+                </span>
+              ))}
+            </p>
+          ) : null}
         </div>
 
         {/* Scroll cue, retired once the reader has started. */}
