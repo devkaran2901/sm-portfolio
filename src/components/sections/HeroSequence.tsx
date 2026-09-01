@@ -435,7 +435,7 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
             </p>
           ) : null}
 
-          <div className="animate-fade-rise mt-5 sm:mt-7" style={{ animationDelay: '180ms' }}>
+          <div className="animate-fade-rise mt-5 sm:mt-7 flex flex-col items-center gap-2.5" style={{ animationDelay: '180ms' }}>
             <Link href="/about#journey" className={cn(buttonClass('accent', 'lg'), 'group')}>
               Explore My Journey
               <ArrowRight
@@ -444,21 +444,16 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
                 className="transition-transform group-hover:translate-x-1"
               />
             </Link>
-          </div>
-        </div>
 
-        {/* Scroll cue: hidden on mobile to avoid button collision, visible on desktop/tablet */}
-        <div
-          aria-hidden="true"
-          className="absolute bottom-6 left-1/2 hidden sm:flex -translate-x-1/2 flex-col items-center gap-2.5 transition-opacity duration-500 pointer-events-none"
-          style={{ opacity: started ? 0 : 1 }}
-        >
-          <span className="text-xs font-semibold uppercase tracking-[0.24em] text-white/70">
-            Scroll to Discover
-          </span>
-          <span className="grid h-8 w-8 place-items-center rounded-full border border-brass-400/50 text-brass-300">
-            <ChevronDown size={15} aria-hidden="true" className="animate-soft-bounce" />
-          </span>
+            <div
+              aria-hidden="true"
+              className="flex items-center gap-1.5 text-[0.6875rem] font-medium uppercase tracking-[0.2em] text-white/45 transition-opacity duration-500 mt-1 pointer-events-none"
+              style={{ opacity: started ? 0 : 1 }}
+            >
+              <span>Scroll to explore</span>
+              <ChevronDown size={13} className="animate-soft-bounce text-brass-400/80" />
+            </div>
+          </div>
         </div>
 
         {/* Scroll cue and loading readout sit above; sentinel is below. */}
