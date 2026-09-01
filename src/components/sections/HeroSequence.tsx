@@ -300,8 +300,10 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
       rafRef.current = requestAnimationFrame(render);
 
       const rect = section.getBoundingClientRect();
-      const scrollable = rect.height - window.innerHeight;
-      const raw = scrollable > 0 ? -rect.top / scrollable : 0;
+      // Accounting for negative top margin (-mt-[4.5rem]) so 0..1 progress matches exact pinned scroll range
+      const topOffset = Math.max(0, -(window.scrollY + rect.top));
+      const pinnedDistance = rect.height - window.innerHeight - topOffset;
+      const raw = pinnedDistance > 0 ? (-rect.top - topOffset) / pinnedDistance : 0;
       const value = Math.min(1, Math.max(0, raw));
 
       // Update split text scroll progress on every frame
@@ -341,7 +343,7 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
       className="relative -mt-[4.5rem] bg-[#0A0A0B]"
       style={{ height: hasFrames ? `${RUNWAY_VH}vh` : undefined }}
     >
-      <div className="sticky top-0 flex h-dvh w-full items-end justify-center pb-16 sm:pb-24 overflow-hidden">
+      <div className="sticky top-0 flex h-screen w-full items-end justify-center pb-16 sm:pb-24 overflow-hidden">
         {hasFrames ? (
           <>
             <canvas
