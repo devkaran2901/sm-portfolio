@@ -341,7 +341,7 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
       className="relative -mt-[4.5rem] bg-[#0A0A0B]"
       style={{ height: hasFrames ? `${RUNWAY_VH}vh` : undefined }}
     >
-      <div className="sticky top-0 flex h-dvh w-full items-end justify-center pb-14 sm:pb-20 overflow-hidden">
+      <div className="sticky top-0 flex h-dvh w-full items-end justify-center pb-16 sm:pb-24 overflow-hidden">
         {hasFrames ? (
           <>
             <canvas
@@ -373,6 +373,13 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
             className="object-cover"
           />
         ) : null}
+
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute left-[-2vw] top-1/2 hidden -translate-y-1/2 select-none font-display text-[clamp(8rem,22vw,18rem)] leading-none tracking-tight text-transparent [-webkit-text-stroke:1.5px_rgba(201,160,80,0.16)] lg:block"
+        >
+          {initials(name)}
+        </span>
 
         <span
           aria-hidden="true"
@@ -440,10 +447,10 @@ export function HeroSequence({ name, fallbackImageUrl, fallbackAlt, positioning,
           </div>
         </div>
 
-        {/* Scroll cue, retired once the reader has started. */}
+        {/* Scroll cue: hidden on mobile to avoid button collision, visible on desktop/tablet */}
         <div
           aria-hidden="true"
-          className="absolute bottom-9 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2.5 transition-opacity duration-500"
+          className="absolute bottom-6 left-1/2 hidden sm:flex -translate-x-1/2 flex-col items-center gap-2.5 transition-opacity duration-500 pointer-events-none"
           style={{ opacity: started ? 0 : 1 }}
         >
           <span className="text-xs font-semibold uppercase tracking-[0.24em] text-white/70">
